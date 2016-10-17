@@ -2,5 +2,7 @@
 /LoggingModule
 /Packages
 /LogMyWork/bin
-/LogMyWork/obj*.mdf
+/LogMyWork/obj
+*.mdf
+LogMyWork/App_Data/aspnet-LogMyWork-20160905120332_log.ldf
 *.mdf
