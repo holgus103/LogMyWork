@@ -1,0 +1,32 @@
+﻿@model LogMyWork.Models.ProjectTask
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ProjectTask</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ParentProject.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ParentProject.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TaskID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
