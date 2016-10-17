@@ -2,4 +2,5 @@
 /LoggingModule
 /Packages
 /LogMyWork/bin
-/LogMyWork/obj
+/LogMyWork/obj*.mdf
+*.mdf

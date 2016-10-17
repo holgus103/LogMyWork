@@ -21,7 +21,7 @@
             @Html.DisplayNameFor(model => model.ParentProject.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ParentProject.Name)
+            @Html.ActionLink(Model.ParentProject.Name, "Details", "Projects", new { id = Model.ParentProjectId }, null)
         </dd>
 
     </dl>
