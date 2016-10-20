@@ -7,10 +7,11 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using LogMyWork.Models;
+using System.Diagnostics;
 
 namespace LogMyWork.Controllers
 {
-    public class TimeEntriesController : Controller
+    public class TimeEntriesController : AjaxController
     {
         private LogMyWorkContext db = new LogMyWorkContext();
 
@@ -46,16 +47,34 @@ namespace LogMyWork.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EntryID,Start,End,Active")] TimeEntry timeEntry)
+        public ActionResult Create([Bind(Include = "ParentTaskId")] TimeEntry timeEntry)
         {
+            db.TimeEntries.Where(t => t.Active == true)
+                .ForEachAsync(
+                    t => {
+                        t.Active = false;
+                        t.End = DateTime.UtcNow;
+                    } 
+                );
+            timeEntry.Active = true;
+            timeEntry.Start = DateTime.UtcNow;
+
             if (ModelState.IsValid)
             {
                 db.TimeEntries.Add(timeEntry);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch(Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                    return this.ajaxFailure();
+                }
+                return this.ajaxSuccess();
             }
 
-            return View(timeEntry);
+            return this.ajaxFailure();
         }
 
         // GET: TimeEntries/Edit/5

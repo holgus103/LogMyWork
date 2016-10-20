@@ -13,7 +13,7 @@ namespace LogMyWork.Models
         [Key]
         public int EntryID { get; set; }
         public DateTime Start { get; set; }
-        public DateTime End { get; set; }
+        public DateTime? End { get; set; }
         public bool Active { get; set; }
         [ForeignKey ("ParentTask")]
         public int ParentTaskId { get; set; }

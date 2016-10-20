@@ -28,7 +28,7 @@
                 @Html.ActionLink("Edit", "Edit", "Tasks", new { id = task.TaskID }, null) |
                 @Html.ActionLink("Details", "Details", "Tasks", new { id = task.TaskID }, null) |
                 @Html.ActionLink("Delete", "Delete", "Tasks", new { id = task.TaskID }, null) |
-                @Html.ActionLink("Track", "Create", "TimeEntries", new { id = task.TaskID }, null)
+                @Html.ActionLink("Track", null, null, new { onClick = String.Format("createTimeEntry({0})", task.TaskID)} ) 
             </dd>
         }
     </dl>

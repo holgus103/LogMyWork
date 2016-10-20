@@ -196,6 +196,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
@@ -215,6 +216,10 @@
     <Compile Include="Migrations\201610172248204_TimeEntries.cs" />
     <Compile Include="Migrations\201610172248204_TimeEntries.Designer.cs">
       <DependentUpon>201610172248204_TimeEntries.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610202226536_Nullable end of time entry.cs" />
+    <Compile Include="Migrations\201610202226536_Nullable end of time entry.Designer.cs">
+      <DependentUpon>201610202226536_Nullable end of time entry.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -300,6 +305,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Ajax\" />
     <Folder Include="Views\TimeEntries\" />
   </ItemGroup>
   <ItemGroup>
@@ -319,6 +325,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201610172248204_TimeEntries.resx">
       <DependentUpon>201610172248204_TimeEntries.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610202226536_Nullable end of time entry.resx">
+      <DependentUpon>201610202226536_Nullable end of time entry.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
