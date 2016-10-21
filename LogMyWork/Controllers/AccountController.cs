@@ -9,12 +9,16 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using LogMyWork.Models;
+using LogMyWork.Consts;
 
 namespace LogMyWork.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+
+        private LogMyWorkContext db = new LogMyWorkContext();
+
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -79,6 +83,7 @@ namespace LogMyWork.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    Session[SessionKeys.CurrentTimeEntry] = db.TimeEntries.Where(t => t.Active == true).First();
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");

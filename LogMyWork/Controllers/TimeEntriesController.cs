@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using LogMyWork.Models;
 using System.Diagnostics;
+using LogMyWork.Consts;
 
 namespace LogMyWork.Controllers
 {
@@ -49,13 +50,28 @@ namespace LogMyWork.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ParentTaskId")] TimeEntry timeEntry)
         {
-            db.TimeEntries.Where(t => t.Active == true)
+
+            db.TimeEntries
+                .Where(t => t.Active == true)
                 .ForEachAsync(
                     t => {
                         t.Active = false;
                         t.End = DateTime.UtcNow;
                     } 
                 );
+
+            // if exits a currently active entry for this task, end it
+            if(db.TimeEntries
+                .Where(t => t.Active == true && t.ParentTaskId == timeEntry.ParentTaskId)
+                .Count() > 0)
+            {
+                Session[SessionKeys.CurrentTimeEntry] = null;
+                db.SaveChanges();
+                return this.ajaxSuccess();
+            }
+            //else create new record and save it
+
+            Session[SessionKeys.CurrentTimeEntry] = timeEntry;
             timeEntry.Active = true;
             timeEntry.Start = DateTime.UtcNow;
 

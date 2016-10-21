@@ -1,4 +1,6 @@
-﻿function createTimeEntry(taskId) {
+﻿var isTracking = false;
+function createTimeEntry(node) {
+    var taskId = node.attr("taskId");
     var headers = new Array();
 
     headers['__RequestVerificationToken'] = $('input[name="__RequestVerificationToken"]').val();
@@ -17,9 +19,19 @@
 
         }
     )
-        .done(
+        .success(
             function (data) {
-                console.log(data);
+                isTracking = !isTracking;
+                if (data == "1") {
+                    console.log("hooray");
+                    if (isTracking)
+                        node.html("Stop");
+                    else
+                        node.html("Track");
+                }
+                else {
+                    console.log("fail");
+                }
             }
         );
 }
