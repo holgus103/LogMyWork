@@ -222,6 +222,14 @@
     <Compile Include="Migrations\201610202226536_Nullable end of time entry.Designer.cs">
       <DependentUpon>201610202226536_Nullable end of time entry.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201610211922585_UserId in TimeEntries.cs" />
+    <Compile Include="Migrations\201610211922585_UserId in TimeEntries.Designer.cs">
+      <DependentUpon>201610211922585_UserId in TimeEntries.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610211933411_UserId is a string.cs" />
+    <Compile Include="Migrations\201610211933411_UserId is a string.Designer.cs">
+      <DependentUpon>201610211933411_UserId is a string.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -303,11 +311,11 @@
     <Content Include="Views\Tasks\Details.cshtml" />
     <Content Include="Views\Tasks\Edit.cshtml" />
     <Content Include="Views\Tasks\Index.cshtml" />
+    <Content Include="Views\TimeEntries\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Ajax\" />
-    <Folder Include="Views\TimeEntries\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -329,6 +337,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201610202226536_Nullable end of time entry.resx">
       <DependentUpon>201610202226536_Nullable end of time entry.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610211922585_UserId in TimeEntries.resx">
+      <DependentUpon>201610211922585_UserId in TimeEntries.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610211933411_UserId is a string.resx">
+      <DependentUpon>201610211933411_UserId is a string.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

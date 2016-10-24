@@ -83,7 +83,7 @@ namespace LogMyWork.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    Session[SessionKeys.CurrentTimeEntry] = db.TimeEntries.Where(t => t.Active == true).First();
+                    Session[SessionKeys.CurrentTimeEntry] = db.TimeEntries.Where(t => t.Active == true).FirstOrDefault();
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");

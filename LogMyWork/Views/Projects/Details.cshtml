@@ -1,9 +1,16 @@
-﻿@model LogMyWork.Models.Project
+﻿@using LogMyWork.Consts;
+@model LogMyWork.Models.Project
 
 @{
     ViewBag.Title = "Details";
 }
+@{ 
+    string ButtonText = Session[SessionKeys.CurrentTimeEntry] == null ? "Track" : "Stop";
+}
 
+<script>
+    isTracking = @(Session[SessionKeys.CurrentTimeEntry] != null)
+</script>
 <h2>Details</h2>
 
 <div>
@@ -25,7 +32,7 @@
             </dt>
             <dd>
                 @Html.DisplayFor(tmp => task.Name)
-                @Html.Label("Track", new { onClick = "createTimeEntry($(this))", taskId = task.TaskID }) |
+                @Html.Label(ButtonText, new { onClick = "createTimeEntry($(this))", taskId = task.TaskID }) |
                 @Html.ActionLink("Edit", "Edit", "Tasks", new { id = task.TaskID }, null) |
                 @Html.ActionLink("Details", "Details", "Tasks", new { id = task.TaskID }, null) |
                 @Html.ActionLink("Delete", "Delete", "Tasks", new { id = task.TaskID }, null) |

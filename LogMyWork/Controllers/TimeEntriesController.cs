@@ -7,8 +7,10 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using LogMyWork.Models;
+using Microsoft.AspNet.Identity;
 using System.Diagnostics;
 using LogMyWork.Consts;
+using System.Threading.Tasks;
 
 namespace LogMyWork.Controllers
 {
@@ -19,6 +21,15 @@ namespace LogMyWork.Controllers
         // GET: TimeEntries
         public ActionResult Index()
         {
+            string userId = User.Identity.GetUserId();
+            foreach (var t in this.db.TimeEntries.Where(val => val.UserID == userId))
+            {
+                if (t.ParentTask == null)
+                {
+                    t.ParentTask = this.db.ProjectTasks.Find(t.ParentTaskId);
+                }
+            }
+
             return View(db.TimeEntries.ToList());
         }
 
@@ -50,18 +61,15 @@ namespace LogMyWork.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ParentTaskId")] TimeEntry timeEntry)
         {
-
-            db.TimeEntries
-                .Where(t => t.Active == true)
-                .ForEachAsync(
-                    t => {
-                        t.Active = false;
-                        t.End = DateTime.UtcNow;
-                    } 
-                );
+            Debug.WriteLine("REQUEST");
+            foreach (var val in db.TimeEntries.Where(t => t.Active == true))
+            {
+                val.Active = false;
+                val.End = DateTime.UtcNow;
+            }
 
             // if exits a currently active entry for this task, end it
-            if(db.TimeEntries
+            if (db.TimeEntries
                 .Where(t => t.Active == true && t.ParentTaskId == timeEntry.ParentTaskId)
                 .Count() > 0)
             {
@@ -74,6 +82,7 @@ namespace LogMyWork.Controllers
             Session[SessionKeys.CurrentTimeEntry] = timeEntry;
             timeEntry.Active = true;
             timeEntry.Start = DateTime.UtcNow;
+            timeEntry.UserID = User.Identity.GetUserId();
 
             if (ModelState.IsValid)
             {
@@ -82,7 +91,7 @@ namespace LogMyWork.Controllers
                 {
                     db.SaveChanges();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Debug.WriteLine(e.Message);
                     return this.ajaxFailure();

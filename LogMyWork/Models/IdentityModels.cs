@@ -21,7 +21,7 @@ namespace LogMyWork.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("LogMyWorkContext", throwIfV1Schema: false)
         {
         }
 

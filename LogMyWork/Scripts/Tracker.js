@@ -1,4 +1,4 @@
-﻿var isTracking = false;
+﻿var isTracking;
 function createTimeEntry(node) {
     var taskId = node.attr("taskId");
     var headers = new Array();
