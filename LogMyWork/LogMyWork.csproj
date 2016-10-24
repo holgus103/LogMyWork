@@ -267,6 +267,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\Shared.js" />
     <Content Include="Scripts\Tracker.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
@@ -344,6 +345,12 @@
     <EmbeddedResource Include="Migrations\201610211933411_UserId is a string.resx">
       <DependentUpon>201610211933411_UserId is a string.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Commons\Commons.csproj">
+      <Project>{97f7edd2-5ab3-4ac9-8f0a-42a16230e014}</Project>
+      <Name>Commons</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

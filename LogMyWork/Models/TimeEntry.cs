@@ -20,11 +20,14 @@ namespace LogMyWork.Models
         public int ParentTaskId { get; set; }
         public ProjectTask ParentTask { get; set; }
         [DisplayFormat(DataFormatString = @"{0:hh\:mm\:ss}", ApplyFormatInEditMode = true)]
-        public TimeSpan Duration
+        public TimeSpan? Duration
         {
             get
             {
-                return this.End.Value.Subtract(this.Start);
+                if (this.End != null)
+                    return this.End.Value.Subtract(this.Start);
+                else
+                    return null;
             }
         }
     }

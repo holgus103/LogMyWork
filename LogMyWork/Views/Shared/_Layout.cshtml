@@ -1,5 +1,6 @@
 ﻿@using LogMyWork.Models
 @using LogMyWork.Consts
+@using Commons
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +13,7 @@
 </head>
 <body>
     @if(Session[SessionKeys.CurrentTimeEntry] != null){
-        @Html.Hidden("currentTask", ((TimeEntry) Session[SessionKeys.CurrentTimeEntry]).Start.ToString())
+        @Html.Hidden("currentTask", ((TimeEntry) Session[SessionKeys.CurrentTimeEntry]).Start.ToUnixTimestamp())
     }
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
@@ -48,6 +49,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Scripts/Shared.js")
     @RenderSection("scripts", required: false)
 </body>
 </html>
