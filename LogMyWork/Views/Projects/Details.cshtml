@@ -9,7 +9,7 @@
 }
 
 <script>
-    isTracking = @(Session[SessionKeys.CurrentTimeEntry] != null)
+    isTracking = @((Session[SessionKeys.CurrentTimeEntry] != null).ToString().ToLower());
 </script>
 <h2>Details</h2>
 

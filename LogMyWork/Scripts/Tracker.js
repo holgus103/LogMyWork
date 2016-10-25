@@ -1,4 +1,5 @@
 ﻿var isTracking;
+
 function createTimeEntry(node) {
     var taskId = node.attr("taskId");
     var headers = new Array();
@@ -23,14 +24,13 @@ function createTimeEntry(node) {
             function (data) {
                 isTracking = !isTracking;
                 if (data == "1") {
-                    console.log("hooray");
-                    if (isTracking)
+                    if (isTracking) {
                         node.html("Stop");
-                    else
+                    }
+                    else {
                         node.html("Track");
-                }
-                else {
-                    console.log("fail");
+                    }
+                    location.reload();
                 }
             }
         );

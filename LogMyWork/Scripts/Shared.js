@@ -1,11 +1,18 @@
-﻿var startDate;
-var taskClock = $("#TaskClock");
-$(document).ready(function () {
-    startDate = new Date($("#currentTask").val()*1000);
-    setInterval(oneTick, 500);
-});
+﻿// page global variables
+var startDate;
+var taskClock;
 
+// assign event handlers
+$(document).ready(setUpTimer);
 
+function setUpTimer() {
+    var hidden = $("#currentTask");
+    if (hidden.length > 0) {
+        taskClock = $("#TaskClock");
+        startDate = new Date($("#currentTask").val() * 1000);
+        setInterval(oneTick, 500);
+    }
+}
 function oneTick() {
     var now = new Date();
     var span = new TimeSpan(now - startDate);
