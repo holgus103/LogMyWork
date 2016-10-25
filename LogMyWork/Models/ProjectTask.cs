@@ -9,6 +9,9 @@ namespace LogMyWork.Models
     {
         [Key]
         public int TaskID { get; set; }
+        [ForeignKey("User")]
+        public string UserID { get; set; }
+        public ApplicationUser User { get; set; }
         [DisplayName ("Task Name")]
         public string Name { get; set; }
         [ForeignKey ("ParentProject")]

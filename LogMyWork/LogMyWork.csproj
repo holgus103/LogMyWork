@@ -230,6 +230,14 @@
     <Compile Include="Migrations\201610211933411_UserId is a string.Designer.cs">
       <DependentUpon>201610211933411_UserId is a string.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201610251511305_New DB Context.cs" />
+    <Compile Include="Migrations\201610251511305_New DB Context.Designer.cs">
+      <DependentUpon>201610251511305_New DB Context.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610251703026_Old context removed.cs" />
+    <Compile Include="Migrations\201610251703026_Old context removed.Designer.cs">
+      <DependentUpon>201610251703026_Old context removed.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -344,6 +352,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201610211933411_UserId is a string.resx">
       <DependentUpon>201610211933411_UserId is a string.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610251511305_New DB Context.resx">
+      <DependentUpon>201610251511305_New DB Context.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610251703026_Old context removed.resx">
+      <DependentUpon>201610251703026_Old context removed.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -12,7 +12,9 @@ namespace LogMyWork.Models
     {
         [Key]
         public int EntryID { get; set; }
+        [ForeignKey("User")]
         public string UserID { get; set; }
+        public ApplicationUser User { get; set; }
         public DateTime Start { get; set; }
         public DateTime? End { get; set; }
         public bool Active { get; set; }
