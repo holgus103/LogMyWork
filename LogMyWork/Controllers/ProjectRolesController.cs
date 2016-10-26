@@ -14,6 +14,10 @@ namespace LogMyWork.Controllers
     {
         private LogMyWorkContext db = new LogMyWorkContext();
 
+        public ActionResult Index()
+        {
+            return null;
+        }
         // GET: ProjectRoles/Details/5
         public ActionResult Details(int? id)
         {
@@ -43,12 +47,12 @@ namespace LogMyWork.Controllers
             {
                 db.ProjectRoles.Add(projectRole);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return this.RedirectToAction("Index", "Projects");
             }
 
             ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "Name", projectRole.ProjectID);
             ViewBag.UserID = new SelectList(db.Users, "Id", "Email", projectRole.UserID);
-            return View(projectRole);
+            return this.RedirectToAction("Index", "Projects"); 
         }
 
 
@@ -75,7 +79,7 @@ namespace LogMyWork.Controllers
             ProjectRole projectRole = db.ProjectRoles.Find(id);
             db.ProjectRoles.Remove(projectRole);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return this.RedirectToAction("Index", "Projects"); 
         }
 
         protected override void Dispose(bool disposing)
