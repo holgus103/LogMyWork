@@ -16,6 +16,6 @@ namespace LogMyWork.Models
         [DisplayName("Project Name")]
         public string Name { get; set; }
         public ICollection<ProjectTask> Tasks{ get; set; }
-        public ICollection<ApplicationUser> Users { get; set; }
+        public ICollection<ProjectRole> Roles { get; set; }
     }
 }

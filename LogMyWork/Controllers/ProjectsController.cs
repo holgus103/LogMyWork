@@ -124,6 +124,16 @@ namespace LogMyWork.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult Users(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Project project = db.Projects.Include(p => p.Roles.Select( t => t.User)).Where( p => p.ProjectID == id).FirstOrDefault();
+            return View(project);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

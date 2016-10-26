@@ -1,0 +1,36 @@
+﻿@model LogMyWork.Models.Project
+
+@{
+    ViewBag.Title = "Users";
+}
+
+<h2>@Model.Name</h2>
+@Html.ActionLink("Add User", "Create", "ProjectRoles", new { id = Model.ProjectID }, null)
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Roles.FirstOrDefault().User.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Roles.FirstOrDefault().Role)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Roles)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role)
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "Delete", "ProjectRoles", new { Id = item.ProjectRoleID }, null)
+            </td>
+        </tr>
+    }
+
+</table>
+

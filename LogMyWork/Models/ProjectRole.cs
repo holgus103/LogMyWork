@@ -10,28 +10,10 @@ namespace LogMyWork.Models
 {
     public class ProjectRole
     {
-        private Project project;
-        private ApplicationUser user;
-
-        //[Key]
-        //public int ProjectRoleID { get; set; }
         [Key]
-        [Column(Order = 1)]
+        public int ProjectRoleID { get; set; }
         public int ProjectID { get; set; }
-        public Project Project
-        {
-            get
-            {
-                return this.project;
-            }
-            set
-            {
-                this.project = value;
-                this.ProjectID = value.ProjectID;
-            }
-        }
-        [Key]
-        [Column(Order = 2)]
+        public Project Project { get; set; }
         public string UserID { get; set; }
         public ApplicationUser User { get; set; }
         public Role Role { get; set; }

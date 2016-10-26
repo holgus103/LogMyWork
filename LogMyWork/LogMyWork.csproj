@@ -201,9 +201,11 @@
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ProjectRolesController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\TimeEntriesController.cs" />
+    <Compile Include="DAL\Projects.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -222,6 +224,14 @@
     <Compile Include="Migrations\201610260029165_typo.cs" />
     <Compile Include="Migrations\201610260029165_typo.Designer.cs">
       <DependentUpon>201610260029165_typo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610261542202_Some keys removed.cs" />
+    <Compile Include="Migrations\201610261542202_Some keys removed.Designer.cs">
+      <DependentUpon>201610261542202_Some keys removed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610261707485_Id for ProjectRole.cs" />
+    <Compile Include="Migrations\201610261707485_Id for ProjectRole.Designer.cs">
+      <DependentUpon>201610261707485_Id for ProjectRole.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -251,6 +261,7 @@
       <SubType>Designer</SubType>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\common\TimeZoneAdjust.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -307,6 +318,9 @@
     <Content Include="Views\Tasks\Edit.cshtml" />
     <Content Include="Views\Tasks\Index.cshtml" />
     <Content Include="Views\TimeEntries\Index.cshtml" />
+    <Content Include="Views\ProjectRoles\Create.cshtml" />
+    <Content Include="Views\ProjectRoles\Delete.cshtml" />
+    <Content Include="Views\Projects\Users.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -338,6 +352,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201610260029165_typo.resx">
       <DependentUpon>201610260029165_typo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610261542202_Some keys removed.resx">
+      <DependentUpon>201610261542202_Some keys removed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610261707485_Id for ProjectRole.resx">
+      <DependentUpon>201610261707485_Id for ProjectRole.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

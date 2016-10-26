@@ -32,5 +32,7 @@ namespace LogMyWork.Models
         public DbSet<TimeEntry> TimeEntries { get; set; }
 
         public DbSet<ProjectRole> ProjectRoles { get; set; }
+
+
     }
 }
