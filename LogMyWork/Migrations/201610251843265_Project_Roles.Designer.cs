@@ -7,13 +7,13 @@ namespace LogMyWork.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class ForeignKeyforTasks : IMigrationMetadata
+    public sealed partial class Project_Roles : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(ForeignKeyforTasks));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Project_Roles));
         
         string IMigrationMetadata.Id
         {
-            get { return "201610161212449_ForeignKey for Tasks"; }
+            get { return "201610251843265_Project_Roles"; }
         }
         
         string IMigrationMetadata.Source

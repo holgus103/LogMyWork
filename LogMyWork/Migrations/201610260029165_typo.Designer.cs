@@ -7,13 +7,13 @@ namespace LogMyWork.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Oldcontextremoved : IMigrationMetadata
+    public sealed partial class typo : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Oldcontextremoved));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(typo));
         
         string IMigrationMetadata.Id
         {
-            get { return "201610251703026_Old context removed"; }
+            get { return "201610260029165_typo"; }
         }
         
         string IMigrationMetadata.Source

@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using LogMyWork.Models;
+using Microsoft.AspNet.Identity;
 
 namespace LogMyWork.Controllers
 {
@@ -18,7 +19,12 @@ namespace LogMyWork.Controllers
         // GET: Projects
         public ActionResult Index()
         {
-            return View(db.Projects.ToList());
+            string userID = User.Identity.GetUserId();
+            IQueryable<Project> projects = (from p in this.db.Projects
+                            join r in this.db.ProjectRoles on p.ProjectID equals r.ProjectID
+                            where r.UserID == userID
+                            select p);
+            return View(projects.ToList());
         }
 
         // GET: Projects/Details/5
@@ -29,7 +35,7 @@ namespace LogMyWork.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Project project = db.Projects.Find(id);
-            project.Tasks = db.ProjectTasks.Where(t => t.ParentProjectId == project.ProjectID).ToList();
+            project.Tasks = db.ProjectTasks.Where(t => t.ParentProjectID == project.ProjectID).ToList();
             if (project == null)
             {
                 return HttpNotFound();
@@ -53,6 +59,7 @@ namespace LogMyWork.Controllers
             if (ModelState.IsValid)
             {
                 db.Projects.Add(project);
+                db.ProjectRoles.Add(new ProjectRole { ProjectID = project.ProjectID, UserID = User.Identity.GetUserId()});
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

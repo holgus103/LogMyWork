@@ -7,13 +7,13 @@ namespace LogMyWork.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class TimeEntries : IMigrationMetadata
+    public sealed partial class Init : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(TimeEntries));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Init));
         
         string IMigrationMetadata.Id
         {
-            get { return "201610172248204_TimeEntries"; }
+            get { return "201610251820022_Init"; }
         }
         
         string IMigrationMetadata.Source

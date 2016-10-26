@@ -3,10 +3,25 @@ namespace LogMyWork.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class NewDBContext : DbMigration
+    public partial class Init : DbMigration
     {
         public override void Up()
         {
+            CreateTable(
+                "dbo.Projects",
+                c => new
+                    {
+                        ProjectID = c.Int(nullable: false, identity: true),
+                        OwnerID = c.String(maxLength: 128),
+                        Name = c.String(),
+                        ApplicationUser_Id = c.String(maxLength: 128),
+                    })
+                .PrimaryKey(t => t.ProjectID)
+                .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id)
+                .ForeignKey("dbo.AspNetUsers", t => t.OwnerID)
+                .Index(t => t.OwnerID)
+                .Index(t => t.ApplicationUser_Id);
+            
             CreateTable(
                 "dbo.AspNetUsers",
                 c => new
@@ -23,10 +38,12 @@ namespace LogMyWork.Migrations
                         LockoutEnabled = c.Boolean(nullable: false),
                         AccessFailedCount = c.Int(nullable: false),
                         UserName = c.String(nullable: false, maxLength: 256),
-                        Discriminator = c.String(nullable: false, maxLength: 128),
+                        Project_ProjectID = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .Index(t => t.UserName, unique: true, name: "UserNameIndex");
+                .ForeignKey("dbo.Projects", t => t.Project_ProjectID)
+                .Index(t => t.UserName, unique: true, name: "UserNameIndex")
+                .Index(t => t.Project_ProjectID);
             
             CreateTable(
                 "dbo.AspNetUserClaims",
@@ -61,10 +78,42 @@ namespace LogMyWork.Migrations
                         RoleId = c.String(nullable: false, maxLength: 128),
                     })
                 .PrimaryKey(t => new { t.UserId, t.RoleId })
-                .ForeignKey("dbo.AspNetRoles", t => t.RoleId, cascadeDelete: true)
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
+                .ForeignKey("dbo.AspNetRoles", t => t.RoleId, cascadeDelete: true)
                 .Index(t => t.UserId)
                 .Index(t => t.RoleId);
+            
+            CreateTable(
+                "dbo.ProjectTasks",
+                c => new
+                    {
+                        TaskID = c.Int(nullable: false, identity: true),
+                        UserID = c.String(maxLength: 128),
+                        Name = c.String(),
+                        ParentProjectID = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.TaskID)
+                .ForeignKey("dbo.Projects", t => t.ParentProjectID, cascadeDelete: true)
+                .ForeignKey("dbo.AspNetUsers", t => t.UserID)
+                .Index(t => t.UserID)
+                .Index(t => t.ParentProjectID);
+            
+            CreateTable(
+                "dbo.TimeEntries",
+                c => new
+                    {
+                        EntryID = c.Int(nullable: false, identity: true),
+                        UserID = c.String(maxLength: 128),
+                        Start = c.DateTime(nullable: false),
+                        End = c.DateTime(),
+                        Active = c.Boolean(nullable: false),
+                        ParentTaskId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.EntryID)
+                .ForeignKey("dbo.ProjectTasks", t => t.ParentTaskId, cascadeDelete: true)
+                .ForeignKey("dbo.AspNetUsers", t => t.UserID)
+                .Index(t => t.UserID)
+                .Index(t => t.ParentTaskId);
             
             CreateTable(
                 "dbo.AspNetRoles",
@@ -76,37 +125,42 @@ namespace LogMyWork.Migrations
                 .PrimaryKey(t => t.Id)
                 .Index(t => t.Name, unique: true, name: "RoleNameIndex");
             
-            AddColumn("dbo.ProjectTasks", "UserID", c => c.String(maxLength: 128));
-            AlterColumn("dbo.TimeEntries", "UserID", c => c.String(maxLength: 128));
-            CreateIndex("dbo.ProjectTasks", "UserID");
-            CreateIndex("dbo.TimeEntries", "UserID");
-            AddForeignKey("dbo.ProjectTasks", "UserID", "dbo.AspNetUsers", "Id");
-            AddForeignKey("dbo.TimeEntries", "UserID", "dbo.AspNetUsers", "Id");
         }
         
         public override void Down()
         {
+            DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
+            DropForeignKey("dbo.AspNetUsers", "Project_ProjectID", "dbo.Projects");
+            DropForeignKey("dbo.Projects", "OwnerID", "dbo.AspNetUsers");
+            DropForeignKey("dbo.TimeEntries", "UserID", "dbo.AspNetUsers");
+            DropForeignKey("dbo.TimeEntries", "ParentTaskId", "dbo.ProjectTasks");
+            DropForeignKey("dbo.ProjectTasks", "UserID", "dbo.AspNetUsers");
+            DropForeignKey("dbo.ProjectTasks", "ParentProjectID", "dbo.Projects");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Projects", "ApplicationUser_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
-            DropForeignKey("dbo.TimeEntries", "UserID", "dbo.AspNetUsers");
-            DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
-            DropForeignKey("dbo.ProjectTasks", "UserID", "dbo.AspNetUsers");
-            DropIndex("dbo.TimeEntries", new[] { "UserID" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
+            DropIndex("dbo.TimeEntries", new[] { "ParentTaskId" });
+            DropIndex("dbo.TimeEntries", new[] { "UserID" });
+            DropIndex("dbo.ProjectTasks", new[] { "ParentProjectID" });
+            DropIndex("dbo.ProjectTasks", new[] { "UserID" });
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
+            DropIndex("dbo.AspNetUsers", new[] { "Project_ProjectID" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
-            DropIndex("dbo.ProjectTasks", new[] { "UserID" });
-            AlterColumn("dbo.TimeEntries", "UserID", c => c.String());
-            DropColumn("dbo.ProjectTasks", "UserID");
+            DropIndex("dbo.Projects", new[] { "ApplicationUser_Id" });
+            DropIndex("dbo.Projects", new[] { "OwnerID" });
             DropTable("dbo.AspNetRoles");
+            DropTable("dbo.TimeEntries");
+            DropTable("dbo.ProjectTasks");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
+            DropTable("dbo.Projects");
         }
     }
 }

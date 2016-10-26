@@ -12,14 +12,10 @@ namespace LogMyWork.Models
     [Table("Projects")]
     public class Project
     {
-        [ForeignKey("User")]
-        public string OwnerID { get; }
-        public ApplicationUser Owner { get; }
         public int ProjectID { get; set; }
-        //[Required]
         [DisplayName("Project Name")]
         public string Name { get; set; }
-        public IEnumerable<ProjectTask> Tasks{ get; set; }
-        public IEnumerable<ApplicationUser> Users { get; set; }
+        public ICollection<ProjectTask> Tasks{ get; set; }
+        public ICollection<ApplicationUser> Users { get; set; }
     }
 }

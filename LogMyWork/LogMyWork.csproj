@@ -195,6 +195,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Consts\Role.cs" />
     <Compile Include="Consts\SessionsKey.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
@@ -206,37 +207,21 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201610151808562_init.cs" />
-    <Compile Include="Migrations\201610151808562_init.Designer.cs">
-      <DependentUpon>201610151808562_init.cs</DependentUpon>
+    <Compile Include="Migrations\201610251820022_Init.cs" />
+    <Compile Include="Migrations\201610251820022_Init.Designer.cs">
+      <DependentUpon>201610251820022_Init.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201610161212449_ForeignKey for Tasks.cs" />
-    <Compile Include="Migrations\201610161212449_ForeignKey for Tasks.Designer.cs">
-      <DependentUpon>201610161212449_ForeignKey for Tasks.cs</DependentUpon>
+    <Compile Include="Migrations\201610251843265_Project_Roles.cs" />
+    <Compile Include="Migrations\201610251843265_Project_Roles.Designer.cs">
+      <DependentUpon>201610251843265_Project_Roles.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201610172248204_TimeEntries.cs" />
-    <Compile Include="Migrations\201610172248204_TimeEntries.Designer.cs">
-      <DependentUpon>201610172248204_TimeEntries.cs</DependentUpon>
+    <Compile Include="Migrations\201610251916411_Roles_2.cs" />
+    <Compile Include="Migrations\201610251916411_Roles_2.Designer.cs">
+      <DependentUpon>201610251916411_Roles_2.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201610202226536_Nullable end of time entry.cs" />
-    <Compile Include="Migrations\201610202226536_Nullable end of time entry.Designer.cs">
-      <DependentUpon>201610202226536_Nullable end of time entry.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610211922585_UserId in TimeEntries.cs" />
-    <Compile Include="Migrations\201610211922585_UserId in TimeEntries.Designer.cs">
-      <DependentUpon>201610211922585_UserId in TimeEntries.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610211933411_UserId is a string.cs" />
-    <Compile Include="Migrations\201610211933411_UserId is a string.Designer.cs">
-      <DependentUpon>201610211933411_UserId is a string.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610251511305_New DB Context.cs" />
-    <Compile Include="Migrations\201610251511305_New DB Context.Designer.cs">
-      <DependentUpon>201610251511305_New DB Context.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201610251703026_Old context removed.cs" />
-    <Compile Include="Migrations\201610251703026_Old context removed.Designer.cs">
-      <DependentUpon>201610251703026_Old context removed.cs</DependentUpon>
+    <Compile Include="Migrations\201610260029165_typo.cs" />
+    <Compile Include="Migrations\201610260029165_typo.Designer.cs">
+      <DependentUpon>201610260029165_typo.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -244,6 +229,7 @@
     <Compile Include="Models\LogMyWorkContext.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Project.cs" />
+    <Compile Include="Models\ProjectRole.cs" />
     <Compile Include="Models\ProjectTask.cs" />
     <Compile Include="Models\TimeEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -335,36 +321,24 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201610151808562_init.resx">
-      <DependentUpon>201610151808562_init.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610161212449_ForeignKey for Tasks.resx">
-      <DependentUpon>201610161212449_ForeignKey for Tasks.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610172248204_TimeEntries.resx">
-      <DependentUpon>201610172248204_TimeEntries.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610202226536_Nullable end of time entry.resx">
-      <DependentUpon>201610202226536_Nullable end of time entry.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610211922585_UserId in TimeEntries.resx">
-      <DependentUpon>201610211922585_UserId in TimeEntries.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610211933411_UserId is a string.resx">
-      <DependentUpon>201610211933411_UserId is a string.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610251511305_New DB Context.resx">
-      <DependentUpon>201610251511305_New DB Context.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610251703026_Old context removed.resx">
-      <DependentUpon>201610251703026_Old context removed.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Commons\Commons.csproj">
       <Project>{97f7edd2-5ab3-4ac9-8f0a-42a16230e014}</Project>
       <Name>Commons</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201610251820022_Init.resx">
+      <DependentUpon>201610251820022_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610251843265_Project_Roles.resx">
+      <DependentUpon>201610251843265_Project_Roles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610251916411_Roles_2.resx">
+      <DependentUpon>201610251916411_Roles_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610260029165_typo.resx">
+      <DependentUpon>201610260029165_typo.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -15,7 +15,7 @@ namespace LogMyWork.Models
         [DisplayName ("Task Name")]
         public string Name { get; set; }
         [ForeignKey ("ParentProject")]
-        public int ParentProjectId { get; set; }
+        public int ParentProjectID { get; set; }
         public Project ParentProject { get; set; }
     }
 }

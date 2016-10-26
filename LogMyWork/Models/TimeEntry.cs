@@ -12,14 +12,12 @@ namespace LogMyWork.Models
     {
         [Key]
         public int EntryID { get; set; }
-        [ForeignKey("User")]
         public string UserID { get; set; }
         public ApplicationUser User { get; set; }
         public DateTime Start { get; set; }
         public DateTime? End { get; set; }
         public bool Active { get; set; }
-        [ForeignKey("ParentTask")]
-        public int ParentTaskId { get; set; }
+        public int ParentTaskID { get; set; }
         public ProjectTask ParentTask { get; set; }
         [DisplayFormat(DataFormatString = @"{0:hh\:mm\:ss}", ApplyFormatInEditMode = true)]
         public TimeSpan? Duration

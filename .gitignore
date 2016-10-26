@@ -1,11 +1,14 @@
 /.vs
 /LoggingModule
 /Packages
-/LogMyWork/bin
-/LogMyWork/obj
+/LogMyWork/bin/
+/LogMyWork/obj/
+/LogMyWork/App_Data/
 *.mdf
 LogMyWork/App_Data/aspnet-LogMyWork-20160905120332_log.ldf
 *.mdf
 *.pdb
-Commons/obj/Debug/Commons.csproj.FileListAbsolute.txt
+Commons/obj/
+Commons/bin/
 *.mdf
+*.cache

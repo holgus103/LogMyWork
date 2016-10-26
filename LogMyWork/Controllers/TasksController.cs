@@ -34,14 +34,14 @@ namespace LogMyWork.Controllers
             {
                 return HttpNotFound();
             }
-            projectTask.ParentProject = db.Projects.Find(projectTask.ParentProjectId);
+            projectTask.ParentProject = db.Projects.Find(projectTask.ParentProjectID);
             return View(projectTask);
         }
 
         // GET: Tasks/Create
         public ActionResult Create()
         {
-            ViewBag.ParentProjectId = new SelectList(db.Projects, "ProjectID", "Name");
+            ViewBag.ParentProjectID = new SelectList(db.Projects, "ProjectID", "Name");
             return View();
         }
 
@@ -50,7 +50,7 @@ namespace LogMyWork.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TaskID,Name,ParentProjectId")] ProjectTask projectTask)
+        public ActionResult Create([Bind(Include = "TaskID,Name,ParentProjectID")] ProjectTask projectTask)
         {
             if (ModelState.IsValid)
             {
@@ -59,7 +59,7 @@ namespace LogMyWork.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ParentProjectId = new SelectList(db.Projects, "ProjectID", "Name", projectTask.ParentProjectId);
+            ViewBag.ParentProjectID = new SelectList(db.Projects, "ProjectID", "Name", projectTask.ParentProjectID);
             return View(projectTask);
         }
 
@@ -75,7 +75,7 @@ namespace LogMyWork.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ParentProjectId = new SelectList(db.Projects, "ProjectID", "Name", projectTask.ParentProjectId);
+            ViewBag.ParentProjectID = new SelectList(db.Projects, "ProjectID", "Name", projectTask.ParentProjectID);
             return View(projectTask);
         }
 
@@ -84,7 +84,7 @@ namespace LogMyWork.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "TaskID,Name,ParentProjectId")] ProjectTask projectTask)
+        public ActionResult Edit([Bind(Include = "TaskID,Name,ParentProjectID")] ProjectTask projectTask)
         {
             if (ModelState.IsValid)
             {
@@ -92,7 +92,7 @@ namespace LogMyWork.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.ParentProjectId = new SelectList(db.Projects, "ProjectID", "Name", projectTask.ParentProjectId);
+            ViewBag.ParentProjectID = new SelectList(db.Projects, "ProjectID", "Name", projectTask.ParentProjectID);
             return View(projectTask);
         }
 

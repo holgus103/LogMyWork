@@ -26,7 +26,7 @@ namespace LogMyWork.Controllers
             {
                 if (t.ParentTask == null)
                 {
-                    t.ParentTask = this.db.ProjectTasks.Find(t.ParentTaskId);
+                    t.ParentTask = this.db.ProjectTasks.Find(t.ParentTaskID);
                 }
             }
 
@@ -70,7 +70,7 @@ namespace LogMyWork.Controllers
 
             // if exits a currently active entry for this task, end it
             if (db.TimeEntries
-                .Where(t => t.Active == true && t.ParentTaskId == timeEntry.ParentTaskId)
+                .Where(t => t.Active == true && t.ParentTaskID == timeEntry.ParentTaskID)
                 .Count() > 0)
             {
                 Session[SessionKeys.CurrentTimeEntry] = null;
