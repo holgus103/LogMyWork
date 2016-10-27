@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using LogMyWork.Repositories;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -18,6 +19,7 @@ namespace LogMyWork.Models
     
         public LogMyWorkContext() : base("name=LogMyWorkContext", throwIfV1Schema: false)
         {
+
         }
 
         public static LogMyWorkContext Create()
@@ -33,6 +35,20 @@ namespace LogMyWork.Models
 
         public DbSet<ProjectRole> ProjectRoles { get; set; }
 
+        private ProjectRepository projectRepository;
+        public ProjectRepository ProjectRepository
+        {
+            get
+            {
+                if (this.projectRepository == null)
+                    this.projectRepository = new ProjectRepository(this);
+                return this.projectRepository;
+            }
 
+            set
+            {
+                this.projectRepository = value;
+            }
+        }
     }
 }

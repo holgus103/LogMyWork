@@ -20,11 +20,7 @@ namespace LogMyWork.Controllers
         public ActionResult Index()
         {
             string userID = User.Identity.GetUserId();
-            IQueryable<Project> projects = (from p in this.db.Projects
-                            join r in this.db.ProjectRoles on p.ProjectID equals r.ProjectID
-                            where r.UserID == userID
-                            select p);
-            //db.Projects.Join(db.Roles, p => p.Pro)
+            IQueryable<Project> projects = this.db.ProjectRoles.Include(r => r.Project).Where(r => r.UserID == userID).Select( r => r.Project);
             return View(projects.ToList());
         }
 
@@ -131,8 +127,7 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Project project = db.Projects.Include(p => p.Roles.Select( t => t.User)).Where( p => p.ProjectID == id).FirstOrDefault();
-            return View(project);
+            return View(this.db.Projects.Include(p => p.Roles.Select(t => t.User)).Where(p => p.ProjectID == id).FirstOrDefault());
         }
 
         protected override void Dispose(bool disposing)

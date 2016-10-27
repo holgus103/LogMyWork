@@ -22,7 +22,7 @@ namespace LogMyWork.Controllers
         public ActionResult Index()
         {
             string userId = User.Identity.GetUserId();
-            var val = db.TimeEntries.Include(t => t.ParentTask).Where(e => e.UserID == userId);
+            var val = db.TimeEntries.Include(t => t.ParentTask.ParentProject).Where(e => e.UserID == userId);
             return View(val.ToList());
         }
 

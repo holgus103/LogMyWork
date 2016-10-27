@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using LogMyWork.Models;
+using Microsoft.AspNet.Identity;
 
 namespace LogMyWork.Controllers
 {
@@ -18,7 +19,8 @@ namespace LogMyWork.Controllers
         // GET: Tasks
         public ActionResult Index()
         {
-            var projectTasks = db.ProjectTasks.Include(p => p.ParentProject);
+            string userID = User.Identity.GetUserId();
+            var projectTasks = db.Users.Include(u => u.Tasks).Where(u => u.Id == userID).SingleOrDefault().Tasks;
             return View(projectTasks.ToList());
         }
 

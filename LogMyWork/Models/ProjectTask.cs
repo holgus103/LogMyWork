@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,9 +10,8 @@ namespace LogMyWork.Models
     {
         [Key]
         public int TaskID { get; set; }
-        [ForeignKey("User")]
-        public string UserID { get; set; }
-        public ApplicationUser User { get; set; }
+        public ProjectStatus Status { get; set; }
+        public ICollection<ApplicationUser> User { get; set; }
         [DisplayName ("Task Name")]
         public string Name { get; set; }
         [ForeignKey ("ParentProject")]

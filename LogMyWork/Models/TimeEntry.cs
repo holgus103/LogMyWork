@@ -17,6 +17,9 @@ namespace LogMyWork.Models
         public DateTime Start { get; set; }
         public DateTime? End { get; set; }
         public bool Active { get; set; }
+        public bool Billed { get; set; }
+        public int? RateID { get; set; }
+        public Rate  Rate { get; set; }
         public int ParentTaskID { get; set; }
         [ForeignKey("ParentTaskID")]
         public ProjectTask ParentTask { get; set; }

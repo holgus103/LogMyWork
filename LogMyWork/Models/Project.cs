@@ -15,6 +15,10 @@ namespace LogMyWork.Models
         public int ProjectID { get; set; }
         [DisplayName("Project Name")]
         public string Name { get; set; }
+        public ProjectStatus Status { get; set; }
+        public string ClientID { get; set; }
+        [ForeignKey("ClientID")]
+        public ApplicationUser Client { get; set; }
         public ICollection<ProjectTask> Tasks{ get; set; }
         public ICollection<ProjectRole> Roles { get; set; }
     }
