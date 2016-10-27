@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace LogMyWork.Models
 {
@@ -10,5 +10,6 @@ namespace LogMyWork.Models
         public double RateValue { get; set; }
         public string UserID { get; set; }
         public ApplicationUser User { get; set; }
+        public ICollection<Project> Projects { get; set; }
     }
 }

@@ -203,6 +203,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProjectRolesController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
+    <Compile Include="Controllers\RatesController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\TimeEntriesController.cs" />
     <Compile Include="Migrations\201610272118310_Many to many for tasks and users.cs" />
@@ -217,6 +218,10 @@
     <Compile Include="Migrations\201610272148529_Nullable Rates for TimeEntries.cs" />
     <Compile Include="Migrations\201610272148529_Nullable Rates for TimeEntries.Designer.cs">
       <DependentUpon>201610272148529_Nullable Rates for TimeEntries.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610272213113_Rates to Projects.cs" />
+    <Compile Include="Migrations\201610272213113_Rates to Projects.Designer.cs">
+      <DependentUpon>201610272213113_Rates to Projects.cs</DependentUpon>
     </Compile>
     <Compile Include="Repositories\ProjectRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
@@ -349,6 +354,10 @@
     <Content Include="Views\ProjectRoles\Create.cshtml" />
     <Content Include="Views\ProjectRoles\Delete.cshtml" />
     <Content Include="Views\Projects\Users.cshtml" />
+    <Content Include="Views\Rates\Create.cshtml" />
+    <Content Include="Views\Rates\Delete.cshtml" />
+    <Content Include="Views\Rates\Edit.cshtml" />
+    <Content Include="Views\Rates\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -404,6 +413,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201610272148529_Nullable Rates for TimeEntries.resx">
       <DependentUpon>201610272148529_Nullable Rates for TimeEntries.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610272213113_Rates to Projects.resx">
+      <DependentUpon>201610272213113_Rates to Projects.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

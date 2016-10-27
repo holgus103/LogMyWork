@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LogMyWork.Models
 {
@@ -21,5 +16,6 @@ namespace LogMyWork.Models
         public ApplicationUser Client { get; set; }
         public ICollection<ProjectTask> Tasks{ get; set; }
         public ICollection<ProjectRole> Roles { get; set; }
+        public ICollection<Rate> Rates { get; set; }
     }
 }

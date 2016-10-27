@@ -1,10 +1,6 @@
 ﻿using LogMyWork.Repositories;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Web;
 
 namespace LogMyWork.Models
 {
@@ -16,7 +12,7 @@ namespace LogMyWork.Models
         // automatically whenever you change your model schema, please use data migrations.
         // For more information refer to the documentation:
         // http://msdn.microsoft.com/en-us/data/jj591621.aspx
-    
+
         public LogMyWorkContext() : base("name=LogMyWorkContext", throwIfV1Schema: false)
         {
 
@@ -34,6 +30,8 @@ namespace LogMyWork.Models
         public DbSet<TimeEntry> TimeEntries { get; set; }
 
         public DbSet<ProjectRole> ProjectRoles { get; set; }
+
+        public DbSet<Rate> Rates { get; set; }
 
         private ProjectRepository projectRepository;
         public ProjectRepository ProjectRepository
