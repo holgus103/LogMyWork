@@ -18,6 +18,7 @@ namespace LogMyWork.Models
         public DateTime? End { get; set; }
         public bool Active { get; set; }
         public int ParentTaskID { get; set; }
+        [ForeignKey("ParentTaskID")]
         public ProjectTask ParentTask { get; set; }
         [DisplayFormat(DataFormatString = @"{0:hh\:mm\:ss}", ApplyFormatInEditMode = true)]
         public TimeSpan? Duration

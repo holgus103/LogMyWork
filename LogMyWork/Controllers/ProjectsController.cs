@@ -24,6 +24,7 @@ namespace LogMyWork.Controllers
                             join r in this.db.ProjectRoles on p.ProjectID equals r.ProjectID
                             where r.UserID == userID
                             select p);
+            //db.Projects.Join(db.Roles, p => p.Pro)
             return View(projects.ToList());
         }
 

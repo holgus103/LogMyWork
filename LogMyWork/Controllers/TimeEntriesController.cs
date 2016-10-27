@@ -22,15 +22,8 @@ namespace LogMyWork.Controllers
         public ActionResult Index()
         {
             string userId = User.Identity.GetUserId();
-            foreach (var t in this.db.TimeEntries.Where(val => val.UserID == userId))
-            {
-                if (t.ParentTask == null)
-                {
-                    t.ParentTask = this.db.ProjectTasks.Find(t.ParentTaskID);
-                }
-            }
-
-            return View(db.TimeEntries.ToList());
+            var val = db.TimeEntries.Include(t => t.ParentTask).Where(e => e.UserID == userId);
+            return View(val.ToList());
         }
 
         // GET: TimeEntries/Details/5
