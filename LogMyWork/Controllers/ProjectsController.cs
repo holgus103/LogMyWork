@@ -42,7 +42,9 @@ namespace LogMyWork.Controllers
         // GET: Projects/Create
         public ActionResult Create()
         {
-            return View();
+            string userID = this.User.Identity.GetUserId();
+            ViewBag.Rates = new SelectList(this.db.Rates.Where(r => r.UserID == userID), "RateID", "RateValue");
+            return View("Edit");
         }
 
         // POST: Projects/Create
@@ -50,17 +52,19 @@ namespace LogMyWork.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProjectID,Name")] Project project)
+        public ActionResult Create(ProjectEdit form)
         {
             if (ModelState.IsValid)
             {
+                Project project = new Project() { Name = form.Name };
+                project.Rates = new List<Rate>() { this.db.Rates.Find(form.RateID) };
                 db.Projects.Add(project);
                 db.ProjectRoles.Add(new ProjectRole { ProjectID = project.ProjectID, UserID = User.Identity.GetUserId()});
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(project);
+            return View("Edit", form);
         }
 
         // GET: Projects/Edit/5
@@ -72,20 +76,18 @@ namespace LogMyWork.Controllers
             }
             string userID = User.Identity.GetUserId();
             Project project = db.Projects.Find(id);
-            //load filtered entities
-            project.Rates = new List<Rate>();
-            foreach (var item in this.db.Entry(project).Collection(p => p.Rates).Query().Where(e => e.UserID == userID))
-            {
-                project.Rates.Add(item);
-            }
-
-                //.Load();
-            ViewBag.Rates = new SelectList(this.db.Rates.Where(r => r.UserID == userID), "RateID", "RateValue", project.Rates.FirstOrDefault().RateID);
+            ViewBag.Rates = new SelectList(
+                this.db.Rates.Where(r => r.UserID == userID),
+                "RateID",
+                "RateValue",
+                this.db.Entry(project).Collection(p => p.Rates).Query().Where(e => e.UserID == userID).FirstOrDefault().RateID
+                );
             if (project == null)
             {
                 return HttpNotFound();
             }
-            return View(project);
+            ProjectEdit editProject = new ProjectEdit() { ProjectID = project.ProjectID, Name = project.Name };
+            return View(editProject);
         }
 
         // POST: Projects/Edit/5
