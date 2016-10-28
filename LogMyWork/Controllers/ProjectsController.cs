@@ -5,6 +5,7 @@ using System.Net;
 using System.Web.Mvc;
 using LogMyWork.Models;
 using Microsoft.AspNet.Identity;
+using System.Collections.Generic;
 
 namespace LogMyWork.Controllers
 {
@@ -68,7 +69,17 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            string userID = User.Identity.GetUserId();
             Project project = db.Projects.Find(id);
+            //load filtered entities
+            project.Rates = new List<Rate>();
+            foreach (var item in this.db.Entry(project).Collection(p => p.Rates).Query().Where(e => e.UserID == userID))
+            {
+                project.Rates.Add(item);
+            }
+
+                //.Load();
+            ViewBag.Rates = new SelectList(this.db.Rates.Where(r => r.UserID == userID), "RateID", "RateValue", project.Rates.FirstOrDefault().RateID);
             if (project == null)
             {
                 return HttpNotFound();
