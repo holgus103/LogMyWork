@@ -259,6 +259,7 @@
     <Compile Include="Migrations\201610281222101_Removed some id.Designer.cs">
       <DependentUpon>201610281222101_Removed some id.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProjectEdit.cs" />
     <Compile Include="ProjectRoles.cs">
       <DependentUpon>LogMyWork.tt</DependentUpon>
     </Compile>

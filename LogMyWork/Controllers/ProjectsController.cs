@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using LogMyWork.Models;
 using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
+using System;
 
 namespace LogMyWork.Controllers
 {
@@ -92,15 +93,28 @@ namespace LogMyWork.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProjectID,Name")] Project project)
+        //[Bind(Include = "ProjectID,Name,Rates[0].RateID")] Project project
+        public ActionResult Edit(ProjectEdit form)
         {
             if (ModelState.IsValid)
             {
+                string userID = User.Identity.GetUserId();
+                Project project = this.db.Projects.Find(form.ProjectID);
+                // get rate for this project for this user
+                Rate rate = this.db.Rates.Include(r => r.Projects).Where(r => r.UserID == userID && r.Projects.Any(p => p.ProjectID == project.ProjectID)).FirstOrDefault();
+                // update project fields
+                project.Name = form.Name;
+                // load project rates
+                this.db.Entry(project).Collection(p => p.Rates).Load();
+                // remove previously selected rate
+                project.Rates.Remove(rate);
+                // add new relation for RateProject
+                project.Rates.Add(this.db.Rates.Find(form.RateID));
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(project);
+            return RedirectToAction("Index");
         }
 
         // GET: Projects/Delete/5
