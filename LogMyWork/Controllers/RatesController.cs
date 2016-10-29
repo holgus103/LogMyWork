@@ -24,7 +24,7 @@ namespace LogMyWork.Controllers
         // GET: Rates/Create
         public ActionResult Create()
         {
-            ViewBag.UserID = new SelectList(db.Users, "Id", "Email");
+            //ViewBag.UserID = new SelectList(db.Users, "Id", "Email");
             return View();
         }
 
@@ -33,8 +33,9 @@ namespace LogMyWork.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "RateID,RateValue,UserID")] Rate rate)
+        public ActionResult Create([Bind(Include = "RateID,RateValue")] Rate rate)
         {
+            rate.UserID = User.Identity.GetUserId();
             if (ModelState.IsValid)
             {
                 db.Rates.Add(rate);

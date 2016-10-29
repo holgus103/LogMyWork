@@ -12,7 +12,7 @@ using Microsoft.AspNet.Identity;
 namespace LogMyWork.Controllers
 {
     [Authorize]
-    public class TasksController : Controller
+    public class TasksController : AjaxController
     {
         private LogMyWorkContext db = new LogMyWorkContext();
 
@@ -58,7 +58,7 @@ namespace LogMyWork.Controllers
             {
                 db.ProjectTasks.Add(projectTask);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return this.sendID(projectTask.TaskID);
             }
 
             ViewBag.ParentProjectID = new SelectList(db.Projects, "ProjectID", "Name", projectTask.ParentProjectID);

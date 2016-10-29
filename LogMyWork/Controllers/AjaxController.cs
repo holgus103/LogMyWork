@@ -17,5 +17,10 @@ namespace LogMyWork.Controllers
         {
             return this.Content("0");
         }
+
+        protected ContentResult sendID(int id)
+        {
+            return this.Content(id.ToString());
+        }
     }
 }
