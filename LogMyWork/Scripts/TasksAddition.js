@@ -1,4 +1,4 @@
-﻿var asd = "<dt>Task Name</dt><dd>TASK_NAME <label for='Track' onclick='createTimeEntry($(this))' taskid='TASK_ID'>Track</label> | <a href='/Tasks/Edit/TASK_ID'>Edit</a> | <a href='/Tasks/Details/TASK_ID'>Details</a> | <a href='/Tasks/Delete/TASK_ID'>Delete</a></dd>"
+﻿
 function showTaskAdditionPanel() {
     var panel = $("#pnlAddTask");
     if (panel.hasClass("hidden"))

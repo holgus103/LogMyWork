@@ -1,15 +1,32 @@
 ﻿@using LogMyWork.Consts;
 @model LogMyWork.Models.Project
 
+@Styles.Render("~/Content/Projects.css")
+
 @{
     ViewBag.Title = "Details";
 }
-@{ 
+@{
     string ButtonText = Session[SessionKeys.CurrentTimeEntry] == null ? "Track" : "Stop";
 }
-
+@{
+    // tag for javascript to insert
+    string temp = (
+        "<dt>" +
+        "TASK_NAME" +
+        "</dt>" + "<dd>" +
+        Html.Label(ButtonText, new { onClick = "createTimeEntry($(this))", taskId = "TASK_ID" }).ToString() + " | " +
+        Html.ActionLink("Edit", "Edit", "Tasks", new { id = "TASK_ID" }, null).ToString() + " | " +
+        Html.ActionLink("Details", "Details", "Tasks", new { id = "TASK_ID" }, null).ToString() + " | " +
+        Html.ActionLink("Delete", "Delete", "Tasks", new { id = "TASK_ID" }, null).ToString() + "</dd>"
+    ).Replace("\"", "'");
+}
 <script>
     isTracking = @((Session[SessionKeys.CurrentTimeEntry] != null).ToString().ToLower());
+</script>
+<script>
+    var asd = "@Html.Raw(temp)";
+
 </script>
 <h2>Details</h2>
 
@@ -25,17 +42,16 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <h5>Tasks</h5>
-        @foreach(var task in Model.Tasks)
+        @foreach (var task in Model.Tasks)
         {
             <dt>
-                @Html.DisplayNameFor(tmp => task.Name)
+                @Html.DisplayFor(tmp => task.Name)
             </dt>
             <dd>
-                @Html.DisplayFor(tmp => task.Name)
                 @Html.Label(ButtonText, new { onClick = "createTimeEntry($(this))", taskId = task.TaskID }) |
                 @Html.ActionLink("Edit", "Edit", "Tasks", new { id = task.TaskID }, null) |
                 @Html.ActionLink("Details", "Details", "Tasks", new { id = task.TaskID }, null) |
-                @Html.ActionLink("Delete", "Delete", "Tasks", new { id = task.TaskID }, null) 
+                @Html.ActionLink("Delete", "Delete", "Tasks", new { id = task.TaskID }, null)
             </dd>
         }
         <div id="pnlAddTask" class="panel panel-default hidden">
@@ -71,4 +87,5 @@
 @section Scripts{
     @Scripts.Render("~/Scripts/Tracker.js")
     @Scripts.Render("~/Scripts/TasksAddition.js")
+
 }
