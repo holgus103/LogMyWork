@@ -7,27 +7,19 @@ function showTaskAdditionPanel() {
         panel.addClass("hidden");
 }
 
-function sendAjax() {
-    var headers = new Array();
+var controlls =
+    {
+        ParentProjectID: $("#ParentProjectID"),
+        Name: $("#Name")
+    };
 
-    headers['__RequestVerificationToken'] = $('input[name="__RequestVerificationToken"]').val();
-    var data = {
-        ParentProjectID: $("#ParentProjectID").val(),
-        Name: $("#Name").val(),
-        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
-    }
-    $.ajax(
-        {
-            headers: headers,
-            url: "/Tasks/Create",
-            method: 'POST',
-            data: data
+var url = "/Tasks/Create";
+
+function createTask() {
+    sendAjax(controlls, url, function (input) {
+        if (input > 0) {
+            $(asd.replace(/TASK_NAME/g, data.Name).replace(/TASK_ID/g, input)).insertBefore("#pnlAddTask");
         }
-    ).success(
-        function (input) {
-            if (input > 0) {
-                $(asd.replace(/TASK_NAME/g, data.Name).replace(/TASK_ID/g, input)).insertBefore("#pnlAddTask");
-            }
-        }
-    );
+    });
 }
+

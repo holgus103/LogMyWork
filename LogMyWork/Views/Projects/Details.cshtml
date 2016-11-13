@@ -1,91 +1,93 @@
 ﻿@using LogMyWork.Consts;
-@model LogMyWork.Models.Project
+@using LogMyWork.Models;
+    @model LogMyWork.Models.Project
 
-@Styles.Render("~/Content/Projects.css")
+    @Styles.Render("~/Content/Projects.css")
 
-@{
-    ViewBag.Title = "Details";
-}
-@{
-    string ButtonText = Session[SessionKeys.CurrentTimeEntry] == null ? "Track" : "Stop";
-}
-@{
-    // tag for javascript to insert
-    string temp = (
+    @{
+        ViewBag.Title = "Details";
+    }
+    @{
+        TimeEntry timeEntry = (TimeEntry)Session[SessionKeys.CurrentTimeEntry];
+    }
+    @{
+        // tag for javascript to insert
+        string temp = (
         "<dt>" +
         "TASK_NAME" +
         "</dt>" + "<dd>" +
-        Html.Label(ButtonText, new { onClick = "createTimeEntry($(this))", taskId = "TASK_ID" }).ToString() + " | " +
+        Html.Label("Track", new { onClick = "createTimeEntry($(this))", taskId = "TASK_ID" }).ToString() + " | " +
         Html.ActionLink("Edit", "Edit", "Tasks", new { id = "TASK_ID" }, null).ToString() + " | " +
         Html.ActionLink("Details", "Details", "Tasks", new { id = "TASK_ID" }, null).ToString() + " | " +
         Html.ActionLink("Delete", "Delete", "Tasks", new { id = "TASK_ID" }, null).ToString() + "</dd>"
     ).Replace("\"", "'");
-}
-<script>
-    isTracking = @((Session[SessionKeys.CurrentTimeEntry] != null).ToString().ToLower());
-</script>
-<script>
-    var asd = "@Html.Raw(temp)";
+    }
+    <script>
+        isTracking = @((Session[SessionKeys.CurrentTimeEntry] != null).ToString().ToLower());
+    </script>
+    <script>
+        var asd = "@Html.Raw(temp)";
 
-</script>
-<h2>Details</h2>
+    </script>
+    <h2>Details</h2>
 
-<div>
-    <h4>Project</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <h5>Tasks</h5>
-        @foreach (var task in Model.Tasks)
-        {
+    <div>
+        <h4>Project</h4>
+        <hr />
+        <dl class="dl-horizontal">
             <dt>
-                @Html.DisplayFor(tmp => task.Name)
+                @Html.DisplayNameFor(model => model.Name)
             </dt>
+
             <dd>
-                @Html.Label(ButtonText, new { onClick = "createTimeEntry($(this))", taskId = task.TaskID }) |
-                @Html.ActionLink("Edit", "Edit", "Tasks", new { id = task.TaskID }, null) |
-                @Html.ActionLink("Details", "Details", "Tasks", new { id = task.TaskID }, null) |
-                @Html.ActionLink("Delete", "Delete", "Tasks", new { id = task.TaskID }, null)
+                @Html.DisplayFor(model => model.Name)
             </dd>
-        }
-        <div id="pnlAddTask" class="panel panel-default hidden">
-            @using (Html.BeginForm("Create", "Tasks"))
+            <h5>Tasks</h5>
+            @foreach (var task in Model.Tasks)
             {
-                @Html.AntiForgeryToken()
-
-                <div class="form-horizontal">
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Tasks.FirstOrDefault().Name, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Tasks.FirstOrDefault().Name, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Tasks.FirstOrDefault().Name, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    @Html.Hidden("ParentProjectID", Model.ProjectID)
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <div class="btn btn-default" onclick="sendAjax();">Add</div>
-                        </div>
-                    </div>
-                </div>
+                <dt>
+                    @Html.DisplayFor(tmp => task.Name)
+                </dt>
+                <dd>
+                    @Html.Label(timeEntry != null && timeEntry.ParentTaskID == task.TaskID  ? "Stop" : "Track", new { onClick = "createTimeEntry($(this))", taskId = task.TaskID }) |
+                    @Html.ActionLink("Edit", "Edit", "Tasks", new { id = task.TaskID }, null) |
+                    @Html.ActionLink("Details", "Details", "Tasks", new { id = task.TaskID }, null) |
+                    @Html.ActionLink("Delete", "Delete", "Tasks", new { id = task.TaskID }, null)
+                </dd>
             }
-        </div>
-        <div class="btn btn-default" id="btnAddTask" onclick="showTaskAdditionPanel()">Add Task</div>
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ProjectID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
-@section Scripts{
-    @Scripts.Render("~/Scripts/Tracker.js")
-    @Scripts.Render("~/Scripts/TasksAddition.js")
+            <div id="pnlAddTask" class="panel panel-default hidden">
+                @using (Html.BeginForm("Create", "Tasks"))
+            {
+                    @Html.AntiForgeryToken()
 
-}
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Tasks.FirstOrDefault().Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Tasks.FirstOrDefault().Name, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Tasks.FirstOrDefault().Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @Html.Hidden("ParentProjectID", Model.ProjectID)
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <div class="btn btn-default" onclick="createTask();">Add</div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="btn btn-default" id="btnAddTask" onclick="showTaskAdditionPanel()">Add Task</div>
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ProjectID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+    @section Scripts{
+        @Scripts.Render("~/Scripts/Tracker.js")
+        @Scripts.Render("~/Scripts/common/Ajax.js")
+        @Scripts.Render("~/Scripts/TasksAddition.js")
+
+    }
