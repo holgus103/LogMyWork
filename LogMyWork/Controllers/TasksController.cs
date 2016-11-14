@@ -121,7 +121,7 @@ namespace LogMyWork.Controllers
             ProjectTask projectTask = db.ProjectTasks.Find(id);
             db.ProjectTasks.Remove(projectTask);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "Projects", new { id = projectTask.ParentProjectID });
         }
 
         protected override void Dispose(bool disposing)
