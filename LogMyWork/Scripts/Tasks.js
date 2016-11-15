@@ -1,4 +1,8 @@
-﻿
+﻿$(document).ready(function () {
+    $("#User_0__Email").change(function () {
+
+    });
+});
 function createTask(input) {
     if (input > 0) {
         var taskName = $("#Name").val();

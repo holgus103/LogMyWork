@@ -1,4 +1,5 @@
-﻿@model ProjectTasks
+﻿@using LogMyWork.Models
+@model ProjectTask
 @{
     // tag for javascript to insert
     string temp = (
@@ -16,10 +17,7 @@
     var taskNodeTemplate = "@Html.Raw(temp)";
 
 </script>
-@using (Ajax.BeginForm("Create", "Tasks", new AjaxOptions
-{
-    OnSuccess = "createTask"
-}))
+@using (Ajax.BeginForm("Create", "Tasks", new AjaxOptions{OnSuccess = "createTask"}))
 {
     @Html.AntiForgeryToken()
 
@@ -30,6 +28,13 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Users[0].Id, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Users[0].Id, new SelectList((List<ProjectRole>)this.ViewData["ProjectUsers"], "User.Id", "User.Email"), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Users[0].Id, "", new { @class = "text-danger" })
             </div>
         </div>
         @Html.Hidden("ParentProjectID", (int)this.ViewData["ProjectId"])

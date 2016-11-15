@@ -23,6 +23,12 @@
         <dd>
             @Html.ActionLink(Model.ParentProject.Name, "Details", "Projects", new { id = Model.ParentProjectID }, null)
         </dd>
+        <h5>Assignees</h5>
+        @foreach(var user in Model.Users)
+        {
+            <dt>@Html.LabelFor(model => model.Users[0].Email)</dt>
+            <dd>@Html.DisplayFor(model => model.Users[0].Email)</dd>
+        }
 
     </dl>
 </div>

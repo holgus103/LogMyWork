@@ -31,12 +31,12 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProjectTask projectTask = db.ProjectTasks.Find(id);
+            ProjectTask projectTask = db.ProjectTasks.Include( t => t.ParentProject).Include(t => t.Users).Where(t => t.TaskID == id).FirstOrDefault();
             if (projectTask == null)
             {
                 return HttpNotFound();
             }
-            projectTask.ParentProject = db.Projects.Find(projectTask.ParentProjectID);
+            //projectTask.ParentProject = db.Projects.Find(projectTask.ParentProjectID);
             return View(projectTask);
         }
 
@@ -52,17 +52,21 @@ namespace LogMyWork.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TaskID,Name,ParentProjectID")] ProjectTask projectTask)
+        public ActionResult Create([Bind(Include = "TaskID,Name,ParentProjectID,Users")] ProjectTask task)
         {
             if (ModelState.IsValid)
             {
-                db.ProjectTasks.Add(projectTask);
+
+                task.Users.ForEach(u => this.db.Users.Attach(u));
+                //ProjectTask task = new ProjectTask { Name = projectTaskEdit.Name, ParentProjectID = projectTaskEdit.ParentProjectID, Users = new List<ApplicationUser>()};
+                //projectTaskEdit.Users.ForEach(u => task.Users.Add(this.db.Users.Find(u)));
+
+                db.ProjectTasks.Add(task);
                 db.SaveChanges();
-                return this.sendID(projectTask.TaskID);
+                return this.sendID(task.TaskID);
             }
 
-            ViewBag.ParentProjectID = new SelectList(db.Projects, "ProjectID", "Name", projectTask.ParentProjectID);
-            return View(projectTask);
+            return this.ajaxFailure();
         }
 
         // GET: Tasks/Edit/5

@@ -11,7 +11,7 @@ namespace LogMyWork.Models
         [Key]
         public int TaskID { get; set; }
         public ProjectStatus Status { get; set; }
-        public ICollection<ApplicationUser> User { get; set; }
+        public List<ApplicationUser> Users { get; set; } 
         [DisplayName ("Task Name")]
         public string Name { get; set; }
         [ForeignKey ("ParentProject")]

@@ -42,7 +42,7 @@
             </dd>
         }
         <div id="AddTaskPnl" class="panel panel-default hidden">
-            @Html.Partial("~/Views/Partials/Add.cshtml", new ViewDataDictionary() { { "ProjectId", Model.ProjectID } })
+            @Html.Partial("~/Views/Partials/Add.cshtml", new ViewDataDictionary() { { "ProjectId", Model.ProjectID }, { "ProjectUsers", Model.Roles } })
         </div>
         <div class="btn btn-default" id="ShowTaskPanelBtn">Add Task</div>
     </dl>

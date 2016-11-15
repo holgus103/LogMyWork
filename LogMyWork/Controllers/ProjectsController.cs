@@ -31,6 +31,7 @@ namespace LogMyWork.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Project project = db.Projects.Find(id);
+            project.Roles = db.ProjectRoles.Include(r => r.User).Where(r => r.ProjectID == project.ProjectID).ToList();
             project.Tasks = db.ProjectTasks.Where(t => t.ParentProjectID == project.ProjectID).ToList();
             if (project == null)
             {

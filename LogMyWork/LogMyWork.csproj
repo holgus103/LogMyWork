@@ -247,6 +247,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ProjectEdit.cs" />
+    <Compile Include="Models\ProjectTaskEdit.cs" />
     <Compile Include="ProjectRoles.cs">
       <DependentUpon>LogMyWork.tt</DependentUpon>
     </Compile>
