@@ -32,6 +32,7 @@ namespace LogMyWork.Controllers
             }
             Project project = db.Projects.Find(id);
             project.Roles = db.ProjectRoles.Include(r => r.User).Where(r => r.ProjectID == project.ProjectID).ToList();
+            project.Roles.Insert(0, new ProjectRole { ProjectID = project.ProjectID });
             project.Tasks = db.ProjectTasks.Where(t => t.ParentProjectID == project.ProjectID).ToList();
             if (project == null)
             {

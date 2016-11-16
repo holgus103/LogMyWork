@@ -14,8 +14,8 @@ namespace LogMyWork.Models
         public string ClientID { get; set; }
         [ForeignKey("ClientID")]
         public ApplicationUser Client { get; set; }
-        public ICollection<ProjectTask> Tasks{ get; set; }
-        public ICollection<ProjectRole> Roles { get; set; }
-        public ICollection<Rate> Rates { get; set; }
+        public List<ProjectTask> Tasks{ get; set; }
+        public List<ProjectRole> Roles { get; set; }
+        public List<Rate> Rates { get; set; }
     }
 }
