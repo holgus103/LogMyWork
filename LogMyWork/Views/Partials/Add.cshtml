@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.Users[0].Id, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Users[0].Email, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.Users[0].Id, new SelectList((List<ProjectRole>)this.ViewData["ProjectUsers"], "User.Id", "User.Email"), new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Users[0].Id, "", new { @class = "text-danger" })

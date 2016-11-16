@@ -13,16 +13,21 @@ function createTask(input) {
 }
 
 function handleSelectChange() {
-    if ($(this).val() == "") return;
-    selectedValues.push($(this).val());
-    var arr = $("#AddTaskPnl  .form-group")
-    $($("#AddTaskPnl  .form-group:has(select)").last()).clone().insertAfter(arr[arr.length - 2])
-    dropDowns.push($("select").last());
-    dropDowns[dropDowns.length - 1].change(handleSelectChange);
+    if ($(this).val() != "") {
+        selectedValues.push($(this).val());
+        var arr = $("#AddTaskPnl  .form-group")
+        $($("#AddTaskPnl  .form-group:has(select)").last()).clone().insertAfter(arr[arr.length - 2])
+        dropDowns.push($("select").last());
+        dropDowns[dropDowns.length - 1].change(handleSelectChange);
+    }
+    else {
+        $(this).parents(".form-group").remove();
+    }
     updateDropDowns()
 }
 
 function updateDropDowns() {
+    $("#AddTaskPnl option").attr("disabled", false);
     dropDowns.forEach(function (dd) {
         if (dd.val() != "") {
             dropDowns.forEach(function (element) {
