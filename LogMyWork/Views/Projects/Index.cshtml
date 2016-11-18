@@ -1,4 +1,6 @@
-﻿@model IEnumerable<LogMyWork.Models.Project>
+﻿@using LogMyWork.Models
+@using LogMyWork.Consts
+@model List<ProjectRole>
 
 @{
     ViewBag.Title = "Index";
@@ -12,23 +14,30 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model[0].Project.Name)
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ProjectID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ProjectID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ProjectID }) |
-            @Html.ActionLink("Manage Users", "Users", new { id = item.ProjectID })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Project.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.ProjectID })
+                @if (item.Role != Role.Worker)
+                {
+                    @(" | ")
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ProjectID })
+                    @(" | ")
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ProjectID })
+                    @(" | ")
+                    @Html.ActionLink("Manage Users", "Users", new { id = item.ProjectID })
+                }
+            </td>
+        </tr>
+    }
 
 </table>

@@ -1,4 +1,5 @@
-﻿@model LogMyWork.Models.Project
+﻿@using LogMyWork.Consts
+@model LogMyWork.Models.Project
 
 @{
     ViewBag.Title = "Users";
@@ -27,10 +28,13 @@
                 @Html.DisplayFor(modelItem => item.Role)
             </td>
             <td>
-                @Html.ActionLink("Delete", "Delete", "ProjectRoles", new { Id = item.ProjectRoleID }, null)
+                @if (item.Role != Role.Owner)
+                {
+                    @Html.ActionLink("Delete", "Delete", "ProjectRoles", new { Id = item.ProjectRoleID }, null)
+                }
             </td>
+
         </tr>
     }
 
 </table>
-

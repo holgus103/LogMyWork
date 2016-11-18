@@ -11,7 +11,6 @@ namespace LogMyWork.Models
     public class ApplicationUser : IdentityUser
     {
         public virtual ICollection<TimeEntry> UserEntries { get; set; }
-        public virtual ICollection<Project> Projects { get; set; }
         public virtual ICollection<ProjectTask> Tasks { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)

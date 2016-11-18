@@ -19,8 +19,8 @@ namespace LogMyWork.Controllers
         public ActionResult Index()
         {
             string userID = User.Identity.GetUserId();
-            IQueryable<Project> projects = this.db.ProjectRoles.Include(r => r.Project).Where(r => r.UserID == userID).Select( r => r.Project);
-            return View(projects.ToList());
+            //IQueryable<ProjectRole> projects = this.db.ProjectRoles.Include(r => r.Project).Where(r => r.UserID == userID).ToList();
+            return View(this.db.ProjectRoles.Include(r => r.Project).Where(r => r.UserID == userID).ToList());
         }
 
         // GET: Projects/Details/5
