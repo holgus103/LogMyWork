@@ -7,8 +7,15 @@ Written in ASP.NET MVC
 - Projects:
   - Creation
   - Edition
-  - Adding tasks
-  - Defining default hourly rates for user
+  - Deletion
+  - User assignment
+  - Task addition
+  - Definition of hourly rates for each user
+- Tasks
+  - Addition
+  - Edition
+  - Deletion
+  - Assignment to multiple employees
 - Time-Tracking
   - Real-Time tracking using JavaScript 
   - Logs view
