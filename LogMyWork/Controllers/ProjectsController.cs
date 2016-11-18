@@ -19,8 +19,8 @@ namespace LogMyWork.Controllers
         public ActionResult Index()
         {
             string userID = User.Identity.GetUserId();
-            //IQueryable<ProjectRole> projects = this.db.ProjectRoles.Include(r => r.Project).Where(r => r.UserID == userID).ToList();
-            return View(this.db.ProjectRoles.Include(r => r.Project).Where(r => r.UserID == userID).ToList());
+            List<ProjectRole> projects = this.db.ProjectRoles.Include(r => r.Project).Where(r => r.UserID == userID).ToList();
+            return View(projects);
         }
 
         // GET: Projects/Details/5
@@ -78,17 +78,18 @@ namespace LogMyWork.Controllers
             }
             string userID = User.Identity.GetUserId();
             Project project = db.Projects.Find(id);
+            ProjectRole role = this.db.Entry(project).Collection(p => p.Roles).Query().Where(r => r.UserID == userID).FirstOrDefault();
             ViewBag.Rates = new SelectList(
                 this.db.Rates.Where(r => r.UserID == userID),
                 "RateID",
                 "RateValue",
-                this.db.Entry(project).Collection(p => p.Rates).Query().Where(e => e.UserID == userID).FirstOrDefault().RateID
+                this.db.Entry(project).Collection(p => p.Rates).Query().Where(e => e.UserID == userID).FirstOrDefault()?.RateID
                 );
             if (project == null)
             {
                 return HttpNotFound();
             }
-            ProjectEdit editProject = new ProjectEdit() { ProjectID = project.ProjectID, Name = project.Name };
+            ProjectEdit editProject = new ProjectEdit() { ProjectID = project.ProjectID, Name = project.Name, Role = role };
             return View(editProject);
         }
 

@@ -27,10 +27,9 @@
             </td>
             <td>
                 @Html.ActionLink("Details", "Details", new { id = item.ProjectID })
+                | @Html.ActionLink("Edit", "Edit", new { id = item.ProjectID })
                 @if (item.Role != Role.Worker)
                 {
-                    @(" | ")
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ProjectID })
                     @(" | ")
                     @Html.ActionLink("Delete", "Delete", new { id = item.ProjectID })
                     @(" | ")

@@ -1,4 +1,6 @@
-﻿@model LogMyWork.Models.ProjectEdit
+﻿@using LogMyWork.Consts
+@model LogMyWork.Models.ProjectEdit
+
 
 @{
     ViewBag.Title = "Edit";
@@ -10,7 +12,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Project</h4>
         <hr />
@@ -20,14 +22,21 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @if (Model.Role.Role == Role.Owner)
+                {
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                }
+                else
+                {
+                     @Html.DisplayFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })   
+                }
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(model => model.RateID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("RateID", (SelectList)ViewBag.Rates)
+                @Html.DropDownList("RateID", (SelectList)ViewBag.Rates, new { @class = "form-control" })
             </div>
         </div>
 

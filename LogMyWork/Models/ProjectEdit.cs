@@ -12,5 +12,6 @@ namespace LogMyWork.Models
         public int? ProjectID { get; set; }
         public string Name { get; set; }
         public int RateID { get; set; }
+        public ProjectRole Role {get; set;}
     }
 }
