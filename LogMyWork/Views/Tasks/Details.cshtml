@@ -26,8 +26,8 @@
         <h5>Assignees</h5>
         @foreach(var user in Model.Users)
         {
-            <dt>@Html.LabelFor(model => model.Users[0].Email)</dt>
-            <dd>@Html.DisplayFor(model => model.Users[0].Email)</dd>
+            <dt>@Html.LabelFor(model => user.Email)</dt>
+            <dd>@Html.DisplayFor(mnodel => user.Email)</dd>
         }
 
     </dl>

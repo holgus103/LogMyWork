@@ -32,7 +32,7 @@
         @foreach (var task in Model.Tasks)
             {
             <dt>
-                @Html.DisplayFor(tmp => task.Name)
+                @Html.DisplayFor(model => task.Name)
             </dt>
             <dd>
                 @Html.Label(timeEntry != null && timeEntry.ParentTaskID == task.TaskID ? "Stop" : "Track", new { onClick = "createTimeEntry($(this))", taskId = task.TaskID }) |
