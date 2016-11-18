@@ -53,8 +53,10 @@
     @Scripts.Render("~/Scripts/Shared.js")
 
 
-    @Scripts.Render("~/Scripts/jquery-1.10.2.js")
-    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.js")
+    @*@Scripts.Render("~/Scripts/jquery-1.10.2.js")*@
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.2.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.js"></script>
+    @*@Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.js")*@
 
 
     @RenderSection("scripts", required: false)

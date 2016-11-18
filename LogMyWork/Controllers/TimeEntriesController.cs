@@ -25,7 +25,16 @@ namespace LogMyWork.Controllers
             var val = db.TimeEntries.Include(t => t.ParentTask.ParentProject).Where(e => e.UserID == userId);
             return View(val.ToList());
         }
+        [HttpPost]
+        public ActionResult GetFilteredValues(DateTime from, DateTime to)
+        {
 
+            string userId = User.Identity.GetUserId();
+            var entries = this.db.TimeEntries.Where(t => t.UserID == userId && t.Start > from);
+            if (to != null)
+                entries = entries.Where(t => t.End < to);
+            return View("Index", entries.ToList());
+        }
         // GET: TimeEntries/Details/5
         public ActionResult Details(int? id)
         {

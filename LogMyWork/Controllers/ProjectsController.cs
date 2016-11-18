@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using LogMyWork.Models;
 using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
-using System;
+using System;using LogMyWork.Consts;
 
 namespace LogMyWork.Controllers
 {
@@ -14,6 +14,11 @@ namespace LogMyWork.Controllers
     public class ProjectsController : Controller
     {
         private LogMyWorkContext db = new LogMyWorkContext();
+
+        private bool isProjectOwner(int projectID, string userID)
+        {
+            return this.db.ProjectRoles.Where(r => r.ProjectID == projectID && r.UserID == userID && r.Role == Role.Owner).Count() > 0;
+        }
 
         // GET: Projects
         public ActionResult Index()
@@ -108,7 +113,10 @@ namespace LogMyWork.Controllers
                 // get rate for this project for this user
                 Rate rate = this.db.Rates.Include(r => r.Projects).Where(r => r.UserID == userID && r.Projects.Any(p => p.ProjectID == project.ProjectID)).FirstOrDefault();
                 // update project fields
-                project.Name = form.Name;
+                if (this.isProjectOwner(form.ProjectID.Value, userID))
+                {
+                    project.Name = form.Name;
+                }
                 // load project rates
                 this.db.Entry(project).Collection(p => p.Rates).Load();
                 // remove previously selected rate
@@ -129,6 +137,10 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            if (!this.isProjectOwner(id.Value, User.Identity.GetUserId()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
             Project project = db.Projects.Find(id);
             if (project == null)
             {
@@ -142,6 +154,10 @@ namespace LogMyWork.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if (!this.isProjectOwner(id, User.Identity.GetUserId()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
             Project project = db.Projects.Find(id);
             db.Projects.Remove(project);
             db.SaveChanges();
