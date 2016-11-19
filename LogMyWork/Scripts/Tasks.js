@@ -19,7 +19,7 @@ function handleSelectChange() {
             var lastSelectGroup = $("#AddTaskPnl  .form-group:has(select)").last();
             // clone the node and insert as last
             var newSelect = lastSelectGroup.clone().insertAfter(lastSelectGroup);
-            var newSelect = newSelect.children("select");
+            var newSelect = newSelect.find("select");
             // set the id and the name of the new select 
             newSelect.attr("Name", "Users[" + selectCounter + "].Id").attr("Id", "Users_" + selectCounter + "__Id");
             selectCounter++;
