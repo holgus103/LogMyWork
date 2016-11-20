@@ -1,5 +1,7 @@
 ﻿var isTracking;
 
+
+
 function createTimeEntry(node) {
     var taskId = node.attr("taskId");
     var headers = new Array();
@@ -11,17 +13,12 @@ function createTimeEntry(node) {
             url: "/TimeEntries/Create",
             headers: headers,
             method: "POST",
-            data: 
+            data:
                 {
                     __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
                     ParentTaskId: taskId
-            }
-
-
-        }
-    )
-        .success(
-            function (data) {
+                },
+            success:  function(data) {
                 isTracking = !isTracking;
                 if (data == "1") {
                     if (isTracking) {
@@ -33,5 +30,9 @@ function createTimeEntry(node) {
                     location.reload();
                 }
             }
-        );
+
+        }
+    )
 }
+
+
