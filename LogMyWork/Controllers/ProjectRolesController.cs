@@ -10,6 +10,7 @@ using LogMyWork.Models;
 
 namespace LogMyWork.Controllers
 {
+    [Authorize]
     public class ProjectRolesController : Controller
     {
         private LogMyWorkContext db = new LogMyWorkContext();

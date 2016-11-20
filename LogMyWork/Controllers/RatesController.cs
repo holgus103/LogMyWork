@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity;
 
 namespace LogMyWork.Controllers
 {
+    [Authorize]
     public class RatesController : Controller
     {
         private LogMyWorkContext db = new LogMyWorkContext();

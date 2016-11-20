@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace LogMyWork.Controllers
 {
+    [Authorize]
     public class TimeEntriesController : AjaxController
     {
         private LogMyWorkContext db = new LogMyWorkContext();
