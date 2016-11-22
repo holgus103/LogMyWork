@@ -27,13 +27,15 @@ namespace LogMyWork.Controllers
             return View(val.ToList());
         }
         [HttpPost]
-        public ActionResult GetFilteredValues(DateTime from, DateTime to)
+        public ActionResult GetFilteredValues(string from, string to)
         {
+            DateTime dateFrom = DateTime.Parse(from ?? "");
+            DateTime dateTo = DateTime.Parse(to ?? "");
 
             string userId = User.Identity.GetUserId();
-            var entries = this.db.TimeEntries.Where(t => t.UserID == userId && t.Start > from);
-            if (to != null)
-                entries = entries.Where(t => t.End < to);
+            var entries = this.db.TimeEntries.Where(t => t.UserID == userId && t.Start > dateFrom);
+            if (dateTo != null)
+                entries = entries.Where(t => t.End < dateTo);
             return View("Index", entries.ToList());
         }
         // GET: TimeEntries/Details/5
