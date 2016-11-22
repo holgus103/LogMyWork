@@ -37,10 +37,10 @@ namespace LogMyWork.Controllers
 
             string userId = User.Identity.GetUserId();
             var entries = (from entry in this.db.TimeEntries
-                            join task in this.db.ProjectTasks on entry.ParentTaskID equals task.TaskID
-                            join project in this.db.Projects on task.ParentProjectID equals project.ProjectID
-                            where entry.UserID == userId && entry.Start > dateFrom
-                            select new { ProjectName = project.Name, TaskName = task.Name, StartString = entry.Start.ToString(), EndString = entry.End.ToString(), Start = entry.Start, End = entry.End, Active = entry.Active });
+                           join task in this.db.ProjectTasks on entry.ParentTaskID equals task.TaskID
+                           join project in this.db.Projects on task.ParentProjectID equals project.ProjectID
+                           where entry.UserID == userId && entry.Start > dateFrom
+                           select new { ProjectName = project.Name, TaskName = task.Name, StartString = entry.Start.ToString(), EndString = entry.End.ToString(),  Start = entry.Start, End = entry.End, Active = entry.Active });
             //var entries = this.db.TimeEntries.Include(t => t.ParentTask.ParentProject).Where(t => t.UserID == userId && t.Start > dateFrom);
             if (to != null)
             {

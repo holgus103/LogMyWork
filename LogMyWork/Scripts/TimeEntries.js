@@ -6,10 +6,19 @@ function appendToTable(entry) {
     var html = "<tr>";
     html = appendColumn(html, entry.ProjectName);
     html = appendColumn(html, entry.TaskName);
-    html = appendColumn(html, entry.StartString);
-    html = appendColumn(html, entry.EndString);
-    html = appendColumn(html, "1");
-    html = appendColumn(html, entry.Active);
+    var startDate = new Date(parseInt(entry.Start.replace("/Date(", "")))
+    html = appendColumn(html, startDate);
+    var endDate = new Date(parseInt(entry.End.replace("/Date(", "")))
+    html = appendColumn(html, endDate);
+    html = appendColumn(html, new Date(endDate - startDate));
+    var checkboxActive = '<input class="check-box" checked="true" disabled type="checkbox">';
+    var checkboxInactive = '<input class="check-box" disabled type="checkbox">';
+    if (entry.Active == 1) {
+        html = appendColumn(html, checkboxActive);
+    }
+    else {
+        html = appendColumn(html, checkboxInactive)
+    }
 
     html += "</tr>"
     $(html).insertAfter("#TimeEntriesTable tr:last")
@@ -31,13 +40,13 @@ function onDateChanged() {
             data:
                 {
                     __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
-                    from: (new Date(from.data().date)).getTime()/1000,
-                    to: (new Date(to.data().date)).getTime()/1000
+                    from: (new Date(from.data().date)).getTime() / 1000,
+                    to: (new Date(to.data().date)).getTime() / 1000
 
                 },
             success: function (data) {
                 $("#TimeEntriesTable tbody tr:has(td)").remove();
-                var entries = JSON.parse(data);
+                var entries = $.parseJSON(data);
                 entries.forEach(appendToTable)
 
             }
