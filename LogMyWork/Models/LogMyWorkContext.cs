@@ -15,7 +15,7 @@ namespace LogMyWork.Models
 
         public LogMyWorkContext() : base("name=LogMyWorkContext", throwIfV1Schema: false)
         {
-
+            this.Configuration.LazyLoadingEnabled = false;
         }
 
         public static LogMyWorkContext Create()
