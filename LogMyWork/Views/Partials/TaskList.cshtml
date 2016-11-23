@@ -4,7 +4,7 @@
 @{
     TimeEntry timeEntry = (TimeEntry)this.ViewData["timeEntry"];
 }
-<table class="table">
+<table class="table" id="TaskTable">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model[0].Name)
@@ -19,6 +19,7 @@
             </td>
             <td>
                 @Html.Label(timeEntry != null && timeEntry.ParentTaskID == task.TaskID ? "Stop" : "Track", new { onClick = "createTimeEntry($(this))", taskId = task.TaskID }) |
+                @*@(if)*@
                 @Html.ActionLink("Edit", "Edit", "Tasks", new { id = task.TaskID }, null) |
                 @Html.ActionLink("Details", "Details", "Tasks", new { id = task.TaskID }, null) |
                 @Html.ActionLink("Delete", "Delete", "Tasks", new { id = task.TaskID }, null)

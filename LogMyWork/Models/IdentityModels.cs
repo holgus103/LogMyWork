@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LogMyWork.Models
 {
@@ -11,7 +12,10 @@ namespace LogMyWork.Models
     public class ApplicationUser : IdentityUser
     {
         public virtual ICollection<TimeEntry> UserEntries { get; set; }
+
         public virtual ICollection<ProjectTask> Tasks { get; set; }
+        [InverseProperty("Owner")]
+        public virtual ICollection<ProjectTask> OwnerTasks { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

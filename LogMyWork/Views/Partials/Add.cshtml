@@ -3,13 +3,13 @@
 @{
     // tag for javascript to insert
     string temp = (
-    "<dt>" +
+    "<tr><td>" +
     "TASK_NAME" +
-    "</dt>" + "<dd>" +
+    "</td>" + "<td>" +
     Html.Label("Track", new { onClick = "createTimeEntry($(this))", taskId = "TASK_ID" }).ToString() + " | " +
     Html.ActionLink("Edit", "Edit", "Tasks", new { id = "TASK_ID" }, null).ToString() + " | " +
     Html.ActionLink("Details", "Details", "Tasks", new { id = "TASK_ID" }, null).ToString() + " | " +
-    Html.ActionLink("Delete", "Delete", "Tasks", new { id = "TASK_ID" }, null).ToString() + "</dd>"
+    Html.ActionLink("Delete", "Delete", "Tasks", new { id = "TASK_ID" }, null).ToString() + "</td></tr>"
 ).Replace("\"", "'");
 }
 

@@ -27,9 +27,10 @@
             </td>
             <td>
                 @Html.ActionLink("Details", "Details", new { id = item.ProjectID })
-                | @Html.ActionLink("Edit", "Edit", new { id = item.ProjectID })
-                @if (item.Role != Role.Worker)
+                @if (item.Role == Role.Owner)
                 {
+                    @(" | ")
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ProjectID })
                     @(" | ")
                     @Html.ActionLink("Delete", "Delete", new { id = item.ProjectID })
                     @(" | ")
