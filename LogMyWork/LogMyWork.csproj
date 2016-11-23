@@ -353,6 +353,7 @@
     <Content Include="Views\Rates\Delete.cshtml" />
     <Content Include="Views\Rates\Index.cshtml" />
     <Content Include="Views\Partials\Add.cshtml" />
+    <Content Include="Views\Partials\TimeEntriesResultsTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

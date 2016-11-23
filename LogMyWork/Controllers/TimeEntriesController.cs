@@ -31,23 +31,18 @@ namespace LogMyWork.Controllers
         }
 
         [HttpPost]
-        public string GetFilteredValues(long? from, long? to)
+        public ActionResult GetFilteredValues(long? from, long? to)
         {
             DateTime dateFrom = UnixTime.ParseUnitTimestamp((ulong)from);
 
             string userId = User.Identity.GetUserId();
-            var entries = (from entry in this.db.TimeEntries
-                           join task in this.db.ProjectTasks on entry.ParentTaskID equals task.TaskID
-                           join project in this.db.Projects on task.ParentProjectID equals project.ProjectID
-                           where entry.UserID == userId && entry.Start > dateFrom
-                           select new { ProjectName = project.Name, TaskName = task.Name, StartString = entry.Start.ToString(), EndString = entry.End.ToString(),  Start = entry.Start, End = entry.End, Active = entry.Active });
-            //var entries = this.db.TimeEntries.Include(t => t.ParentTask.ParentProject).Where(t => t.UserID == userId && t.Start > dateFrom);
+            var entries = this.db.TimeEntries.Include(t => t.ParentTask.ParentProject).Where(t => t.UserID == userId && t.Start > dateFrom);
             if (to != null)
             {
                 DateTime dateTo = UnixTime.ParseUnitTimestamp((ulong)to);
                 entries = entries.Where(t => t.End < dateTo);
             }
-            return (new JavaScriptSerializer()).Serialize(entries);
+            return PartialView("~/Views/Partials/TimeEntriesResultsTable.cshtml", entries.ToList());
         }
         // GET: TimeEntries/Details/5
         public ActionResult Details(int? id)
