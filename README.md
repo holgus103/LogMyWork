@@ -17,9 +17,9 @@ Written in ASP.NET MVC
   - Deletion
   - Assignment to multiple employees
 - Time-Tracking
-  - Real-Time tracking using JavaScript 
-  - Logs view
+  - Real-Time tracking using JavaScript   
+- Logs view
+  - Filter all logs by date (from and to)
+  - Timezone adjustment for all entries
 
-## History
-TODO
 
