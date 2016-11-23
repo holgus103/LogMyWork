@@ -8,5 +8,6 @@ namespace LogMyWork.Consts
     public static class SessionKeys
     {
         public const string CurrentTimeEntry = "CURRENT_TIME_ENTRY";
+        public const string ProjectRoles = "PROJECT_ROLES";
     }
 }

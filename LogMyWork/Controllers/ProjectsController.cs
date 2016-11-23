@@ -6,7 +6,8 @@ using System.Web.Mvc;
 using LogMyWork.Models;
 using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
-using System;using LogMyWork.Consts;
+using System;
+using LogMyWork.Consts;
 
 namespace LogMyWork.Controllers
 {
@@ -35,10 +36,24 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            string userId = User.Identity.GetUserId();
+            ProjectRole role = this.db.ProjectRoles.Where(r => r.UserID == userId && r.ProjectID == id).FirstOrDefault();
+            if (role == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+            else
+            {
+                // store current project user role
+                this.ViewData[ViewDataKeys.CurrentProjectRole] = role.Role;
+            }
             Project project = db.Projects.Find(id);
             project.Roles = db.ProjectRoles.Include(r => r.User).Where(r => r.ProjectID == project.ProjectID).ToList();
+            // insert empty user to roles for dropdowns 
             project.Roles.Insert(0, new ProjectRole { ProjectID = project.ProjectID });
-            project.Tasks = db.ProjectTasks.Where(t => t.ParentProjectID == project.ProjectID).ToList();
+            //project.Tasks = db.ProjectTasks.Include(t => t.Users).Where(t => t.ParentProjectID == project.ProjectID).Where( t=> t.Users.Contains(user)).ToList();
+            project.Tasks = this.db.Users.Include(u => u.Tasks).Where(u => u.Id == userId).SelectMany(u => u.Tasks).Where(t => t.ParentProjectID == project.ProjectID).ToList();
+
             if (project == null)
             {
                 return HttpNotFound();
@@ -66,7 +81,7 @@ namespace LogMyWork.Controllers
                 Project project = new Project() { Name = form.Name };
                 project.Rates = new List<Rate>() { this.db.Rates.Find(form.RateID) };
                 db.Projects.Add(project);
-                db.ProjectRoles.Add(new ProjectRole { ProjectID = project.ProjectID, UserID = User.Identity.GetUserId()});
+                db.ProjectRoles.Add(new ProjectRole { ProjectID = project.ProjectID, UserID = User.Identity.GetUserId() });
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

@@ -48,6 +48,14 @@ namespace LogMyWork.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult UpdateStatus(int id, TaskStatus status)
+        {
+            var task = this.db.ProjectTasks.Find(id);
+            task.Status = status;
+            db.SaveChanges();
+            return this.ajaxSuccess();
+        } 
         // POST: Tasks/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.

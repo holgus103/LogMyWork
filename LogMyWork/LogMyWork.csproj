@@ -202,6 +202,7 @@
     <Compile Include="Consts\Role.cs" />
     <Compile Include="Consts\SessionsKey.cs" />
     <Compile Include="Consts\TaskStatus.cs" />
+    <Compile Include="Consts\ViewDataKeys.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\HomeController.cs" />

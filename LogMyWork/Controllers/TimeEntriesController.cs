@@ -11,7 +11,7 @@ using Microsoft.AspNet.Identity;
 using System.Diagnostics;
 using LogMyWork.Consts;
 using System.Web.Script.Serialization;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 using Commons;
 
 namespace LogMyWork.Controllers
@@ -71,18 +71,18 @@ namespace LogMyWork.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ParentTaskId")] TimeEntry timeEntry)
         {
-            Debug.WriteLine("REQUEST");
-            foreach (var val in db.TimeEntries.Where(t => t.Active == true))
-            {
-                val.Active = false;
-                val.End = DateTime.UtcNow;
-            }
-
+            ProjectTask task;
+            var entries = db.TimeEntries.Where(t => t.Active == true && t.ParentTaskID == timeEntry.ParentTaskID);
             // if exits a currently active entry for this task, end it
-            if (db.TimeEntries
-                .Where(t => t.Active == true && t.ParentTaskID == timeEntry.ParentTaskID)
-                .Count() > 0)
+            if (entries.Count()>0)
             {
+                foreach (var val in entries)
+                {
+                    val.Active = false;
+                    val.End = DateTime.UtcNow;
+                }
+                task = this.db.ProjectTasks.Find(timeEntry.ParentTaskID);
+                task.Status = TaskStatus.InProgress;
                 Session[SessionKeys.CurrentTimeEntry] = null;
                 db.SaveChanges();
                 return this.ajaxSuccess();
@@ -93,7 +93,8 @@ namespace LogMyWork.Controllers
             timeEntry.Active = true;
             timeEntry.Start = DateTime.UtcNow;
             timeEntry.UserID = User.Identity.GetUserId();
-
+            task = this.db.ProjectTasks.Find(timeEntry.ParentTaskID);
+            task.Status = TaskStatus.CurrentlyInProgress;
             if (ModelState.IsValid)
             {
                 db.TimeEntries.Add(timeEntry);

@@ -29,9 +29,9 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <h5>Tasks</h5>
-        @Html.Partial("~/Views/Partials/TaskList.cshtml", Model.Tasks, new ViewDataDictionary() { { "timeEntry", timeEntry} })
+        @Html.Partial("~/Views/Partials/TaskList.cshtml", Model.Tasks)
         <div id="AddTaskPnl" class="panel panel-default hidden">
-            @Html.Partial("~/Views/Partials/Add.cshtml", new ViewDataDictionary() { { "ProjectId", Model.ProjectID }, { "ProjectUsers", Model.Roles } })
+            @Html.Partial("~/Views/Partials/Add.cshtml", new ViewDataDictionary() { { "ProjectId", Model.ProjectID }, { "ProjectUsers", Model.Roles }, { ViewDataKeys.CurrentProjectRole, this.ViewData[ViewDataKeys.CurrentProjectRole]} })
         </div>
         <div class="btn btn-default" id="ShowTaskPanelBtn">Add Task</div>
     </dl>

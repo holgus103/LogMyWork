@@ -1,6 +1,7 @@
 ﻿var selectCounter = 1;
 $(document).ready(function () {
     $("#Users_0__Id").change(handleSelectChange);
+    $("[status]").click(sendStatusUpdate);
 });
 
 function createTask(input) {
@@ -55,5 +56,29 @@ function prepareSelects() {
     selects.each(function (index, element) {
         $(element).attr("Name", "Users[" + index + "].Id").attr("Id", "Users_" + index + "__Id");
     })
+}
+
+function sendStatusUpdate() {
+    var headers = Array();
+    headers['__RequestVerificationToken'] = $('input[name="__RequestVerificationToken"]').val();
+
+    $.ajax(
+        {
+            url: "/Tasks/UpdateStatus",
+            headers: headers,
+            method: "POST",
+            data:
+                {
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+                    id: $(this).attr("taskID"),
+                    status: $(this).attr("status")
+
+                },
+            success: function (data) {
+                location.reload();
+            }
+
+        }
+    );
 }
 
