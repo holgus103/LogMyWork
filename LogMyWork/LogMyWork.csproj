@@ -201,6 +201,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Consts\Role.cs" />
     <Compile Include="Consts\SessionsKey.cs" />
+    <Compile Include="Consts\TaskStatus.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -354,6 +355,7 @@
     <Content Include="Views\Rates\Index.cshtml" />
     <Content Include="Views\Partials\Add.cshtml" />
     <Content Include="Views\Partials\TimeEntriesResultsTable.cshtml" />
+    <Content Include="Views\Partials\TaskList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

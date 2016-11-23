@@ -11,7 +11,7 @@
             @Html.DisplayFor(modelItem => item.ParentTask.Name)
         </td>
         <td adjustment="timezone" timestamp="@item.Start.ToUnixTimestamp()">
-        </td>
+        </td> 
         <td adjustment="timezone" timestamp="@item.End.Value.ToUnixTimestamp()">
         </td>
         <td>
@@ -22,3 +22,11 @@
         </td>
     </tr>
 }
+<tr>
+    <td>Sum</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>@TimeSpan.FromSeconds(Model.Sum( e => e.Duration.Value.TotalSeconds)).ToString(@"hh\:mm\:ss")</td>
+    <td></td>
+</tr>
