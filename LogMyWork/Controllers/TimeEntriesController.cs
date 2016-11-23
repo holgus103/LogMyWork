@@ -26,7 +26,6 @@ namespace LogMyWork.Controllers
         {
             string userId = User.Identity.GetUserId();
             var val = db.TimeEntries.Include(t => t.ParentTask.ParentProject).Where(e => e.UserID == userId);
-
             return View(val.ToList());
         }
 

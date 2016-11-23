@@ -2,6 +2,17 @@
 var from;
 var to;
 
+function adjustTimeZones() {
+    $("#TimeEntriesTable td[adjustment=timezone]").each(
+        function (index, element) {
+            var timestamp = $(element).attr("timestamp");
+            var date = new Date(0);
+            date.setUTCSeconds(timestamp);
+            $(element).html(date.toLocaleString());
+        }
+    );
+}
+
 
 function onDateChanged() {
     var headers = Array();
@@ -22,6 +33,7 @@ function onDateChanged() {
             success: function (data) {
                 $("#TimeEntriesTable tbody tr:has(td)").remove();
                 $(data).insertAfter("#TimeEntriesTable tr:last");
+                adjustTimeZones();
 
             }
 
@@ -38,6 +50,7 @@ $(document).ready(function () {
 
     to.on("dp.change", onDateChanged);
     from.on("dp.change", onDateChanged);
-
+    adjustTimeZones();
 });
+
 
