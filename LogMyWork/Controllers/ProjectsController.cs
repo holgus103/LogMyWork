@@ -68,12 +68,7 @@ namespace LogMyWork.Controllers
 
             // insert empty user to roles for dropdowns 
             projectDetails.Project.Roles.Insert(0, new ProjectRole { ProjectID = projectDetails.Project.ProjectID });
-            //project.Tasks = db.ProjectTasks.Include(t => t.Users).Where(t => t.ParentProjectID == project.ProjectID).Where( t=> t.Users.Contains(user)).ToList();
-            //project.Tasks = this.db.Users.Include(u => u.Tasks).Where(u => u.Id == userId).SelectMany(u => u.Tasks).Where(t => t.ParentProjectID == project.ProjectID).ToList();
 
-            //if (role.Role != Role.Worker) {
-            //    this.ViewData[ViewDataKeys.OwnedTasks] = this.db.Users.Include(u => u.OwnerTasks).Where(u => u.Id == userId).SelectMany(u => );
-            //}
             return View(projectDetails);
         }
 

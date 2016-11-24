@@ -1,19 +1,21 @@
 ﻿@using LogMyWork.Models
 @using LogMyWork.Consts
-@model List<ProjectTask>
+@*@model List<ProjectTask>*@
+@model ProjectRole
+
 
 @{
     TimeEntry timeEntry = (TimeEntry)Session[SessionKeys.CurrentTimeEntry];
-    Role currentProjectRole = (Role)this.ViewData[ViewDataKeys.CurrentProjectRole];
+    //Role currentProjectRole = (Role)this.ViewData[ViewDataKeys.CurrentProjectRole];
 }
 <table class="table" id="TaskTable">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model[0].Name)
+            @Html.DisplayNameFor(model => model.User.Tasks[0].Name)
         </th>
         <th></th>
     </tr>
-    @foreach (var task in Model)
+    @foreach (var task in Model.User.Tasks)
     {
         <tr>
             <td>
@@ -31,7 +33,7 @@
                 }
                 else
                 {
-                    if (task.Status == TaskStatus.AwaitingFeedback && currentProjectRole != Role.Worker)
+                    if (task.Status == TaskStatus.AwaitingFeedback && Model.Role != Role.Worker)
                     {
                         @(" | ")
                         @Html.Label("Close", new { taskID = task.TaskID, status = TaskStatus.Finished })
@@ -43,3 +45,25 @@
         </tr>
     }
 </table>
+<h3>Owned tasks</h3>
+@if(Model.Role <= Role.Manager)
+{
+    <table class="table">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.User.OwnerTasks[0].Name)</th>
+            <th>@Html.DisplayNameFor(model => model.User.OwnerTasks[0].Status)</th>
+        </tr>
+    @foreach (var item in Model.User.OwnerTasks)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Status)
+            </td>
+        </tr>
+        
+    }
+    </table>
+}
