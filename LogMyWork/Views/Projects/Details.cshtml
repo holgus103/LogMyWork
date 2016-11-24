@@ -1,6 +1,7 @@
-﻿@using LogMyWork.Consts;
-@using LogMyWork.Models;
-@model LogMyWork.Models.Project
+﻿@using LogMyWork.Consts
+@using LogMyWork.Models
+@using LogMyWork.ViewModels.Projects
+@model ProjectDetails
 
 @Styles.Render("~/Content/Projects.css")
 
@@ -22,22 +23,22 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Project.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Project.Name)
         </dd>
         <h5>Tasks</h5>
-        @Html.Partial("~/Views/Partials/TaskList.cshtml", Model.Tasks)
+        @Html.Partial("~/Views/Partials/TaskList.cshtml", Model.CurrentProjectRole.User.Tasks, new ViewDataDictionary() { { ViewDataKeys.CurrentProjectRole, Model.CurrentProjectRole.Role } })
         <div id="AddTaskPnl" class="panel panel-default hidden">
-            @Html.Partial("~/Views/Partials/Add.cshtml", new ViewDataDictionary() { { "ProjectId", Model.ProjectID }, { "ProjectUsers", Model.Roles }, { ViewDataKeys.CurrentProjectRole, this.ViewData[ViewDataKeys.CurrentProjectRole]} })
+            @Html.Partial("~/Views/Partials/Add.cshtml", new ViewDataDictionary() { { "ProjectId", Model.Project.ProjectID }, { "ProjectUsers", Model.Project.Roles }, { ViewDataKeys.CurrentProjectRole, Model.CurrentProjectRole.Role} })
         </div>
         <div class="btn btn-default" id="ShowTaskPanelBtn">Add Task</div>
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ProjectID }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Project.ProjectID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
 @section Scripts{

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using LogMyWork.Models;
 using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
+using LogMyWork.ViewModels.Projects;
 using System;
 using LogMyWork.Consts;
 
@@ -32,33 +33,48 @@ namespace LogMyWork.Controllers
         // GET: Projects/Details/5
         public ActionResult Details(int? id)
         {
+            ProjectDetails projectDetails = new ProjectDetails();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             string userId = User.Identity.GetUserId();
-            ProjectRole role = this.db.ProjectRoles.Where(r => r.UserID == userId && r.ProjectID == id).FirstOrDefault();
-            if (role == null)
+            projectDetails.CurrentProjectRole = this.db.ProjectRoles
+                .Include(r => r.User.OwnerTasks)
+                .Include(r => r.User.Tasks)
+                .Where(r => r.UserID == userId && r.ProjectID == id)
+                .ToList()
+                .Select(r =>  new ProjectRole {
+                    ProjectRoleID = r.ProjectRoleID,
+                    ProjectID = r.ProjectID,
+                    Role = r.Role,
+                    User = new ApplicationUser {
+                        OwnerTasks = r.User.OwnerTasks.Where(t => t.ParentProjectID == id).ToList(),
+                        Tasks = r.User.Tasks.Where(t => t.ParentProjectID == id).ToList()
+                    }
+                })
+                .FirstOrDefault();
+            if (projectDetails.CurrentProjectRole == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
-            else
-            {
-                // store current project user role
-                this.ViewData[ViewDataKeys.CurrentProjectRole] = role.Role;
-            }
-            Project project = db.Projects.Find(id);
-            project.Roles = db.ProjectRoles.Include(r => r.User).Where(r => r.ProjectID == project.ProjectID).ToList();
-            // insert empty user to roles for dropdowns 
-            project.Roles.Insert(0, new ProjectRole { ProjectID = project.ProjectID });
-            //project.Tasks = db.ProjectTasks.Include(t => t.Users).Where(t => t.ParentProjectID == project.ProjectID).Where( t=> t.Users.Contains(user)).ToList();
-            project.Tasks = this.db.Users.Include(u => u.Tasks).Where(u => u.Id == userId).SelectMany(u => u.Tasks).Where(t => t.ParentProjectID == project.ProjectID).ToList();
+            projectDetails.Project = db.Projects.Include(p => p.Tasks).Include(p => p.Roles).Where(p => p.ProjectID == id).FirstOrDefault();
 
-            if (project == null)
+
+            if (projectDetails.Project == null)
             {
                 return HttpNotFound();
             }
-            return View(project);
+
+            // insert empty user to roles for dropdowns 
+            projectDetails.Project.Roles.Insert(0, new ProjectRole { ProjectID = projectDetails.Project.ProjectID });
+            //project.Tasks = db.ProjectTasks.Include(t => t.Users).Where(t => t.ParentProjectID == project.ProjectID).Where( t=> t.Users.Contains(user)).ToList();
+            //project.Tasks = this.db.Users.Include(u => u.Tasks).Where(u => u.Id == userId).SelectMany(u => u.Tasks).Where(t => t.ParentProjectID == project.ProjectID).ToList();
+
+            //if (role.Role != Role.Worker) {
+            //    this.ViewData[ViewDataKeys.OwnedTasks] = this.db.Users.Include(u => u.OwnerTasks).Where(u => u.Id == userId).SelectMany(u => );
+            //}
+            return View(projectDetails);
         }
 
         // GET: Projects/Create
