@@ -13,6 +13,7 @@ using LogMyWork.Consts;
 using System.Web.Script.Serialization;
 //using System.Threading.Tasks;
 using Commons;
+using LogMyWork.ViewModels.TimeEntries;
 
 namespace LogMyWork.Controllers
 {
@@ -25,14 +26,26 @@ namespace LogMyWork.Controllers
         public ActionResult Index()
         {
             string userId = User.Identity.GetUserId();
-            var val = db.TimeEntries.Include(t => t.ParentTask.ParentProject).Where(e => e.UserID == userId);
-            return View(val.ToList());
+            TimeEntryIndex viewModel = new TimeEntryIndex();
+            viewModel.TimeEntries = this.db.TimeEntries.Include(t => t.ParentTask.ParentProject).Where(e => e.UserID == userId).ToList();
+            viewModel.Roles = this.db.Users.Include(u => u.ProjectRoles).Where(u => u.Id == userId).SelectMany(u => u.ProjectRoles).ToList();
+            viewModel.Roles.Insert(0, new ProjectRole());
+
+            return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult GetFilteredValues(long? from, long? to)
+        public ActionResult GetFilteredValues(long? from, long? to, int? projectID)
         {
-            DateTime dateFrom = UnixTime.ParseUnitTimestamp((ulong)from);
+            DateTime dateFrom;
+            if (from != null)
+            {
+                dateFrom = UnixTime.ParseUnitTimestamp((ulong)from);
+            }
+            else
+            {
+                dateFrom = UnixTime.ParseUnitTimestamp(0);
+            }
 
             string userId = User.Identity.GetUserId();
             var entries = this.db.TimeEntries.Include(t => t.ParentTask.ParentProject).Where(t => t.UserID == userId && t.Start > dateFrom);
@@ -40,6 +53,10 @@ namespace LogMyWork.Controllers
             {
                 DateTime dateTo = UnixTime.ParseUnitTimestamp((ulong)to);
                 entries = entries.Where(t => t.End < dateTo);
+            }
+            if (projectID != null)
+            {
+                entries = entries.Where(e => e.ParentTask.ParentProjectID == projectID);
             }
             return PartialView("~/Views/Partials/TimeEntriesResultsTable.cshtml", entries.ToList());
         }
@@ -74,7 +91,7 @@ namespace LogMyWork.Controllers
             ProjectTask task;
             var entries = db.TimeEntries.Where(t => t.Active == true && t.ParentTaskID == timeEntry.ParentTaskID);
             // if exits a currently active entry for this task, end it
-            if (entries.Count()>0)
+            if (entries.Count() > 0)
             {
                 foreach (var val in entries)
                 {

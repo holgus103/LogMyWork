@@ -1,5 +1,4 @@
-﻿using LogMyWork.Repositories;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
 
 namespace LogMyWork.Models
@@ -33,20 +32,5 @@ namespace LogMyWork.Models
 
         public DbSet<Rate> Rates { get; set; }
 
-        private ProjectRepository projectRepository;
-        public ProjectRepository ProjectRepository
-        {
-            get
-            {
-                if (this.projectRepository == null)
-                    this.projectRepository = new ProjectRepository(this);
-                return this.projectRepository;
-            }
-
-            set
-            {
-                this.projectRepository = value;
-            }
-        }
     }
 }

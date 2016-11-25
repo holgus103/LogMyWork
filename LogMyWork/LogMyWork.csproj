@@ -220,9 +220,6 @@
     <Compile Include="Consts\ProjectStatus.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ProjectEdit.cs" />
-    <Compile Include="Models\ProjectTaskEdit.cs" />
-    <Compile Include="Repositories\ProjectRepository.cs" />
-    <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -236,9 +233,10 @@
     <Compile Include="Models\Rate.cs" />
     <Compile Include="Models\TimeEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\TasksRepository.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Projects\ProjectDetails.cs" />
+    <Compile Include="ViewModels\Tasks\TaskAdd.cs" />
+    <Compile Include="ViewModels\TimeEntries\TimeEntryIndex.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-datetimepicker.css" />
@@ -355,7 +353,7 @@
     <Content Include="Views\Rates\Create.cshtml" />
     <Content Include="Views\Rates\Delete.cshtml" />
     <Content Include="Views\Rates\Index.cshtml" />
-    <Content Include="Views\Partials\Add.cshtml" />
+    <Content Include="Views\Partials\AddTask.cshtml" />
     <Content Include="Views\Partials\TimeEntriesResultsTable.cshtml" />
     <Content Include="Views\Partials\TaskList.cshtml" />
   </ItemGroup>

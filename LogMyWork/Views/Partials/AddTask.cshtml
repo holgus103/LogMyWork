@@ -1,5 +1,6 @@
-﻿@using LogMyWork.Models
-@model ProjectTask
+﻿@using LogMyWork.ViewModels.Tasks
+@model  TaskAdd
+
 @{
     // tag for javascript to insert
     string temp = (
@@ -33,11 +34,11 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Users[0].Email, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.Users[0].Id, new SelectList((List<ProjectRole>)this.ViewData["ProjectUsers"], "User.Id", "User.Email"), new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Users[0].Id, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(model => model.Users[0].Id, new SelectList(Model.Roles, "User.Id", "User.Email"), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Users[0].Email, "", new { @class = "text-danger" })
             </div>
         </div>
-        @Html.Hidden("ParentProjectID", (int)this.ViewData["ProjectId"])
+        @Html.HiddenFor(model => model.ParentProjectID, Model.ParentProjectID)
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input id="AddTaskBtn" value="Add" type="submit" class="btn btn-default" />

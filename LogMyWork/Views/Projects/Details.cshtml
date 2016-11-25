@@ -1,6 +1,7 @@
 ﻿@using LogMyWork.Consts
 @using LogMyWork.Models
 @using LogMyWork.ViewModels.Projects
+@using LogMyWork.ViewModels.Tasks
 @model ProjectDetails
 
 @Styles.Render("~/Content/Projects.css")
@@ -32,7 +33,7 @@
         <h5>Tasks</h5>
         @Html.Partial("~/Views/Partials/TaskList.cshtml", Model.CurrentProjectRole)
         <div id="AddTaskPnl" class="panel panel-default hidden">
-            @Html.Partial("~/Views/Partials/Add.cshtml", new ViewDataDictionary() { { "ProjectId", Model.Project.ProjectID }, { "ProjectUsers", Model.Project.Roles }, { ViewDataKeys.CurrentProjectRole, Model.CurrentProjectRole.Role} })
+            @Html.Partial("~/Views/Partials/AddTask.cshtml", new TaskAdd() { ParentProjectID = Model.Project.ProjectID, Roles = Model.Project.Roles })
         </div>
         <div class="btn btn-default" id="ShowTaskPanelBtn">Add Task</div>
     </dl>

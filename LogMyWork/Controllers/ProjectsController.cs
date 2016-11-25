@@ -58,7 +58,7 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
-            projectDetails.Project = db.Projects.Include(p => p.Tasks).Include(p => p.Roles).Where(p => p.ProjectID == id).FirstOrDefault();
+            projectDetails.Project = db.Projects.Include(p => p.Tasks).Include(p => p.Roles.Select(r => r.User)).Where(p => p.ProjectID == id).FirstOrDefault();
 
 
             if (projectDetails.Project == null)

@@ -16,7 +16,7 @@ namespace LogMyWork.Models
         public virtual List<ProjectTask> Tasks { get; set; }
         [InverseProperty("Owner")]
         public virtual List<ProjectTask> OwnerTasks { get; set; }
-
+        public virtual List<ProjectRole> ProjectRoles { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
