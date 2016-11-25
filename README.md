@@ -19,7 +19,16 @@ Written in ASP.NET MVC
 - Time-Tracking
   - Real-Time tracking using JavaScript   
 - Logs view
-  - Filter all logs by date (from and to)
+  - Filter all logs (Date from, Date to, Project, Task, User)
   - Timezone adjustment for all entries
+  - Worker:
+    - **only** their own entries
+  - Manager:
+    - their own entries
+    - entries related to the tasks they own
+  - Owner:
+    - their own entries
+    - entries related to the tasks they own
+    - entries related to the projects they own
 
 
