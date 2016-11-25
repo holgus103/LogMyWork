@@ -8,6 +8,9 @@
             @Html.DisplayFor(modelItem => item.ParentTask.ParentProject.Name)
         </td>
         <td>
+            @Html.DisplayFor(model => item.User.Email)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.ParentTask.Name)
         </td>
         <td adjustment="timezone" timestamp="@item.Start.ToUnixTimestamp()">

@@ -15,6 +15,7 @@ namespace LogMyWork.Models
         public string OwnerID { get; set; }
         public ApplicationUser Owner{ get; set; }
         public List<ApplicationUser> Users { get; set; } 
+        public List<TimeEntry> Entries { get; set; }
         [DisplayName ("Task Name")]
         public string Name { get; set; }
         [ForeignKey ("ParentProject")]

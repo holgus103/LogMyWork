@@ -2,6 +2,7 @@
 var from;
 var to;
 var projectSelect;
+var userSelect;
 
 function adjustTimeZones() {
     $("#TimeEntriesTable td[adjustment=timezone]").each(
@@ -29,7 +30,9 @@ function onDateChanged() {
                     __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
                     from: (new Date(from.data().date)).getTime() / 1000,
                     to: (new Date(to.data().date)).getTime() / 1000,
-                    projectId: projectSelect.val()
+                    projectId: projectSelect.val(),
+                    taskId: taskSelect.val(),
+                    user: userSelect.val()
 
                 },
             success: function (data) {
@@ -46,14 +49,17 @@ function onDateChanged() {
 $(document).ready(function () {
     from = $('#datetimepickerFrom');
     to = $('#datetimepickerTo');
-    projectSelect = $("#Roles_0__ProjectID");
-
+    projectSelect = $("#Projects_0__ProjectID");
+    taskSelect = $("#Tasks_0__TaskID");
+    userSelect = $("#Users_0__Id");
     from.datetimepicker();
     to.datetimepicker();
 
     to.on("dp.change", onDateChanged);
     from.on("dp.change", onDateChanged);
     projectSelect.change(onDateChanged);
+    taskSelect.change(onDateChanged);
+    userSelect.change(onDateChanged);
     adjustTimeZones();
 });
 
