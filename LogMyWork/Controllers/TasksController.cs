@@ -73,6 +73,8 @@ namespace LogMyWork.Controllers
             {
                 task.Users.RemoveAt(task.Users.Count - 1);
                 task.Users.ForEach(u => this.db.Users.Attach(u));
+                task.Created = DateTime.UtcNow;
+
                 //ProjectTask task = new ProjectTask { Name = projectTaskEdit.Name, ParentProjectID = projectTaskEdit.ParentProjectID, Users = new List<ApplicationUser>()};
                 //projectTaskEdit.Users.ForEach(u => task.Users.Add(this.db.Users.Find(u)));
                 task.Status = task.Users.Count() > 0 ? TaskStatus.Assigned : TaskStatus.Created;

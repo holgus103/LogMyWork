@@ -31,7 +31,7 @@ namespace LogMyWork.Models
 
         public ProjectTask()
         {
-            this.LastModified = this.Created = DateTime.UtcNow;
+            this.LastModified = DateTime.UtcNow;
 
         }
     }
