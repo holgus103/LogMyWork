@@ -21,8 +21,14 @@ namespace LogMyWork.Controllers
         public ActionResult Index()
         {
             string userID = User.Identity.GetUserId();
-            var projectTasks = db.Users.Include(u => u.Tasks).Where(u => u.Id == userID).SingleOrDefault().Tasks;
-            return View(projectTasks.ToList());
+            ProjectRole role = new ProjectRole();
+            role.Role = Role.Worker;
+            role.User = db.Users
+                .Where(u => u.Id == userID)
+                .Include(u => u.Tasks)
+                .Include(u => u.OwnedTasks)
+                .SingleOrDefault();
+            return View(role);
         }
 
         // GET: Tasks/Details/5

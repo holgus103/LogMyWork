@@ -40,7 +40,7 @@ namespace LogMyWork.Controllers
             }
             string userId = User.Identity.GetUserId();
             projectDetails.CurrentProjectRole = this.db.ProjectRoles
-                .Include(r => r.User.OwnerTasks)
+                .Include(r => r.User.OwnedTasks)
                 .Include(r => r.User.Tasks)
                 .Where(r => r.UserID == userId && r.ProjectID == id)
                 .ToList()
@@ -49,7 +49,7 @@ namespace LogMyWork.Controllers
                     ProjectID = r.ProjectID,
                     Role = r.Role,
                     User = new ApplicationUser {
-                        OwnerTasks = r.User.OwnerTasks.Where(t => t.ParentProjectID == id).ToList(),
+                        OwnedTasks = r.User.OwnedTasks.Where(t => t.ParentProjectID == id).ToList(),
                         Tasks = r.User.Tasks.Where(t => t.ParentProjectID == id).ToList()
                     }
                 })

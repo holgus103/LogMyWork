@@ -199,6 +199,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Consts\FileType.cs" />
     <Compile Include="Consts\Role.cs" />
     <Compile Include="Consts\SessionsKey.cs" />
     <Compile Include="Consts\TaskStatus.cs" />
@@ -219,6 +220,7 @@
     </Compile>
     <Compile Include="Consts\ProjectStatus.cs" />
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Attachment.cs" />
     <Compile Include="Models\ProjectEdit.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
