@@ -3,12 +3,12 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using LogMyWork.Models;
-using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
-using LogMyWork.ViewModels.Projects;
-using System;
+using Microsoft.AspNet.Identity;
+
 using LogMyWork.Consts;
+using LogMyWork.Models;
+using LogMyWork.ViewModels.Projects;
 
 namespace LogMyWork.Controllers
 {

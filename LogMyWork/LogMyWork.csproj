@@ -221,7 +221,7 @@
     <Compile Include="Consts\ProjectStatus.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Attachment.cs" />
-    <Compile Include="Models\ProjectEdit.cs" />
+    <Compile Include="ViewModels\Projects\ProjectEdit.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -238,6 +238,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Projects\ProjectDetails.cs" />
     <Compile Include="ViewModels\Tasks\TaskAdd.cs" />
+    <Compile Include="ViewModels\Tasks\TaskCreate.cs" />
     <Compile Include="ViewModels\TimeEntries\TimeEntryIndex.cs" />
   </ItemGroup>
   <ItemGroup>

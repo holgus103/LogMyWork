@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using LogMyWork.Models;
 
-namespace LogMyWork.Models
+namespace LogMyWork.ViewModels.Projects
 {
     public class ProjectEdit
     {
