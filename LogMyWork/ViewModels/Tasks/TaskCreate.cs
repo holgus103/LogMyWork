@@ -12,7 +12,7 @@ namespace LogMyWork.ViewModels.Tasks
         public string Name { get; set; }
         public int ParentProjectID { get; set; }
         public string Description { get; set; }
-        public DateTime Deadline { get; set; }
+        public string Deadline { get; set; }
         public List<ApplicationUser> Users { get; set; } = new List<ApplicationUser>();
         public IEnumerable<HttpPostedFileBase> Files { get; set; } 
     }

@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity;
 using LogMyWork.Consts;
 using LogMyWork.ViewModels.Tasks;
 using System.IO;
+using System.Globalization;
 
 namespace LogMyWork.Controllers
 {
@@ -45,6 +46,7 @@ namespace LogMyWork.Controllers
                 .Include(t => t.ParentProject)
                 .Include(t => t.Users)
                 .Include(t => t.Owner)
+                .Include(t => t.Attachments)
                 .FirstOrDefault();
             if (projectTask == null)
             {
@@ -98,7 +100,7 @@ namespace LogMyWork.Controllers
                 {
                     LastModified = DateTime.UtcNow,
                     Created = DateTime.UtcNow,
-                    Deadline = form.Deadline,
+                    Deadline = DateTime.ParseExact("21/11/2016 12:13 PM", "dd/MM/yyyy h:mm tt", CultureInfo.InvariantCulture),
                     Description = form.Description,
                     Name = form.Name,
                     OwnerID = User.Identity.GetUserId(),

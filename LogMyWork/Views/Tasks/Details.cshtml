@@ -41,6 +41,12 @@
             <dt>@Html.LabelFor(model => user.Email)</dt>
             <dd>@Html.DisplayFor(mnodel => user.Email)</dd>
         }
+        <h5>Attachments</h5>
+        @foreach(var attachment in Model.Attachments)
+        {
+            @Html.ActionLink(attachment.FileName, "Download", "Attachments", new { attachmentID = attachment.AttachmentID }, null); 
+            @(" ")
+        }
 
     </dl>
 </div>

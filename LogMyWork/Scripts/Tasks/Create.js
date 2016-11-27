@@ -1,7 +1,8 @@
 ﻿
-
+var users;
 $(document).ready(function () {
     $("#Deadline").datetimepicker();
+    loadUsers();
     var control = new RepeatableControl(
     function (i) {
         return "Files_" + i;
@@ -15,35 +16,23 @@ $(document).ready(function () {
     null
     );
 
-    var users = new RepeatableControl(
-        function (i) {
-            return "Users_" + i + "__Id";
-        },
-        function (i) {
-            return "Users[" + i + "].Id";
-        },
-        "#Users select",
-        "select",
-        ".form-group",
-        function () {
-            users.updateDropDowns();
-        }
-        )
+    users = new RepeatableControl(
+    function (i) {
+        return "Users_" + i + "__Id";
+    },
+    function (i) {
+        return "Users[" + i + "].Id";
+    },
+    "#Users select",
+    "select",
+    ".form-group",
+    function () {
+        users.updateDropDowns();
+    }
+    )
     //var control = new RepeatableControl()
     $("#ParentProjectID").change(
-        function () {
-            sendAjax(
-                {
-                    ProjectID: $("#ParentProjectID")
-                },
-                "/Projects/GetUsersForProject",
-                function (data) {
-                    users.resetControl();
-                    $("#Users_0__Id").html(data);
-                    
-                }
-                );
-        }
+       
     )
 
     
@@ -51,3 +40,16 @@ $(document).ready(function () {
 
 
 
+function loadUsers() {
+    sendAjax(
+        {
+            ProjectID: $("#ParentProjectID")
+        },
+        "/Projects/GetUsersForProject",
+        function (data) {
+            users.resetControl();
+            $("#Users_0__Id").html(data);
+
+        }
+        );
+}
