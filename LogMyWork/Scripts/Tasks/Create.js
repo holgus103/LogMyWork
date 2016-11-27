@@ -1,18 +1,4 @@
-﻿function updateDropDowns() {
-    $("option").attr("disabled", false);
-    // foreach selected value
-    var dropDowns = $("select").toArray();
-    dropDowns.forEach(function (dd) {
-        if ($(dd).val() != "") {
-            // disable the currently processed value foreach other select 
-            dropDowns.forEach(function (element) {
-                if (element != dd) {
-                    $(element).children("option[value='" + $(dd).val() + "']").attr("disabled", true);
-                }
-            });
-        }
-    })
-}
+﻿
 
 $(document).ready(function () {
     $("#Deadline").datetimepicker();
@@ -39,7 +25,9 @@ $(document).ready(function () {
         "#Users select",
         "select",
         ".form-group",
-        updateDropDowns
+        function () {
+            users.updateDropDowns();
+        }
         )
     //var control = new RepeatableControl()
     $("#ParentProjectID").change(
