@@ -277,8 +277,9 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\common\Ajax.js" />
-    <Content Include="Scripts\common\TimeZoneAdjust.js" />
+    <Content Include="Scripts\Common\Ajax.js" />
+    <Content Include="Scripts\Common\RepeatableControl.js" />
+    <Content Include="Scripts\Common\TimeZoneAdjust.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
@@ -299,14 +300,14 @@
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\npm.js" />
-    <Content Include="Scripts\Projects.js" />
+    <Content Include="Scripts\Projects\Projects.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\Shared.js" />
+    <Content Include="Scripts\Common\Shared.js" />
     <Content Include="Scripts\Projects\ProjectTasks.js" />
     <Content Include="Scripts\Tasks\Create.js" />
-    <Content Include="Scripts\TimeEntries.js" />
-    <Content Include="Scripts\Tracker.js" />
+    <Content Include="Scripts\TimeEntries\TimeEntries.js" />
+    <Content Include="Scripts\Common\Tracker.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -360,6 +361,7 @@
     <Content Include="Views\Partials\AddTask.cshtml" />
     <Content Include="Views\Partials\TimeEntriesResultsTable.cshtml" />
     <Content Include="Views\Partials\TaskList.cshtml" />
+    <Content Include="Views\Partials\SelectOptionsTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

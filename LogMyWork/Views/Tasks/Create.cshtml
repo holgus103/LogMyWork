@@ -1,4 +1,5 @@
 ﻿@using LogMyWork.ViewModels.Tasks
+@using LogMyWork.Models
 @model TaskCreate
 
 @{
@@ -10,7 +11,7 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Create", "Tasks", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
@@ -27,7 +28,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ParentProject, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ParentProjectID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-sm-10">
                 @Html.DropDownList("ParentProjectID", (SelectList)ViewBag.ParentProjectID,  new { @class = "form-control" } )
             </div>
@@ -51,13 +52,22 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Files[0], htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Users[0].Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Users[0].Id, new SelectList(new List<ApplicationUser>()), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Users[0].Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Attachment", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-sm-10">
-                <input type="file" class="form-control" id="FIle_0" name="File_0"/>
+                <input type="file" class="form-control" id="Files_0" name="Files[0]"/>
             </div>
 
         </div>
 
+        
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
@@ -76,4 +86,5 @@
     @Scripts.Render("~/Scripts/moment.min.js")
     @Scripts.Render("~/Scripts/bootstrap-datetimepicker.min.js")
     @Scripts.Render("~/Scripts/Tasks/Create.js")
+    @Scripts.Render("~/Scripts/Common/RepeatableControl.js")
 }

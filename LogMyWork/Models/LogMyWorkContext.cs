@@ -32,5 +32,7 @@ namespace LogMyWork.Models
 
         public DbSet<Rate> Rates { get; set; }
 
+        public DbSet<Attachment> Attachments { get; set; }
+
     }
 }

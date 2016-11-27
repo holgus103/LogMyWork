@@ -12,9 +12,8 @@ namespace LogMyWork.Models
 
         public int TaskID { get; set; }
         public ProjectTask Task { get; set; }
-        public string FilePath { get; set; }
         public string FileName { get; set; }
         public int Size { get; set; }
-        public FileType Type { get; set; }
+        public string Type { get; set; }
     }
 }

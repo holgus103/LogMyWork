@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using LogMyWork.Models;
 using Microsoft.AspNet.Identity;
 using LogMyWork.Consts;
+using LogMyWork.ViewModels.Tasks;
+using System.IO;
 
 namespace LogMyWork.Controllers
 {
@@ -38,7 +40,12 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProjectTask projectTask = db.ProjectTasks.Include(t => t.ParentProject).Include(t => t.Users).Include( t => t.Owner).Where(t => t.TaskID == id).FirstOrDefault();
+            ProjectTask projectTask = db.ProjectTasks
+                .Where(t => t.TaskID == id)
+                .Include(t => t.ParentProject)
+                .Include(t => t.Users)
+                .Include(t => t.Owner)
+                .FirstOrDefault();
             if (projectTask == null)
             {
                 return HttpNotFound();
@@ -50,7 +57,11 @@ namespace LogMyWork.Controllers
         // GET: Tasks/Create
         public ActionResult Create()
         {
-            ViewBag.ParentProjectID = new SelectList(db.Projects, "ProjectID", "Name");
+            string userId = User.Identity.GetUserId();
+            ViewBag.ParentProjectID = new SelectList(db.ProjectRoles
+                .Where(r => r.UserID == userId && r.Role < Role.Worker)
+                .Include(r => r.Project).ToList(),
+                "ProjectID", "Project.Name");
             return View();
         }
 
@@ -61,30 +72,62 @@ namespace LogMyWork.Controllers
             task.Status = status;
             db.SaveChanges();
             return this.ajaxSuccess();
-        } 
+        }
+
+        [HttpPost]
+        public ActionResult GetTasksForProject(int projectID)
+        {
+            return View("~/Partials/SelectOptionsTemplate.cshtml", this.db.ProjectTasks
+                .Where(t => t.ParentProjectID == projectID)
+                .ToList()
+                .Select(t => new Tuple<int, string>(t.TaskID, t.Name))
+                );
+        }
         // POST: Tasks/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TaskID,Name,ParentProjectID,Users")] ProjectTask task)
+        public ActionResult Create(TaskCreate form)
         {
             if (ModelState.IsValid)
             {
-                task.Users.RemoveAt(task.Users.Count - 1);
-                task.Users.ForEach(u => this.db.Users.Attach(u));
-                task.Created = DateTime.UtcNow;
+                if (form?.Users.Count > 0)
+                    form.Users.RemoveAt(form.Users.Count - 1);
+                ProjectTask task = new ProjectTask()
+                {
+                    LastModified = DateTime.UtcNow,
+                    Created = DateTime.UtcNow,
+                    Deadline = form.Deadline,
+                    Description = form.Description,
+                    Name = form.Name,
+                    OwnerID = User.Identity.GetUserId(),
+                    ParentProjectID = form.ParentProjectID,
+                    Status = form.Users.Count() > 0 ? TaskStatus.Assigned : TaskStatus.Created,
+                    Users = form.Users
 
-                //ProjectTask task = new ProjectTask { Name = projectTaskEdit.Name, ParentProjectID = projectTaskEdit.ParentProjectID, Users = new List<ApplicationUser>()};
-                //projectTaskEdit.Users.ForEach(u => task.Users.Add(this.db.Users.Find(u)));
-                task.Status = task.Users.Count() > 0 ? TaskStatus.Assigned : TaskStatus.Created;
-                task.OwnerID = User.Identity.GetUserId();
+                };
+                task.Users.ForEach(u => this.db.Users.Attach(u));
+                List<Attachment> attachments = new List<Attachment>();
                 db.ProjectTasks.Add(task);
                 db.SaveChanges();
-                return this.sendID(task.TaskID);
+                
+                // save all attachments
+                foreach (var val in form.Files)
+                {
+                    if (val != null)
+                    {
+                        db.Attachments.Add(new Attachment() { FileName = val.FileName, Size = val.ContentLength, Type = val.ContentType, TaskID = task.TaskID });
+                        DirectoryInfo dir = Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + @"Attachments/" + task.TaskID);
+                        val.SaveAs(dir.FullName + @"/" + val.FileName);
+                    }
+                }
+
+                db.SaveChanges();
+                return this.Redirect("/Projects/Details/" + form.ParentProjectID);
             }
 
-            return this.ajaxFailure();
+            return View();
         }
 
         // GET: Tasks/Edit/5

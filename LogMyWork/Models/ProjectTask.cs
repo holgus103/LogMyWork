@@ -29,10 +29,5 @@ namespace LogMyWork.Models
         public DateTime LastModified { get; set; }
         public List<Attachment> Attachments { get; set; }
 
-        public ProjectTask()
-        {
-            this.LastModified = DateTime.UtcNow;
-
-        }
     }
 }
