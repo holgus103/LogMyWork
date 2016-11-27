@@ -33,5 +33,13 @@
             $(element).attr("Name", nextNameGen(index)).attr("Id", nextIdGen(index));
         })
     };
+    this.resetControl = function() {
+        $(allSelector).each(function (index, element) {
+            if (index > 0) {
+                $(element).remove();
+            }
+        })
+        $(allSelector).eq(0).val(null);
+    }
     $(allSelector).change(handleSelectChange);
 }

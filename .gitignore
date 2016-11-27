@@ -4,6 +4,7 @@
 /LogMyWork/bin/
 /LogMyWork/obj/
 /LogMyWork/App_Data/
+/LogMyWork/Attachments/
 *.mdf
 LogMyWork/App_Data/aspnet-LogMyWork-20160905120332_log.ldf
 *.mdf

@@ -30,13 +30,13 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ParentProjectID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-sm-10">
-                @Html.DropDownList("ParentProjectID", (SelectList)ViewBag.ParentProjectID,  new { @class = "form-control" } )
+                @Html.DropDownList("ParentProjectID", (SelectList)ViewBag.ParentProjectID, new { @class = "form-control" })
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextAreaFor(model => model.Description, 10, 40, new { @class = "form-control" } )
+                @Html.TextAreaFor(model => model.Description, 10, 40, new { @class = "form-control" })
             </div>
         </div>
         <div class="form-group">
@@ -51,23 +51,25 @@
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Users[0].Email, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.Users[0].Id, new SelectList(new List<ApplicationUser>()), new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Users[0].Email, "", new { @class = "text-danger" })
+        <div id="Users">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Users[0].Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.Users[0].Id, new SelectList(new List<ApplicationUser>()), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Users[0].Email, "", new { @class = "text-danger" })
+                </div>
             </div>
         </div>
 
         <div class="form-group">
             @Html.Label("Attachment", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-sm-10">
-                <input type="file" class="form-control" id="Files_0" name="Files[0]"/>
+                <input type="file" class="form-control" id="Files_0" name="Files[0]" />
             </div>
 
         </div>
 
-        
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
@@ -87,4 +89,5 @@
     @Scripts.Render("~/Scripts/bootstrap-datetimepicker.min.js")
     @Scripts.Render("~/Scripts/Tasks/Create.js")
     @Scripts.Render("~/Scripts/Common/RepeatableControl.js")
+    @Scripts.Render("~/Scripts/Common/Ajax.js")
 }

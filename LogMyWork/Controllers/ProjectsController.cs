@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using LogMyWork.Consts;
 using LogMyWork.Models;
 using LogMyWork.ViewModels.Projects;
+using System;
 
 namespace LogMyWork.Controllers
 {
@@ -28,6 +29,18 @@ namespace LogMyWork.Controllers
             string userID = User.Identity.GetUserId();
             List<ProjectRole> projects = this.db.ProjectRoles.Include(r => r.Project).Where(r => r.UserID == userID).ToList();
             return View(projects);
+        }
+
+        public ActionResult GetUsersForProject(int projectID)
+        {
+             var data = this.db.Projects
+                .Where(x => x.ProjectID == projectID)
+                .Include(x => x.Roles.Select(r => r.User))
+                .ToList()
+                .SelectMany(x => x.Roles.Select(r => new Tuple<object, string>(r.User.Id, r.User.Email)))
+                .ToList();
+            data.Insert(0, new Tuple<object, string>(null, null));
+            return PartialView("~/Views/Partials/SelectOptionsTemplate.cshtml", data);
         }
 
         // GET: Projects/Details/5

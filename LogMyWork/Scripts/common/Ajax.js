@@ -11,11 +11,11 @@
             headers: headers,
             url: url,
             method: 'POST',
-            data: data
+            data: data,
+            success: function (data) {
+                callback && callback(data);
+            }
+
         }
-    ).success(
-        function (data) {
-            callback(data);
-        }
-    );
+    )
 }
