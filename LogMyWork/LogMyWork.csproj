@@ -250,6 +250,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Projects.css" />
+    <Content Include="Content\Tasks.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -307,6 +308,7 @@
     <Content Include="Scripts\Common\Shared.js" />
     <Content Include="Scripts\Projects\ProjectTasks.js" />
     <Content Include="Scripts\Tasks\Create.js" />
+    <Content Include="Scripts\Tasks\Details.js" />
     <Content Include="Scripts\TimeEntries\TimeEntries.js" />
     <Content Include="Scripts\Common\Tracker.js" />
     <Content Include="Scripts\_references.js" />

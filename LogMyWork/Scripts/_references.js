@@ -23,4 +23,5 @@
 /// <reference path="projects/projecttasks.js" />
 /// <reference path="respond.js" />
 /// <reference path="tasks/create.js" />
+/// <reference path="tasks/details.js" />
 /// <reference path="timeentries/timeentries.js" />

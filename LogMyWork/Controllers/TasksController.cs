@@ -100,7 +100,7 @@ namespace LogMyWork.Controllers
                 {
                     LastModified = DateTime.UtcNow,
                     Created = DateTime.UtcNow,
-                    Deadline = DateTime.ParseExact("21/11/2016 12:13 PM", "dd/MM/yyyy h:mm tt", CultureInfo.InvariantCulture),
+                    Deadline = DateTime.ParseExact(form.Deadline, "MM/dd/yyyy h:mm tt", CultureInfo.InvariantCulture).ToUniversalTime(),
                     Description = form.Description,
                     Name = form.Name,
                     OwnerID = User.Identity.GetUserId(),

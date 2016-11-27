@@ -1,0 +1,17 @@
+﻿
+#ProgressBar{
+    background-color: #808080;
+    width: 100%;
+    height: 30px;
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding-left: 0px;
+}
+
+#Progress {
+   position: absolute;
+   width:0px;
+   height:30px;
+   background-color: #0026ff
+}
