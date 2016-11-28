@@ -4,6 +4,7 @@
 
 @{
     ViewBag.Title = "Create";
+    int usersCounter = 0;
 }
 @section Styles{
     @Styles.Render("~/Content/bootstrap-datetimepicker.css")
@@ -18,6 +19,11 @@
     <div class="form-horizontal">
         <h4>ProjectTask</h4>
         <hr />
+
+        @if(Model.TaskID != 0)
+        {
+            @Html.HiddenFor(model => model.TaskID)
+        }
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -30,7 +36,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ParentProjectID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-sm-10">
-                @Html.DropDownList("ParentProjectID", (SelectList)ViewBag.ParentProjectID, new { @class = "form-control" })
+                @Html.DropDownList("ParentProjectID", new SelectList(Model.SelectableProjects, "Key", "Value", Model.ParentProjectID), new { @class = "form-control" })
             </div>
         </div>
         <div class="form-group">
@@ -43,7 +49,7 @@
             @Html.LabelFor(model => model.Deadline, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-3">
                 <div class='input-group date' id='Deadline'>
-                    <input type='text' name="Deadline" class="form-control" />
+                    <input type='text' name="Deadline" class="form-control" value="@Model.Deadline">
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -52,14 +58,32 @@
         </div>
 
         <div id="Users">
+            @for (usersCounter = 0; usersCounter < Model.Users.Count(); usersCounter++)
+            {
+            <div class="form-group">
+                @Html.LabelFor(model => model.Users[usersCounter].Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.Users[usersCounter].Id, new SelectList(Model.SelectableUsers, "Key", "Value", Model.Users[usersCounter].Id), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Users[usersCounter].Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            }
             <div class="form-group">
                 @Html.LabelFor(model => model.Users[0].Email, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.Users[0].Id, new SelectList(new List<ApplicationUser>()), new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Users[0].Email, "", new { @class = "text-danger" })
+                    @Html.DropDownListFor(model => model.Users[usersCounter].Id, new SelectList(Model.SelectableUsers, "Key", "Value", null), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Users[usersCounter].Email, "", new { @class = "text-danger" })
                 </div>
             </div>
         </div>
+
+        @if(Model.TaskID != 0)
+        {
+            //foreach(var val in Model.Attachments)
+            //{
+
+            //}
+        }
 
         <div class="form-group">
             @Html.Label("Attachment", htmlAttributes: new { @class = "control-label col-md-2" })

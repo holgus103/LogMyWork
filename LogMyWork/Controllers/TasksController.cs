@@ -20,6 +20,27 @@ namespace LogMyWork.Controllers
     {
         private LogMyWorkContext db = new LogMyWorkContext();
 
+        private void prepareCreateViewModel(TaskCreate viewModel, string userID = null)
+        {
+            if (userID == null)
+                userID = User.Identity.GetUserId();
+            viewModel.SelectableProjects = db.ProjectRoles
+                .Where(r => r.UserID == userID && r.Role < Role.Worker)
+                .Include(r => r.Project)
+                .ToList()
+                .Select(r => new KeyValuePair<object, string>(r.ProjectID, r.Project.Name))
+                .ToList();
+            int projectID = viewModel.ParentProjectID == 0? (int)viewModel.SelectableProjects.First().Key : viewModel.ParentProjectID;
+
+            viewModel.SelectableUsers = this.db.Projects
+                .Where(x => x.ProjectID == projectID)
+                .Include(x => x.Roles.Select(r => r.User))
+                .First()
+                .Roles
+                .Select(r => new KeyValuePair<object, string>(r.User.Id, r.User.Email))
+                .ToList();
+            viewModel.SelectableUsers.Insert(0, new KeyValuePair<object, string>(null, null));
+        }
         // GET: Tasks
         public ActionResult Index()
         {
@@ -56,17 +77,6 @@ namespace LogMyWork.Controllers
             return View(projectTask);
         }
 
-        // GET: Tasks/Create
-        public ActionResult Create()
-        {
-            string userId = User.Identity.GetUserId();
-            ViewBag.ParentProjectID = new SelectList(db.ProjectRoles
-                .Where(r => r.UserID == userId && r.Role < Role.Worker)
-                .Include(r => r.Project).ToList(),
-                "ProjectID", "Project.Name");
-            return View();
-        }
-
         [HttpPost]
         public ActionResult UpdateStatus(int id, TaskStatus status)
         {
@@ -85,33 +95,68 @@ namespace LogMyWork.Controllers
                 .Select(t => new Tuple<int, string>(t.TaskID, t.Name))
                 );
         }
+
+        // GET: Tasks/Create
+        public ActionResult Create()
+        {
+
+            TaskCreate viewModel = new TaskCreate();
+            // Load projects where the user has management rights
+            this.prepareCreateViewModel(viewModel);
+            return View(viewModel);
+        }
+
         // POST: Tasks/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(TaskCreate form)
+        public ActionResult Create(TaskCreateDTO form)
         {
             if (ModelState.IsValid)
             {
                 if (form?.Users.Count > 0)
                     form.Users.RemoveAt(form.Users.Count - 1);
-                ProjectTask task = new ProjectTask()
+                ProjectTask task;
+                if (form.TaskID != 0)
                 {
-                    LastModified = DateTime.UtcNow,
-                    Created = DateTime.UtcNow,
-                    Deadline = DateTime.ParseExact(form.Deadline, "MM/dd/yyyy h:mm tt", CultureInfo.InvariantCulture).ToUniversalTime(),
-                    Description = form.Description,
-                    Name = form.Name,
-                    OwnerID = User.Identity.GetUserId(),
-                    ParentProjectID = form.ParentProjectID,
-                    Status = form.Users.Count() > 0 ? TaskStatus.Assigned : TaskStatus.Created,
-                    Users = form.Users
+                    task = this.db.ProjectTasks
+                        .Where(x => x.TaskID == form.TaskID)
+                        .Include(x => x.Users)
+                        .FirstOrDefault();
+                    //this.db.ProjectTasks.Attach(task);
+                    //task.Users.RemoveAll(x => true);
+                    //form.Users.ForEach(x => this.db.Users.Attach(x));
+                    // remove users that are no longer assigned to the task
+                    task.Users.RemoveAll(x => !form.Users.Contains(x, new ApplicationUser.IdComparer()));
+                    // remove duplicates
+                    form.Users.RemoveAll(x => task.Users.Contains(x, new ApplicationUser.IdComparer()));
+                    
+                }
+                else {
+                    task = new ProjectTask();
+                    task.Created = DateTime.UtcNow;
+                }
 
-                };
-                task.Users.ForEach(u => this.db.Users.Attach(u));
+                if(task == null)
+                {
+                    return HttpNotFound();
+                }
+
+                task.LastModified = DateTime.UtcNow;
+                task.Deadline = DateTime.ParseExact(form.Deadline, "MM/dd/yyyy h:mm tt", CultureInfo.InvariantCulture).ToUniversalTime();
+                task.Description = form.Description;
+                task.Name = form.Name;
+                task.OwnerID = User.Identity.GetUserId();
+                task.ParentProjectID = form.ParentProjectID;
+                task.Status = form.Users.Count() > 0 ? TaskStatus.Assigned : TaskStatus.Created;
+                form.Users.ForEach(u => this.db.Users.Attach(u));
+                form.Users.ForEach(x => task.Users.Add(x));
                 List<Attachment> attachments = new List<Attachment>();
-                db.ProjectTasks.Add(task);
+                if(task.TaskID == 0)
+                {
+                    db.ProjectTasks.Add(task);
+                }
                 db.SaveChanges();
                 
                 // save all attachments
@@ -139,13 +184,27 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProjectTask projectTask = db.ProjectTasks.Find(id);
+            ProjectTask projectTask = db.ProjectTasks
+                .Where(t => t.TaskID == id)
+                .Include(t => t.Users)
+                .Include(t => t.Attachments)
+                .FirstOrDefault();
             if (projectTask == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.ParentProjectID = new SelectList(db.Projects, "ProjectID", "Name", projectTask.ParentProjectID);
-            return View(projectTask);
+            TaskCreate viewModel = new TaskCreate()
+            {
+                Deadline = projectTask.Deadline.ToString("MM/dd/yyyy h:mm tt"),
+                Users = projectTask.Users,
+                TaskID = projectTask.TaskID,
+                Description = projectTask.Description,
+                Name = projectTask.Name,
+                ParentProjectID = projectTask.ParentProjectID
+
+            };
+            this.prepareCreateViewModel(viewModel);
+            return View("Create", viewModel);
         }
 
         // POST: Tasks/Edit/5

@@ -9,7 +9,7 @@
  * @returns {RepeatableControl}
  */
 function RepeatableControl(nextIdGen, nextNameGen, allSelector, innerSelector, outerSelector, onChangeCallback) {
-    var selectCounter = 1;
+    var selectCounter = $(allSelector).length;
     function handleSelectChange() {
         // if selected value is not null 
         if ($(this).val() != "") {
@@ -69,4 +69,5 @@ function RepeatableControl(nextIdGen, nextNameGen, allSelector, innerSelector, o
         $(allSelector).eq(0).val(null);
     }
     $(allSelector).change(handleSelectChange);
+    this.updateDropDowns();
 }

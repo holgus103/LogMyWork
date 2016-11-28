@@ -2,7 +2,7 @@
 var users;
 $(document).ready(function () {
     $("#Deadline").datetimepicker();
-    loadUsers();
+    //loadUsers();
     var control = new RepeatableControl(
     function (i) {
         return "Files_" + i;

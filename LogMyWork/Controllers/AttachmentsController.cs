@@ -10,20 +10,27 @@ using Microsoft.AspNet.Identity;
 
 namespace LogMyWork.Controllers
 {
-    public class AttachmentsController : Controller
+    [Authorize]
+    public class AttachmentsController : AjaxController
     {
 
         private LogMyWorkContext db = new LogMyWorkContext();
 
-        // GET: Attachments
-        public FileResult Download(int attachmentID)
+        private Attachment loadAttachmentWithPermissionCheck(int attachmentID)
         {
             string userID = User.Identity.GetUserId();
-            Attachment attachment = this.db.Attachments
+            return this.db.Attachments
                 .Where(a => a.AttachmentID == attachmentID)
                 .Include(a => a.Task.Users)
                 .Include(a => a.Task.ParentProject.Roles)
-                .Where(x => x.Task.OwnerID == userID || x.Task.Users.Any(u => u.Id == userID) || x.Task.ParentProject.Roles.Any(r => r.UserID == userID)).FirstOrDefault();
+                .Where(x => x.Task.OwnerID == userID || x.Task.Users.Any(u => u.Id == userID) || x.Task.ParentProject.Roles.Any(r => r.UserID == userID))
+                .FirstOrDefault();
+        }
+        // GET: Attachments
+        public FileResult Download(int attachmentID)
+        {
+
+            Attachment attachment = this.loadAttachmentWithPermissionCheck(attachmentID);
             if (attachment != null)
             {
 
@@ -32,6 +39,21 @@ namespace LogMyWork.Controllers
             else
             {
                 return null;
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DeleteAttachment(int attachmentID)
+        {
+            Attachment attachment = this.loadAttachmentWithPermissionCheck(attachmentID);
+            if (attachment != null)
+            {
+                this.db.Attachments.Remove(attachment);
+                return this.ajaxSuccess();
+            }
+            else
+            {
+                return this.ajaxFailure();
             }
         }
 

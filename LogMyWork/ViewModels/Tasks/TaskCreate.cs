@@ -6,14 +6,11 @@ using System.Web;
 
 namespace LogMyWork.ViewModels.Tasks
 {
-    public class TaskCreate
+    public class TaskCreate : TaskCreateDTO
     {
+        public List<KeyValuePair<object, string>> SelectableProjects { get; set; }
+        public List<KeyValuePair<object, string>> SelectableUsers { get; set; }
+        public List<Attachment> Attachments { get; set; }
 
-        public string Name { get; set; }
-        public int ParentProjectID { get; set; }
-        public string Description { get; set; }
-        public string Deadline { get; set; }
-        public List<ApplicationUser> Users { get; set; } = new List<ApplicationUser>();
-        public IEnumerable<HttpPostedFileBase> Files { get; set; } 
     }
 }
