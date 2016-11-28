@@ -142,7 +142,10 @@ namespace LogMyWork.Controllers
                 {
                     return HttpNotFound();
                 }
-
+                if(task.Users == null)
+                {
+                    task.Users = new List<ApplicationUser>();
+                }
                 task.LastModified = DateTime.UtcNow;
                 task.Deadline = DateTime.ParseExact(form.Deadline, "MM/dd/yyyy h:mm tt", CultureInfo.InvariantCulture).ToUniversalTime();
                 task.Description = form.Description;
