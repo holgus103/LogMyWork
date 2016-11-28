@@ -60,11 +60,20 @@
         <dt>@Html.DisplayNameFor(model => model.Description)</dt>
         <dd>@Html.DisplayFor(model => model.Description) </dd>
         <h5>Attachments</h5>
-        @foreach (var attachment in Model.Attachments)
-        {
-            @Html.ActionLink(attachment.FileName, "Download", "Attachments", new { attachmentID = attachment.AttachmentID }, null);
-            @(" ")
-        }
+        <div id="Files">
+            @foreach (var attachment in Model.Attachments)
+            {
+                <div>
+                    <dt>@attachment.FileName.Replace('/', ' ')</dt>
+                    <dd>
+                        @(" ")
+                        @Html.ActionLink("Download", "Download", "Attachments", new { attachmentID = attachment.AttachmentID }, null) |
+                        @Html.Label("Delete", new { attachmentID  = attachment.AttachmentID} )
+                    </dd>
+                </div>
+
+            }
+        </div>
 
     </dl>
 </div>
@@ -74,5 +83,6 @@
 </p>
 
 @section Scripts{
-   @Scripts.Render("~/Scripts/Tasks/Details.js")
-     }
+    @Scripts.Render("~/Scripts/Tasks/Details.js")
+    @Scripts.Render("~/Scripts/Common/Ajax.js")
+}

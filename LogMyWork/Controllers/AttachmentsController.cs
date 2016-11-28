@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.IO;
 using System.Web.Mvc;
 using System.Data.Entity;
 using Microsoft.AspNet.Identity;
@@ -34,7 +35,7 @@ namespace LogMyWork.Controllers
             if (attachment != null)
             {
 
-                return File(AppDomain.CurrentDomain.BaseDirectory + @"/Attachments/" + attachment.TaskID + '/' + attachment.FileName, attachment.Type);
+                return File(AppDomain.CurrentDomain.BaseDirectory + @"/Attachments/" + attachment.TaskID  + attachment.FileName, attachment.Type);
             }
             else
             {
@@ -48,7 +49,10 @@ namespace LogMyWork.Controllers
             Attachment attachment = this.loadAttachmentWithPermissionCheck(attachmentID);
             if (attachment != null)
             {
+                //this.db.Attachments.Attach(attachment);
+                System.IO.File.Delete(AppDomain.CurrentDomain.BaseDirectory + @"Attachments/" + attachment.TaskID + attachment.FileName);
                 this.db.Attachments.Remove(attachment);
+                this.db.SaveChanges();
                 return this.ajaxSuccess();
             }
             else
