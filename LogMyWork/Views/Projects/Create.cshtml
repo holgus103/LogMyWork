@@ -1,5 +1,7 @@
 ﻿@using LogMyWork.Consts
-@model LogMyWork.Models.ProjectEdit
+@using LogMyWork.ViewModels.Projects
+@using Commons.Web
+@model ProjectCreate
 
 
 @{
@@ -36,7 +38,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.RateID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("RateID", (SelectList)ViewBag.Rates, new { @class = "form-control" })
+                @Html.DropDownList("RateID", new KeyValuePairSelectList(Model.UserRates), new { @class = "form-control" })
             </div>
         </div>
 

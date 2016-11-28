@@ -89,8 +89,12 @@ namespace LogMyWork.Controllers
         public ActionResult Create()
         {
             string userID = this.User.Identity.GetUserId();
-            ViewBag.Rates = new SelectList(this.db.Rates.Where(r => r.UserID == userID), "RateID", "RateValue");
-            return View("Edit");
+            ProjectCreate viewModel = new ProjectCreate();
+            viewModel.UserRates = this.db.Rates
+                .Where(r => r.UserID == userID)
+                .ToList()
+                .Select(r => new KeyValuePair<object, string>(r.RateID, r.RateValue.ToString()));
+            return View(viewModel);
         }
 
         // POST: Projects/Create
@@ -98,7 +102,7 @@ namespace LogMyWork.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ProjectEdit form)
+        public ActionResult Create(ProjectCreate form)
         {
             if (ModelState.IsValid)
             {
@@ -110,7 +114,7 @@ namespace LogMyWork.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View("Edit", form);
+            return View( form);
         }
 
         // GET: Projects/Edit/5
@@ -133,7 +137,7 @@ namespace LogMyWork.Controllers
             {
                 return HttpNotFound();
             }
-            ProjectEdit editProject = new ProjectEdit() { ProjectID = project.ProjectID, Name = project.Name, Role = role };
+            ProjectCreate editProject = new ProjectCreate() { ProjectID = project.ProjectID, Name = project.Name, Role = role };
             return View(editProject);
         }
 
@@ -143,7 +147,7 @@ namespace LogMyWork.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         //[Bind(Include = "ProjectID,Name,Rates[0].RateID")] Project project
-        public ActionResult Edit(ProjectEdit form)
+        public ActionResult Edit(ProjectCreate form)
         {
             if (ModelState.IsValid)
             {
@@ -152,7 +156,7 @@ namespace LogMyWork.Controllers
                 // get rate for this project for this user
                 Rate rate = this.db.Rates.Include(r => r.Projects).Where(r => r.UserID == userID && r.Projects.Any(p => p.ProjectID == project.ProjectID)).FirstOrDefault();
                 // update project fields
-                if (this.isProjectOwner(form.ProjectID.Value, userID))
+                if (this.isProjectOwner(form.ProjectID, userID))
                 {
                     project.Name = form.Name;
                 }

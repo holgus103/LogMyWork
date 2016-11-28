@@ -32,7 +32,7 @@ $(document).ready(function () {
     )
     //var control = new RepeatableControl()
     $("#ParentProjectID").change(
-       
+       loadUsers
     )
 
     

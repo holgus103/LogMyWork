@@ -124,9 +124,7 @@ namespace LogMyWork.Controllers
                         .Where(x => x.TaskID == form.TaskID)
                         .Include(x => x.Users)
                         .FirstOrDefault();
-                    //this.db.ProjectTasks.Attach(task);
-                    //task.Users.RemoveAll(x => true);
-                    //form.Users.ForEach(x => this.db.Users.Attach(x));
+
                     // remove users that are no longer assigned to the task
                     task.Users.RemoveAll(x => !form.Users.Contains(x, new ApplicationUser.IdComparer()));
                     // remove duplicates
@@ -137,7 +135,7 @@ namespace LogMyWork.Controllers
                     task = new ProjectTask();
                     task.Created = DateTime.UtcNow;
                 }
-
+                // task not found
                 if(task == null)
                 {
                     return HttpNotFound();
@@ -208,23 +206,6 @@ namespace LogMyWork.Controllers
             };
             this.prepareCreateViewModel(viewModel);
             return View("Create", viewModel);
-        }
-
-        // POST: Tasks/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "TaskID,Name,ParentProjectID")] ProjectTask projectTask)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(projectTask).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.ParentProjectID = new SelectList(db.Projects, "ProjectID", "Name", projectTask.ParentProjectID);
-            return View(projectTask);
         }
 
         // GET: Tasks/Delete/5

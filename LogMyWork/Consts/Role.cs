@@ -9,6 +9,7 @@ namespace LogMyWork.Consts
     {
         Owner,
         Manager,
-        Worker
+        Worker,
+        Client
     }
 }

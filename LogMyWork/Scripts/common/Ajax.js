@@ -1,4 +1,5 @@
 ﻿function sendAjax(controlls, url, callback) {
+    var data = new Object();
     for (var prop in controlls) {
         data[prop] = controlls[prop].val();
     }
