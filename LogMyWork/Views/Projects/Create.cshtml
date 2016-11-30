@@ -11,9 +11,10 @@
 <h2>Edit</h2>
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Create", "Projects"))
 {
     @Html.AntiForgeryToken()
+
 
     <div class="form-horizontal">
         <h4>Project</h4>
@@ -24,7 +25,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @if (Model == null || Model.Role.Role == Role.Owner)
+                @if (Model.Role == null || Model.Role.Role == Role.Owner)
                 {
                     @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
                 }
@@ -36,12 +37,19 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.RateID, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Rate.RateID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("RateID", new KeyValuePairSelectList(Model.UserRates), new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.Rate.RateID, new KeyValuePairSelectList(Model.UserRates, Model.Rate == null ? 0 : Model.Rate.RateID ), new { @class = "form-control" })
             </div>
         </div>
 
+        @*<div id="Managers"></div>
+        <div id="Workers"></div>*@
+        @*<div id="Client">
+            <div class="form-group">
+                @Html.LabelFor(model => model.)
+            </div>
+        </div>*@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />

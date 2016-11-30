@@ -10,6 +10,8 @@ using LogMyWork.Consts;
 using LogMyWork.Models;
 using LogMyWork.ViewModels.Projects;
 using System;
+using LogMyWork.DTO.Projects;
+using LogMyWork.Repositories;
 
 namespace LogMyWork.Controllers
 {
@@ -90,10 +92,8 @@ namespace LogMyWork.Controllers
         {
             string userID = this.User.Identity.GetUserId();
             ProjectCreate viewModel = new ProjectCreate();
-            viewModel.UserRates = this.db.Rates
-                .Where(r => r.UserID == userID)
-                .ToList()
-                .Select(r => new KeyValuePair<object, string>(r.RateID, r.RateValue.ToString()));
+            viewModel.UserRates = this.db.GetUserRatesAsKeyValuePair(userID);
+            viewModel.Users = this.db.GetUsersAsKeyValuePair();
             return View(viewModel);
         }
 
@@ -102,14 +102,44 @@ namespace LogMyWork.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ProjectCreate form)
+        public ActionResult Create(ProjectCreateDTO form)
         {
             if (ModelState.IsValid)
             {
-                Project project = new Project() { Name = form.Name };
-                project.Rates = new List<Rate>() { this.db.Rates.Find(form.RateID) };
-                db.Projects.Add(project);
-                db.ProjectRoles.Add(new ProjectRole { ProjectID = project.ProjectID, UserID = User.Identity.GetUserId() });
+                string userID = User.Identity.GetUserId();
+                Project project;
+                // existing project
+                if (form.ProjectID > 0)
+                {
+                    project = this.db.Projects
+                        .Where(p => p.ProjectID == form.ProjectID)
+                        .Include(p => p.Rates).First();
+                    
+                }
+                // new project
+                else {
+                    project = new Project();
+                }
+                project.Name = form.Name;
+                if(project.Rates == null)
+                {
+                    project.Rates = new List<Rate>();
+                }
+                // if the rate is not already contained, add it and remove the old one for the current user
+                if (!project.Rates.Contains(form.Rate, new Rate.IdComparer()))
+                {
+                    this.db.Rates.Attach(form.Rate);
+                    project.Rates.Add(form.Rate);
+                    project.Rates.RemoveAll(r => r.UserID == userID);
+                }
+                // add a owner entry if the project is new
+                if(form.ProjectID == 0)
+                {
+                    db.Projects.Add(project);
+                    // save to get id
+                    db.SaveChanges();
+                    this.db.ProjectRoles.Add(new ProjectRole() { ProjectID = project.ProjectID, UserID = userID, Role = Role.Owner });
+                }
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -126,52 +156,51 @@ namespace LogMyWork.Controllers
             }
             string userID = User.Identity.GetUserId();
             Project project = db.Projects.Find(id);
-            ProjectRole role = this.db.Entry(project).Collection(p => p.Roles).Query().Where(r => r.UserID == userID).FirstOrDefault();
-            ViewBag.Rates = new SelectList(
-                this.db.Rates.Where(r => r.UserID == userID),
-                "RateID",
-                "RateValue",
-                this.db.Entry(project).Collection(p => p.Rates).Query().Where(e => e.UserID == userID).FirstOrDefault()?.RateID
-                );
             if (project == null)
             {
                 return HttpNotFound();
             }
-            ProjectCreate editProject = new ProjectCreate() { ProjectID = project.ProjectID, Name = project.Name, Role = role };
-            return View(editProject);
+            ProjectCreate viewModel = new ProjectCreate();
+            viewModel.Role = this.db.ProjectRoles.Where(r => r.ProjectID == id && r.UserID == userID).FirstOrDefault();
+            viewModel.Name = project.Name;
+            viewModel.UserRates = this.db.GetUserRatesAsKeyValuePair(userID);
+            viewModel.Rate = this.db.GetRateForProjectForUser(id.Value, userID);
+            viewModel.ProjectID = id.Value;
+
+            return View("Create",viewModel);
         }
 
         // POST: Projects/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        //[Bind(Include = "ProjectID,Name,Rates[0].RateID")] Project project
-        public ActionResult Edit(ProjectCreate form)
-        {
-            if (ModelState.IsValid)
-            {
-                string userID = User.Identity.GetUserId();
-                Project project = this.db.Projects.Find(form.ProjectID);
-                // get rate for this project for this user
-                Rate rate = this.db.Rates.Include(r => r.Projects).Where(r => r.UserID == userID && r.Projects.Any(p => p.ProjectID == project.ProjectID)).FirstOrDefault();
-                // update project fields
-                if (this.isProjectOwner(form.ProjectID, userID))
-                {
-                    project.Name = form.Name;
-                }
-                // load project rates
-                this.db.Entry(project).Collection(p => p.Rates).Load();
-                // remove previously selected rate
-                project.Rates.Remove(rate);
-                // add new relation for RateProject
-                project.Rates.Add(this.db.Rates.Find(form.RateID));
-                db.Entry(project).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return RedirectToAction("Index");
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        ////[Bind(Include = "ProjectID,Name,Rates[0].RateID")] Project project
+        //public ActionResult Edit(ProjectCreate form)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        string userID = User.Identity.GetUserId();
+        //        Project project = this.db.Projects.Find(form.ProjectID);
+        //        // get rate for this project for this user
+        //        Rate rate = this.db.Rates.Include(r => r.Projects).Where(r => r.UserID == userID && r.Projects.Any(p => p.ProjectID == project.ProjectID)).FirstOrDefault();
+        //        // update project fields
+        //        if (this.isProjectOwner(form.ProjectID, userID))
+        //        {
+        //            project.Name = form.Name;
+        //        }
+        //        // load project rates
+        //        this.db.Entry(project).Collection(p => p.Rates).Load();
+        //        // remove previously selected rate
+        //        project.Rates.Remove(rate);
+        //        // add new relation for RateProject
+        //        project.Rates.Add(this.db.Rates.Find(form.RateID));
+        //        db.Entry(project).State = EntityState.Modified;
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+        //    return RedirectToAction("Index");
+        //}
 
         // GET: Projects/Delete/5
         public ActionResult Delete(int? id)
