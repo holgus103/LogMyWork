@@ -31,11 +31,11 @@
             @Html.DisplayFor(model => model.Project.Name)
         </dd>
         <h5>Tasks</h5>
-        @Html.Partial("~/Views/Partials/TaskList.cshtml", Model.CurrentProjectRole)
-        <div id="AddTaskPnl" class="panel panel-default hidden">
+        @Html.Partial("~/Views/Partials/TaskList.cshtml", Model.Tasks)
+        @*<div id="AddTaskPnl" class="panel panel-default hidden">
             @Html.Partial("~/Views/Partials/AddTask.cshtml", new TaskAdd() { ParentProjectID = Model.Project.ProjectID, Roles = Model.Project.Roles })
-        </div>
-        <div class="btn btn-default" id="ShowTaskPanelBtn">Add Task</div>
+        </div>*@
+        @*<div class="btn btn-default" id="ShowTaskPanelBtn">Add Task</div>*@
     </dl>
 </div>
 <p>

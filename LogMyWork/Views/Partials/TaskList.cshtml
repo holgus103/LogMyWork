@@ -1,7 +1,8 @@
 ﻿@using LogMyWork.Models
 @using LogMyWork.Consts
+@using LogMyWork.ViewModels.Tasks
 @*@model List<ProjectTask>*@
-@model ProjectRole
+@model TaskIndex
 
 
 @{
@@ -11,11 +12,11 @@
 <table class="table" id="TaskTable">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.User.Tasks[0].Name)
+            @Html.DisplayNameFor(model => model.AssignedTasks.FirstOrDefault().Name)
         </th>
         <th></th>
     </tr>
-    @foreach (var task in Model.User.Tasks)
+    @foreach (var task in Model.AssignedTasks)
     {
         <tr>
             <td>
@@ -30,31 +31,22 @@
                     @(" | ")
                     @Html.Label("Submit for feedback", new { taskID = task.TaskID, status = TaskStatus.AwaitingFeedback })
                 }
-                else
-                {
-                    if (task.Status == TaskStatus.AwaitingFeedback && Model.Role < Role.Worker)
-                    {
-                        @(" | ")
-                        @Html.Label("Close", new { taskID = task.TaskID, status = TaskStatus.Finished })
-                        @(" | ")
-                        @Html.Label("Reopen", new {taskID = task.TaskID, status = TaskStatus.Assigned })
-                    }
-                }
+
             </td>
         </tr>
     }
 </table>
 
-@if (Model.User.OwnedTasks.Count > 0)
+@if (Model.OwnedTasks?.Count() > 0)
 {
     <h3>Owned tasks</h3>
     <table class="table">
         <tr>
-            <th>@Html.DisplayNameFor(model => model.User.OwnedTasks[0].Name)</th>
-            <th>@Html.DisplayNameFor(model => model.User.OwnedTasks[0].Status)</th>
+            <th>@Html.DisplayNameFor(model => model.OwnedTasks.FirstOrDefault().Name)</th>
+            <th>@Html.DisplayNameFor(model => model.OwnedTasks.FirstOrDefault().Status)</th>
             <th></th>
         </tr>
-    @foreach (var item in Model.User.OwnedTasks)
+    @foreach (var item in Model.OwnedTasks)
     {
         <tr>
             <td>
@@ -67,6 +59,13 @@
                 @Html.ActionLink("Details", "Details", "Tasks", new { id = item.TaskID }, null) |
                 @Html.ActionLink("Edit", "Edit", "Tasks", new { id = item.TaskID }, null) |
                 @Html.ActionLink("Delete", "Delete", "Tasks", new { id = item.TaskID }, null)
+                @if (item.Status == TaskStatus.AwaitingFeedback)
+                {
+                    @(" | ")
+                    @Html.Label("Close", new { taskID = item.TaskID, status = TaskStatus.Finished })
+                    @(" | ")
+                    @Html.Label("Reopen", new { taskID = item.TaskID, status = TaskStatus.Assigned })
+                }
                 
             </td>
         </tr>

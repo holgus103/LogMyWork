@@ -45,14 +45,14 @@ namespace LogMyWork.Controllers
         public ActionResult Index()
         {
             string userID = User.Identity.GetUserId();
-            ProjectRole role = new ProjectRole();
-            role.Role = Role.Worker;
-            role.User = db.Users
+            TaskIndex viewModel = this.db.Users
                 .Where(u => u.Id == userID)
                 .Include(u => u.Tasks)
                 .Include(u => u.OwnedTasks)
-                .SingleOrDefault();
-            return View(role);
+                .ToList()
+                .Select(u => new TaskIndex() { OwnedTasks = u.OwnedTasks, AssignedTasks = u.Tasks })
+                .FirstOrDefault();
+            return View(viewModel);
         }
 
         // GET: Tasks/Details/5

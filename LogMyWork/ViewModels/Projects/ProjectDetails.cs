@@ -1,4 +1,5 @@
 ﻿using LogMyWork.Models;
+using LogMyWork.ViewModels.Tasks;
 
 namespace LogMyWork.ViewModels.Projects
 {
@@ -6,5 +7,6 @@ namespace LogMyWork.ViewModels.Projects
     {
         public Project Project { get; set; }
         public ProjectRole CurrentProjectRole { get; set; }
+        public TaskIndex Tasks { get; set; }
     }
 }

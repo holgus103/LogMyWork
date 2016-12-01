@@ -246,6 +246,7 @@
     <Compile Include="ViewModels\Tasks\TaskAdd.cs" />
     <Compile Include="DTO\Tasks\TaskCreateDTO.cs" />
     <Compile Include="ViewModels\Tasks\TaskCreate.cs" />
+    <Compile Include="ViewModels\Tasks\TaskIndex.cs" />
     <Compile Include="ViewModels\TimeEntries\TimeEntryIndex.cs" />
   </ItemGroup>
   <ItemGroup>
