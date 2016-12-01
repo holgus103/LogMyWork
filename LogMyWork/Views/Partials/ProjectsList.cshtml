@@ -1,0 +1,41 @@
+﻿@using LogMyWork.Models
+@using LogMyWork.Consts
+@model List<ProjectRole>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model[0].Project.Name)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Project.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.ProjectID })
+                @if (item.Role == Role.Owner && item.Project.Status != ProjectStatus.Completed)
+                {
+                    @(" | ")
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ProjectID })
+                    @(" | ")
+                    @Html.ActionLink("Manage Users", "Users", new { id = item.ProjectID })
+                    if (item.Project.Status == ProjectStatus.InProgress)
+                    {
+                        @(" | ")
+                        @Html.Label("Mark as awaiting feedback", new { projectID = item.Project.ProjectID, status = ProjectStatus.AwaitingFeedback })
+                    }
+                    else
+                    {
+                        @(" | ")
+                        @Html.Label("Mark as finished", new { projectID = item.Project.ProjectID, status = ProjectStatus.Completed })
+                    }
+                }
+            </td>
+        </tr>
+    }
+
+</table>

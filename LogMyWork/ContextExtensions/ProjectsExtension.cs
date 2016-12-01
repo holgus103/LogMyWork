@@ -26,7 +26,7 @@ namespace LogMyWork.ContextExtensions
 
         public static bool HasProjectRole(this LogMyWorkContext context, int projectID, string userID, Role role)
         {
-            return context.ProjectRoles.Where(r => r.ProjectID == projectID && r.UserID == userID && r.Role == role).Count() > 0;
+            return context.ProjectRoles.Where(r => r.ProjectID == projectID && r.UserID == userID && r.Role <= role).Count() > 0;
         }
 
         public static ProjectRole GetUserRoleForProject(this LogMyWorkContext context, int projectID, string userID)

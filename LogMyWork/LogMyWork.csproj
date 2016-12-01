@@ -371,6 +371,8 @@
     <Content Include="Views\Partials\TimeEntriesResultsTable.cshtml" />
     <Content Include="Views\Partials\TaskList.cshtml" />
     <Content Include="Views\Partials\SelectOptionsTemplate.cshtml" />
+    <Content Include="Views\Partials\ProjectsList.cshtml" />
+    <Content Include="Views\Projects\Archive.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

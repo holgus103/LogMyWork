@@ -11,33 +11,9 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model[0].Project.Name)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Project.Name)
-            </td>
-            <td>
-                @Html.ActionLink("Details", "Details", new { id = item.ProjectID })
-                @if (item.Role == Role.Owner)
-                {
-                    @(" | ")
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ProjectID })
-                    @(" | ")
-                    @Html.ActionLink("Delete", "Delete", new { id = item.ProjectID })
-                    @(" | ")
-                    @Html.ActionLink("Manage Users", "Users", new { id = item.ProjectID })
-                }
-            </td>
-        </tr>
-    }
-
-</table>
+@Html.Partial("~/Views/Partials/ProjectsList.cshtml", Model)
+@Html.ActionLink("Archive", "Archive")
+@section Scripts{
+    @Scripts.Render("~/Scripts/Projects/Index.js")
+    @Scripts.Render("~/Scripts/Common/Ajax.js")
+     }

@@ -78,6 +78,7 @@ namespace LogMyWork.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult UpdateStatus(int id, TaskStatus status)
         {
             var task = this.db.ProjectTasks.Find(id);
@@ -87,6 +88,7 @@ namespace LogMyWork.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult GetTasksForProject(int projectID)
         {
             return View("~/Partials/SelectOptionsTemplate.cshtml", this.db.ProjectTasks

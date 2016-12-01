@@ -9,7 +9,6 @@ using Microsoft.AspNet.Identity;
 using LogMyWork.Consts;
 using LogMyWork.Models;
 using LogMyWork.ViewModels.Projects;
-using System;
 using LogMyWork.DTO.Projects;
 using LogMyWork.ContextExtensions;
 using LogMyWork.ViewModels.Tasks;
@@ -17,7 +16,7 @@ using LogMyWork.ViewModels.Tasks;
 namespace LogMyWork.Controllers
 {
     [Authorize]
-    public class ProjectsController : Controller
+    public class ProjectsController : AjaxController
     {
         private LogMyWorkContext db = new LogMyWorkContext();
 
@@ -26,8 +25,15 @@ namespace LogMyWork.Controllers
         public ActionResult Index()
         {
             string userID = User.Identity.GetUserId();
-            List<ProjectRole> projects = this.db.ProjectRoles.Include(r => r.Project).Where(r => r.UserID == userID).ToList();
+            List<ProjectRole> projects = this.db.ProjectRoles.Include(r => r.Project).Where(r => r.UserID == userID && r.Project.Status != ProjectStatus.Completed).ToList();
             return View(projects);
+        }
+
+        public ActionResult Archive()
+        {
+            string userID = User.Identity.GetUserId();
+            List<ProjectRole> projects = this.db.ProjectRoles.Include(r => r.Project).Where(r => r.UserID == userID && r.Project.Status == ProjectStatus.Completed).ToList();
+            return View("Index", projects);
         }
 
         public ActionResult GetUsersForProject(int projectID)
@@ -70,6 +76,26 @@ namespace LogMyWork.Controllers
             return View(projectDetails);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateProject(int? id, ProjectStatus status)
+        {
+            if(id == null)
+            {
+                return this.ajaxFailure();
+            }
+
+            if (!this.db.HasProjectRole(id.Value, User.Identity.GetUserId(), Role.Owner))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
+            var project = this.db.Projects.Find(id);
+            project.Status = status;
+            this.db.SaveChanges();
+            return this.ajaxSuccess();
+
+        }
         // GET: Projects/Create
         public ActionResult Create()
         {
@@ -161,40 +187,6 @@ namespace LogMyWork.Controllers
             viewModel.ProjectID = id.Value;
 
             return View("Create",viewModel);
-        }
-
-        // GET: Projects/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            if (!this.db.HasProjectRole(id.Value, User.Identity.GetUserId(), Role.Owner))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
-            }
-            Project project = db.Projects.Find(id);
-            if (project == null)
-            {
-                return HttpNotFound();
-            }
-            return View(project);
-        }
-
-        // POST: Projects/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            if (!this.db.HasProjectRole(id, User.Identity.GetUserId(), Role.Owner))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
-            }
-            Project project = db.Projects.Find(id);
-            db.Projects.Remove(project);
-            db.SaveChanges();
-            return RedirectToAction("Index");
         }
 
         public ActionResult Users(int? id)
