@@ -11,7 +11,7 @@ using LogMyWork.Models;
 using LogMyWork.ViewModels.Projects;
 using System;
 using LogMyWork.DTO.Projects;
-using LogMyWork.Repositories;
+using LogMyWork.ContextExtensions;
 
 namespace LogMyWork.Controllers
 {
@@ -20,10 +20,6 @@ namespace LogMyWork.Controllers
     {
         private LogMyWorkContext db = new LogMyWorkContext();
 
-        private bool isProjectOwner(int projectID, string userID)
-        {
-            return this.db.ProjectRoles.Where(r => r.ProjectID == projectID && r.UserID == userID && r.Role == Role.Owner).Count() > 0;
-        }
 
         // GET: Projects
         public ActionResult Index()
@@ -35,13 +31,8 @@ namespace LogMyWork.Controllers
 
         public ActionResult GetUsersForProject(int projectID)
         {
-             var data = this.db.Projects
-                .Where(x => x.ProjectID == projectID)
-                .Include(x => x.Roles.Select(r => r.User))
-                .ToList()
-                .SelectMany(x => x.Roles.Select(r => new Tuple<object, string>(r.User.Id, r.User.Email)))
-                .ToList();
-            data.Insert(0, new Tuple<object, string>(null, null));
+            var data = this.db.GetUsersForProjectAsKeyValuePair(projectID).ToList();
+            data.Insert(0, new KeyValuePair<object, string>(null, null));
             return PartialView("~/Views/Partials/SelectOptionsTemplate.cshtml", data);
         }
 
@@ -170,38 +161,6 @@ namespace LogMyWork.Controllers
             return View("Create",viewModel);
         }
 
-        // POST: Projects/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        ////[Bind(Include = "ProjectID,Name,Rates[0].RateID")] Project project
-        //public ActionResult Edit(ProjectCreate form)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        string userID = User.Identity.GetUserId();
-        //        Project project = this.db.Projects.Find(form.ProjectID);
-        //        // get rate for this project for this user
-        //        Rate rate = this.db.Rates.Include(r => r.Projects).Where(r => r.UserID == userID && r.Projects.Any(p => p.ProjectID == project.ProjectID)).FirstOrDefault();
-        //        // update project fields
-        //        if (this.isProjectOwner(form.ProjectID, userID))
-        //        {
-        //            project.Name = form.Name;
-        //        }
-        //        // load project rates
-        //        this.db.Entry(project).Collection(p => p.Rates).Load();
-        //        // remove previously selected rate
-        //        project.Rates.Remove(rate);
-        //        // add new relation for RateProject
-        //        project.Rates.Add(this.db.Rates.Find(form.RateID));
-        //        db.Entry(project).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    return RedirectToAction("Index");
-        //}
-
         // GET: Projects/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -209,7 +168,7 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            if (!this.isProjectOwner(id.Value, User.Identity.GetUserId()))
+            if (!this.db.isProjectOwner(id.Value, User.Identity.GetUserId()))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
@@ -226,7 +185,7 @@ namespace LogMyWork.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            if (!this.isProjectOwner(id, User.Identity.GetUserId()))
+            if (!this.db.isProjectOwner(id, User.Identity.GetUserId()))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }

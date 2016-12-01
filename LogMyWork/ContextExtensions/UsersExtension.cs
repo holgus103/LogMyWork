@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace LogMyWork.Repositories
+namespace LogMyWork.ContextExtensions
 {
-    public static class UserRepository
+    public static class UsersExtension
     {
         public static IEnumerable<KeyValuePair<object, string>> GetUsersAsKeyValuePair(this LogMyWorkContext context)
         {
