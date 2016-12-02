@@ -78,7 +78,7 @@ namespace LogMyWork.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpdateProject(int? id, ProjectStatus status)
+        public ActionResult UpdateStatus(int? id, ProjectStatus status)
         {
             if(id == null)
             {
