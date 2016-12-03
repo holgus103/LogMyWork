@@ -216,6 +216,7 @@
     <Compile Include="Controllers\RatesController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\TimeEntriesController.cs" />
+    <Compile Include="DTO\ProjectRoles\ProjectRoleCreateDTO.cs" />
     <Compile Include="DTO\Projects\ProjectCreateDTO.cs" />
     <Compile Include="LogMyWork.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -227,6 +228,7 @@
     <Compile Include="Models\Attachment.cs" />
     <Compile Include="ContextExtensions\RatesExtension.cs" />
     <Compile Include="ContextExtensions\UsersExtension.cs" />
+    <Compile Include="ViewModels\ProjectRoles\ProjectRoleCreate.cs" />
     <Compile Include="ViewModels\Projects\ProjectCreate.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -243,6 +245,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Projects\ProjectDetails.cs" />
+    <Compile Include="ViewModels\Projects\ProjectUsers.cs" />
     <Compile Include="ViewModels\Tasks\TaskAdd.cs" />
     <Compile Include="DTO\Tasks\TaskCreateDTO.cs" />
     <Compile Include="ViewModels\Tasks\TaskCreate.cs" />
@@ -285,6 +288,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <None Include="Properties\PublishProfiles\geathost.pubxml" />
+    <None Include="Properties\PublishProfiles\local.pubxml" />
+    <None Include="Properties\PublishProfiles\logmywork - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\logmywork - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Common\Ajax.js" />
     <Content Include="Scripts\Common\RepeatableControl.js" />
@@ -319,7 +326,9 @@
     <Content Include="Scripts\TimeEntries\TimeEntries.js" />
     <Content Include="Scripts\Common\Tracker.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

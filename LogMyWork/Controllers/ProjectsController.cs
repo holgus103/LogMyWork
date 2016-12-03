@@ -195,7 +195,27 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            return View(this.db.Projects.Include(p => p.Roles.Select(t => t.User)).Where(p => p.ProjectID == id).FirstOrDefault());
+            string userID = User.Identity.GetUserId();
+
+            ProjectUsers viewModel = this.db.Projects
+                .Include(p => p.Roles.Select(t => t.User))
+                .Where(p => p.ProjectID == id)
+                .ToList()
+                .Select(p =>new ProjectUsers()
+                {
+                    ProjectName = p.Name,
+                    Users = p.Roles,
+                    ProjectID = p.ProjectID,
+                    CurrentUserRole = p.Roles.Where(r => r.UserID == userID).FirstOrDefault()
+
+                })
+                .First();
+            // if not a project member => refuse access
+            if(viewModel.CurrentUserRole == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+            return View(viewModel);
         }
 
         protected override void Dispose(bool disposing)

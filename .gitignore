@@ -13,3 +13,4 @@ Commons/obj/
 Commons/bin/
 *.mdf
 *.cache
+/LogMyWork/Properties/PublishProfiles/

@@ -25,7 +25,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @if (Model.Role == null || Model.Role.Role == Role.Owner)
+                @if (Model.ProjectID != null)
                 {
                     @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
                 }

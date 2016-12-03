@@ -1,24 +1,28 @@
 ﻿@using LogMyWork.Consts
-@model LogMyWork.Models.Project
+@using LogMyWork.ViewModels.Projects
+@model ProjectUsers
 
 @{
     ViewBag.Title = "Users";
 }
 
-<h2>@Model.Name</h2>
-@Html.ActionLink("Add User", "Create", "ProjectRoles", new { id = Model.ProjectID }, null)
+<h2>@Model.ProjectName</h2>
+@if (Model.CurrentUserRole.Role <= Role.Manager)
+{
+    @Html.ActionLink("Add User", "Create", "ProjectRoles", new { id = Model.ProjectID }, null)
+}
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Roles.FirstOrDefault().User.Email)
+            @Html.DisplayNameFor(model => model.Users.FirstOrDefault().User.Email)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Roles.FirstOrDefault().Role)
+            @Html.DisplayNameFor(model => model.Users.FirstOrDefault().Role)
         </th>
         <th></th>
     </tr>
 
-    @foreach (var item in Model.Roles)
+    @foreach (var item in Model.Users)
     {
         <tr>
             <td>
@@ -28,9 +32,12 @@
                 @Html.DisplayFor(modelItem => item.Role)
             </td>
             <td>
-                @if (item.Role != Role.Owner)
+                @if (Model.CurrentUserRole.Role <= Role.Manager)
                 {
-                    @Html.ActionLink("Delete", "Delete", "ProjectRoles", new { Id = item.ProjectRoleID }, null)
+                    if (item.Role != Role.Owner)
+                    {
+                        @Html.ActionLink("Delete", "Delete", "ProjectRoles", new { Id = item.ProjectRoleID }, null)
+                    }
                 }
             </td>
 

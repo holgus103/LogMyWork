@@ -7,6 +7,11 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using LogMyWork.Models;
+using LogMyWork.ViewModels.ProjectRoles;
+using LogMyWork.ContextExtensions;
+using Microsoft.AspNet.Identity;
+using LogMyWork.Consts;
+using LogMyWork.DTO.ProjectRoles;
 
 namespace LogMyWork.Controllers
 {
@@ -32,9 +37,31 @@ namespace LogMyWork.Controllers
         // GET: ProjectRoles/Create
         public ActionResult Create(int? id)
         {
-            ViewBag.ProjectID = id;
-            ViewBag.UserID = new SelectList(db.Users, "Id", "Email");
-            return View();
+            if(id == null)
+            {
+                return HttpNotFound();
+            }
+            string userID = User.Identity.GetUserId();
+            // if user is neither an admin nor a manager => refuse access
+            if(!this.db.HasProjectRole(id.Value, userID, Role.Manager) && !this.db.HasProjectRole(id.Value,userID, Role.Owner))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
+            ProjectRoleCreate viewModel = new ProjectRoleCreate();
+            viewModel.SelectableUsers = this.db.Users
+                .Include(u => u.ProjectRoles)
+                .Where(u => !u.ProjectRoles.Any(r => r.ProjectID == id.Value))
+                .ToList()
+                .Select(u => new KeyValuePair<object, string>(u.Id, u.Email));
+
+            viewModel.SelectableRoles = Enum.GetValues(typeof(Role))
+                .Cast<Role>()
+                .Where(r => r != Role.Owner);
+            viewModel.ProjectID = id.Value;
+
+               
+            return View(viewModel);
         }
 
         // POST: ProjectRoles/Create
@@ -42,18 +69,21 @@ namespace LogMyWork.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProjectID,UserID,Role")] ProjectRole projectRole)
+        public ActionResult Create(ProjectRoleCreateDTO dto)
         {
             if (ModelState.IsValid)
             {
-                db.ProjectRoles.Add(projectRole);
+                ProjectRole role = new ProjectRole()
+                {
+                    ProjectID = dto.ProjectID,
+                    Role = dto.Role,
+                    UserID = dto.UserID
+                };
+                db.ProjectRoles.Add(role);
                 db.SaveChanges();
                 return this.RedirectToAction("Index", "Projects");
             }
-
-            ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "Name", projectRole.ProjectID);
-            ViewBag.UserID = new SelectList(db.Users, "Id", "Email", projectRole.UserID);
-            return this.RedirectToAction("Index", "Projects"); 
+            return View();
         }
 
 
