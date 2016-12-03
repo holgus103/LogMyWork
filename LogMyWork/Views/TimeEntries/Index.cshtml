@@ -12,25 +12,25 @@
 <table class="table" id="TimeEntriesTable">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.TimeEntries[0].ParentTask.ParentProject.Name)
+            @Html.DisplayNameFor(model => model.TimeEntries.TimeEntries.First().ParentTask.ParentProject.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TimeEntries[0].User.Email)
+            @Html.DisplayNameFor(model => model.TimeEntries.TimeEntries.First().User.Email)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TimeEntries[0].ParentTask.Name)
+            @Html.DisplayNameFor(model => model.TimeEntries.TimeEntries.First().ParentTask.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TimeEntries[0].Start)
+            @Html.DisplayNameFor(model => model.TimeEntries.TimeEntries.First().Start)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TimeEntries[0].End)
+            @Html.DisplayNameFor(model => model.TimeEntries.TimeEntries.First().End)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TimeEntries[0].Duration)
+            @Html.DisplayNameFor(model => model.TimeEntries.TimeEntries.First().Duration)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TimeEntries[0].Active)
+            @Html.DisplayNameFor(model => model.TimeEntries.TimeEntries.First().Active)
         </th>
         <th></th>
     </tr>

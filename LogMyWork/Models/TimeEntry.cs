@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace LogMyWork.Models
 {
@@ -28,6 +29,18 @@ namespace LogMyWork.Models
                     return this.End.Value.Subtract(this.Start);
                 else
                     return null;
+            }
+        }
+
+        public double Charge
+        {
+            get
+            {
+                double? rate = this.ParentTask?.ParentProject?.Rates?.Where(r => r.UserID == UserID).FirstOrDefault()?.RateValue;
+                if (rate.HasValue && this.Duration.HasValue)
+                    return rate.Value / 60 * this.Duration.Value.TotalMinutes;
+                else
+                    return 0;
             }
         }
     }

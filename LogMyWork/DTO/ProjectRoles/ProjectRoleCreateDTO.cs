@@ -1,4 +1,5 @@
-﻿using LogMyWork.Consts;
+﻿using Commons.Web.Attributes;
+using LogMyWork.Consts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,7 +12,7 @@ namespace LogMyWork.DTO.ProjectRoles
     public class ProjectRoleCreateDTO
     {
         public int ProjectID { get; set; }
-        [Range(1,4)]
+        //[DisallowEnumValueAttribute(typeof(Role), new SortedSet<object>() { Role.Owner })]
         public Role Role { get; set; }
         public string UserID { get; set; }
     }

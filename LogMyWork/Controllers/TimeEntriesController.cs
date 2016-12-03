@@ -25,32 +25,38 @@ namespace LogMyWork.Controllers
         // GET: TimeEntries
         public ActionResult Index()
         {
-            string userId = User.Identity.GetUserId();
+            string userID = User.Identity.GetUserId();
             TimeEntryIndex viewModel = new TimeEntryIndex();
-            viewModel.TimeEntries = this.db.TimeEntries.Include(t => t.ParentTask.ParentProject).Include(e => e.User).Where(e => e.UserID == userId).ToList();
-            viewModel.Projects = viewModel.TimeEntries.Select(e => e.ParentTask.ParentProject).Distinct().ToList();
+            viewModel.TimeEntries.TimeEntries = this.db.TimeEntries
+                .Include(t => t.ParentTask.ParentProject.Rates)
+                .Include(e => e.User)
+                .Where(e => e.UserID == userID).ToList();
+            viewModel.TimeEntries.Sum = TimeSpan.FromSeconds(viewModel.TimeEntries.TimeEntries.Sum(e => e.Duration.Value.TotalSeconds));
+            viewModel.TimeEntries.TotalEarned = viewModel.TimeEntries.TimeEntries.Sum(e => e.Charge);
+
+            viewModel.Projects = viewModel.TimeEntries.TimeEntries.Select(e => e.ParentTask.ParentProject).Distinct().ToList();
             // insert empty Project for DropDown
             viewModel.Projects.Insert(0, null);
             viewModel.Tasks = this.db.ProjectTasks
                 .Include(t => t.Users)
-                .Where(t => t.OwnerID == userId || t.Users.Any(u => u.Id == userId))
+                .Where(t => t.OwnerID == userID || t.Users.Any(u => u.Id == userID))
                 .ToList();
             // insert empty Task for DropDown
             viewModel.Tasks.Insert(0, null);
             viewModel.Users = this.db.Projects
                         .Include(p => p.Roles.Select(r => r.User))
-                        .Where(p => p.Roles.Any(r => r.Role == Role.Owner && r.UserID == userId))
+                        .Where(p => p.Roles.Any(r => r.Role == Role.Owner && r.UserID == userID))
                         .SelectMany(p => p.Roles.Select(r => r.User))
                         .Union(this.db.ProjectTasks
                                 .Include(t => t.Users)
-                                .Where(t => t.OwnerID == userId)
+                                .Where(t => t.OwnerID == userID)
                                 .SelectMany(t => t.Users)
                                 )
-                        .Union(this.db.Users.Where(u => u.Id == userId))
+                        .Union(this.db.Users.Where(u => u.Id == userID))
                         .ToList();
             // insert empty User for DropDown
             viewModel.Users.Insert(0, null);
-                
+
 
             return View(viewModel);
         }
@@ -69,29 +75,34 @@ namespace LogMyWork.Controllers
             }
 
             string userId = User.Identity.GetUserId();
+            TimeEntriesTable viewModel = new TimeEntriesTable();
             var entries = this.db.TimeEntries
                 .Include(t => t.ParentTask.ParentProject.Roles)
+                .Include(t => t.ParentTask.ParentProject.Rates)
                 .Include(e => e.User)
                 .Where(e => e.ParentTask.OwnerID == userId || e.UserID == userId || e.ParentTask.ParentProject.Roles.Any(r => r.Role == Role.Owner && r.UserID == userId))
                 .Where(t => t.Start > dateFrom);
             if (to != null)
             {
                 DateTime dateTo = UnixTime.ParseUnitTimestamp((ulong)to);
-                entries = entries.Where(t => t.End < dateTo); 
+                entries = entries.Where(t => t.End < dateTo);
             }
             if (projectID != null)
             {
                 entries = entries.Where(e => e.ParentTask.ParentProjectID == projectID);
             }
-            if(taskID != null)
+            if (taskID != null)
             {
                 entries = entries.Where(e => e.ParentTaskID == taskID);
             }
-            if(!String.IsNullOrWhiteSpace(user))
+            if (!String.IsNullOrWhiteSpace(user))
             {
                 entries = entries.Where(e => e.UserID == user);
             }
-            return PartialView("~/Views/Partials/TimeEntriesResultsTable.cshtml", entries.ToList());
+            viewModel.TimeEntries = entries;
+            viewModel.Sum = TimeSpan.FromSeconds(viewModel.TimeEntries.Sum(e => e.Duration.Value.TotalSeconds));
+            viewModel.TotalEarned = viewModel.TimeEntries.Sum(e => e.Charge);
+            return PartialView("~/Views/Partials/TimeEntriesResultsTable.cshtml", viewModel);
         }
         // GET: TimeEntries/Details/5
         public ActionResult Details(int? id)

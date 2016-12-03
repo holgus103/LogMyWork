@@ -250,6 +250,7 @@
     <Compile Include="DTO\Tasks\TaskCreateDTO.cs" />
     <Compile Include="ViewModels\Tasks\TaskCreate.cs" />
     <Compile Include="ViewModels\Tasks\TaskIndex.cs" />
+    <Compile Include="ViewModels\TimeEntries\TimeEntriesTable.cs" />
     <Compile Include="ViewModels\TimeEntries\TimeEntryIndex.cs" />
   </ItemGroup>
   <ItemGroup>
