@@ -259,6 +259,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\img\GitHub-Mark-64px.png" />
     <Content Include="Content\Projects.css" />
     <Content Include="Content\Tasks.css" />
     <Content Include="favicon.ico" />
