@@ -201,6 +201,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Consts\FileType.cs" />
+    <Compile Include="Consts\FilterType.cs" />
     <Compile Include="Consts\Role.cs" />
     <Compile Include="Consts\SessionsKey.cs" />
     <Compile Include="Consts\TaskStatus.cs" />
@@ -210,6 +211,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\AttachmentsController.cs" />
+    <Compile Include="Controllers\FiltersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProjectRolesController.cs" />
@@ -220,15 +222,11 @@
     <Compile Include="DTO\ProjectRoles\ProjectRoleCreateDTO.cs" />
     <Compile Include="DTO\Projects\ProjectCreateDTO.cs" />
     <Compile Include="Consts\ProjectStatus.cs" />
-    <Compile Include="LogMyWork.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LogMyWork.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Attachment.cs" />
     <Compile Include="ContextExtensions\RatesExtension.cs" />
     <Compile Include="ContextExtensions\UsersExtension.cs" />
+    <Compile Include="Models\PredefinedFilter.cs" />
     <Compile Include="ViewModels\ProjectRoles\ProjectRoleCreate.cs" />
     <Compile Include="ViewModels\Projects\ProjectCreate.cs" />
     <Compile Include="Global.asax.cs">
@@ -279,10 +277,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <EntityDeploy Include="LogMyWork.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>LogMyWork.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
@@ -382,6 +376,11 @@
     <Content Include="Views\Partials\SelectOptionsTemplate.cshtml" />
     <Content Include="Views\Partials\ProjectsList.cshtml" />
     <Content Include="Views\Projects\Archive.cshtml" />
+    <Content Include="Views\Filters\Create.cshtml" />
+    <Content Include="Views\Filters\Delete.cshtml" />
+    <Content Include="Views\Filters\Details.cshtml" />
+    <Content Include="Views\Filters\Edit.cshtml" />
+    <Content Include="Views\Filters\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
