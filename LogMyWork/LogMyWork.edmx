@@ -4,16 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="__MigrationHistory">
+    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ApplicationUserProjectTasks">
           <Key>
-            <PropertyRef Name="MigrationId" />
-            <PropertyRef Name="ContextKey" />
+            <PropertyRef Name="ProjectTask_TaskID" />
+            <PropertyRef Name="ApplicationUser_Id" />
           </Key>
-          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
-          <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
-          <Property Name="Model" Type="varbinary(max)" Nullable="false" />
-          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="ProjectTask_TaskID" Type="int" Nullable="false" />
+          <Property Name="ApplicationUser_Id" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
         <EntityType Name="AspNetRoles">
           <Key>
@@ -66,14 +64,32 @@
           <Property Name="AccessFailedCount" Type="int" Nullable="false" />
           <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
         </EntityType>
+        <EntityType Name="Attachments">
+          <Key>
+            <PropertyRef Name="AttachmentID" />
+          </Key>
+          <Property Name="AttachmentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskID" Type="int" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar(max)" />
+          <Property Name="Size" Type="int" Nullable="false" />
+          <Property Name="Type" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ProjectRates">
+          <Key>
+            <PropertyRef Name="Rate_RateID" />
+            <PropertyRef Name="Project_ProjectID" />
+          </Key>
+          <Property Name="Rate_RateID" Type="int" Nullable="false" />
+          <Property Name="Project_ProjectID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="ProjectRoles">
           <Key>
             <PropertyRef Name="ProjectRoleID" />
           </Key>
-          <Property Name="Role" Type="int" Nullable="false" />
+          <Property Name="ProjectRoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ProjectID" Type="int" Nullable="false" />
           <Property Name="UserID" Type="nvarchar" MaxLength="128" />
-          <Property Name="ProjectRoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Role" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Projects">
           <Key>
@@ -84,30 +100,19 @@
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="ClientID" Type="nvarchar" MaxLength="128" />
         </EntityType>
-        <EntityType Name="ProjectTaskApplicationUsers">
-          <Key>
-            <PropertyRef Name="ApplicationUser_Id" />
-            <PropertyRef Name="ProjectTask_TaskID" />
-          </Key>
-          <Property Name="ApplicationUser_Id" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="ProjectTask_TaskID" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="ProjectTasks">
           <Key>
             <PropertyRef Name="TaskID" />
           </Key>
           <Property Name="TaskID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" />
           <Property Name="ParentProjectID" Type="int" Nullable="false" />
-          <Property Name="Status" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="RateProjects">
-          <Key>
-            <PropertyRef Name="Rate_RateID" />
-            <PropertyRef Name="Project_ProjectID" />
-          </Key>
-          <Property Name="Rate_RateID" Type="int" Nullable="false" />
-          <Property Name="Project_ProjectID" Type="int" Nullable="false" />
+          <Property Name="OwnerID" Type="nvarchar" MaxLength="128" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Deadline" Type="datetime" Nullable="false" />
+          <Property Name="Created" Type="datetime" Nullable="false" />
+          <Property Name="LastModified" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Rates">
           <Key>
@@ -126,38 +131,10 @@
           <Property Name="Start" Type="datetime" Nullable="false" />
           <Property Name="End" Type="datetime" />
           <Property Name="Active" Type="bit" Nullable="false" />
-          <Property Name="ParentTaskID" Type="int" Nullable="false" />
           <Property Name="Billed" Type="bit" Nullable="false" />
           <Property Name="RateID" Type="int" />
+          <Property Name="ParentTaskID" Type="int" Nullable="false" />
         </EntityType>
-        <Association Name="FK_dbo_ApplicationUserProjectTasks_dbo_AspNetUsers_ApplicationUser_Id">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="ProjectTaskApplicationUsers" Type="Self.ProjectTaskApplicationUsers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProjectTaskApplicationUsers">
-              <PropertyRef Name="ApplicationUser_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_dbo_ApplicationUserProjectTasks_dbo_ProjectTasks_ProjectTask_TaskID">
-          <End Role="ProjectTasks" Type="Self.ProjectTasks" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="ProjectTaskApplicationUsers" Type="Self.ProjectTaskApplicationUsers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ProjectTasks">
-              <PropertyRef Name="TaskID" />
-            </Principal>
-            <Dependent Role="ProjectTaskApplicationUsers">
-              <PropertyRef Name="ProjectTask_TaskID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -214,6 +191,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_dbo_Attachments_dbo_ProjectTasks_TaskID">
+          <End Role="ProjectTasks" Type="Self.ProjectTasks" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Attachments" Type="Self.Attachments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProjectTasks">
+              <PropertyRef Name="TaskID" />
+            </Principal>
+            <Dependent Role="Attachments">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_ProjectRoles_dbo_AspNetUsers_UserID">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
           <End Role="ProjectRoles" Type="Self.ProjectRoles" Multiplicity="*" />
@@ -252,6 +243,46 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_dbo_ProjectTaskApplicationUsers_dbo_AspNetUsers_ApplicationUser_Id">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ApplicationUserProjectTasks" Type="Self.ApplicationUserProjectTasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ApplicationUserProjectTasks">
+              <PropertyRef Name="ApplicationUser_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_ProjectTaskApplicationUsers_dbo_ProjectTasks_ProjectTask_TaskID">
+          <End Role="ProjectTasks" Type="Self.ProjectTasks" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ApplicationUserProjectTasks" Type="Self.ApplicationUserProjectTasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProjectTasks">
+              <PropertyRef Name="TaskID" />
+            </Principal>
+            <Dependent Role="ApplicationUserProjectTasks">
+              <PropertyRef Name="ProjectTask_TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_ProjectTasks_dbo_AspNetUsers_OwnerID">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <End Role="ProjectTasks" Type="Self.ProjectTasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProjectTasks">
+              <PropertyRef Name="OwnerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_ProjectTasks_dbo_Projects_ParentProjectID">
           <End Role="Projects" Type="Self.Projects" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -270,12 +301,12 @@
           <End Role="Projects" Type="Self.Projects" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="RateProjects" Type="Self.RateProjects" Multiplicity="*" />
+          <End Role="ProjectRates" Type="Self.ProjectRates" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Projects">
               <PropertyRef Name="ProjectID" />
             </Principal>
-            <Dependent Role="RateProjects">
+            <Dependent Role="ProjectRates">
               <PropertyRef Name="Project_ProjectID" />
             </Dependent>
           </ReferentialConstraint>
@@ -284,17 +315,17 @@
           <End Role="Rates" Type="Self.Rates" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="RateProjects" Type="Self.RateProjects" Multiplicity="*" />
+          <End Role="ProjectRates" Type="Self.ProjectRates" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Rates">
               <PropertyRef Name="RateID" />
             </Principal>
-            <Dependent Role="RateProjects">
+            <Dependent Role="ProjectRates">
               <PropertyRef Name="Rate_RateID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_dbo_Rates_dbo_AspNetUsers_User_Id">
+        <Association Name="FK_dbo_Rates_dbo_AspNetUsers_UserID">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
           <End Role="Rates" Type="Self.Rates" Multiplicity="*" />
           <ReferentialConstraint>
@@ -345,27 +376,19 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="ModelStoreContainer">
-          <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ApplicationUserProjectTasks" EntityType="Self.ApplicationUserProjectTasks" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Attachments" EntityType="Self.Attachments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProjectRates" EntityType="Self.ProjectRates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProjectRoles" EntityType="Self.ProjectRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Projects" EntityType="Self.Projects" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ProjectTaskApplicationUsers" EntityType="Self.ProjectTaskApplicationUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProjectTasks" EntityType="Self.ProjectTasks" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="RateProjects" EntityType="Self.RateProjects" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rates" EntityType="Self.Rates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TimeEntries" EntityType="Self.TimeEntries" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_dbo_ApplicationUserProjectTasks_dbo_AspNetUsers_ApplicationUser_Id" Association="Self.FK_dbo_ApplicationUserProjectTasks_dbo_AspNetUsers_ApplicationUser_Id">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="ProjectTaskApplicationUsers" EntitySet="ProjectTaskApplicationUsers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_dbo_ApplicationUserProjectTasks_dbo_ProjectTasks_ProjectTask_TaskID" Association="Self.FK_dbo_ApplicationUserProjectTasks_dbo_ProjectTasks_ProjectTask_TaskID">
-            <End Role="ProjectTasks" EntitySet="ProjectTasks" />
-            <End Role="ProjectTaskApplicationUsers" EntitySet="ProjectTaskApplicationUsers" />
-          </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
@@ -382,6 +405,10 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
+          <AssociationSet Name="FK_dbo_Attachments_dbo_ProjectTasks_TaskID" Association="Self.FK_dbo_Attachments_dbo_ProjectTasks_TaskID">
+            <End Role="ProjectTasks" EntitySet="ProjectTasks" />
+            <End Role="Attachments" EntitySet="Attachments" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_ProjectRoles_dbo_AspNetUsers_UserID" Association="Self.FK_dbo_ProjectRoles_dbo_AspNetUsers_UserID">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="ProjectRoles" EntitySet="ProjectRoles" />
@@ -394,19 +421,31 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Projects" EntitySet="Projects" />
           </AssociationSet>
+          <AssociationSet Name="FK_dbo_ProjectTaskApplicationUsers_dbo_AspNetUsers_ApplicationUser_Id" Association="Self.FK_dbo_ProjectTaskApplicationUsers_dbo_AspNetUsers_ApplicationUser_Id">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="ApplicationUserProjectTasks" EntitySet="ApplicationUserProjectTasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_ProjectTaskApplicationUsers_dbo_ProjectTasks_ProjectTask_TaskID" Association="Self.FK_dbo_ProjectTaskApplicationUsers_dbo_ProjectTasks_ProjectTask_TaskID">
+            <End Role="ProjectTasks" EntitySet="ProjectTasks" />
+            <End Role="ApplicationUserProjectTasks" EntitySet="ApplicationUserProjectTasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_ProjectTasks_dbo_AspNetUsers_OwnerID" Association="Self.FK_dbo_ProjectTasks_dbo_AspNetUsers_OwnerID">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="ProjectTasks" EntitySet="ProjectTasks" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_ProjectTasks_dbo_Projects_ParentProjectID" Association="Self.FK_dbo_ProjectTasks_dbo_Projects_ParentProjectID">
             <End Role="Projects" EntitySet="Projects" />
             <End Role="ProjectTasks" EntitySet="ProjectTasks" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_RateProjects_dbo_Projects_Project_ProjectID" Association="Self.FK_dbo_RateProjects_dbo_Projects_Project_ProjectID">
             <End Role="Projects" EntitySet="Projects" />
-            <End Role="RateProjects" EntitySet="RateProjects" />
+            <End Role="ProjectRates" EntitySet="ProjectRates" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_RateProjects_dbo_Rates_Rate_RateID" Association="Self.FK_dbo_RateProjects_dbo_Rates_Rate_RateID">
             <End Role="Rates" EntitySet="Rates" />
-            <End Role="RateProjects" EntitySet="RateProjects" />
+            <End Role="ProjectRates" EntitySet="ProjectRates" />
           </AssociationSet>
-          <AssociationSet Name="FK_dbo_Rates_dbo_AspNetUsers_User_Id" Association="Self.FK_dbo_Rates_dbo_AspNetUsers_User_Id">
+          <AssociationSet Name="FK_dbo_Rates_dbo_AspNetUsers_UserID" Association="Self.FK_dbo_Rates_dbo_AspNetUsers_UserID">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Rates" EntitySet="Rates" />
           </AssociationSet>
@@ -423,21 +462,10 @@
             <End Role="TimeEntries" EntitySet="TimeEntries" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="C__MigrationHistory">
-          <Key>
-            <PropertyRef Name="MigrationId" />
-            <PropertyRef Name="ContextKey" />
-          </Key>
-          <Property Name="MigrationId" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ContextKey" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Model" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
-          <Property Name="ProductVersion" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
-        </EntityType>
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
@@ -491,6 +519,8 @@
           <NavigationProperty Name="TimeEntries" Relationship="Self.FK_dbo_TimeEntries_dbo_AspNetUsers_UserID" FromRole="AspNetUsers" ToRole="TimeEntries" />
           <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
           <NavigationProperty Name="ProjectTasks" Relationship="Self.ProjectTaskApplicationUsers" FromRole="AspNetUsers" ToRole="ProjectTasks" />
+          <NavigationProperty Name="ProjectTasks1" Relationship="Model.FK_dbo_ProjectTasks_dbo_AspNetUsers_OwnerID" FromRole="AspNetUsers" ToRole="ProjectTasks" />
+          <NavigationProperty Name="ProjectTasks11" Relationship="Model.ApplicationUserProjectTasks" FromRole="AspNetUsers" ToRole="ProjectTasks" />
         </EntityType>
         <EntityType Name="ProjectRoles">
           <Key>
@@ -515,6 +545,7 @@
           <NavigationProperty Name="ProjectRoles" Relationship="Self.FK_dbo_ProjectRoles_dbo_Projects_ProjectID" FromRole="Projects" ToRole="ProjectRoles" />
           <NavigationProperty Name="ProjectTasks" Relationship="Self.FK_dbo_ProjectTasks_dbo_Projects_ParentProjectID" FromRole="Projects" ToRole="ProjectTasks" />
           <NavigationProperty Name="Rates" Relationship="Self.RateProjects" FromRole="Projects" ToRole="Rates" />
+          <NavigationProperty Name="Rates1" Relationship="Model.ProjectRates" FromRole="Projects" ToRole="Rates" />
         </EntityType>
         <EntityType Name="ProjectTasks">
           <Key>
@@ -527,6 +558,14 @@
           <NavigationProperty Name="Projects" Relationship="Self.FK_dbo_ProjectTasks_dbo_Projects_ParentProjectID" FromRole="ProjectTasks" ToRole="Projects" />
           <NavigationProperty Name="TimeEntries" Relationship="Self.FK_dbo_TimeEntries_dbo_ProjectTasks_ParentTaskID" FromRole="ProjectTasks" ToRole="TimeEntries" />
           <NavigationProperty Name="AspNetUsers" Relationship="Self.ProjectTaskApplicationUsers" FromRole="ProjectTasks" ToRole="AspNetUsers" />
+          <Property Name="OwnerID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Deadline" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LastModified" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="AspNetUsers1" Relationship="Model.FK_dbo_ProjectTasks_dbo_AspNetUsers_OwnerID" FromRole="ProjectTasks" ToRole="AspNetUsers" />
+          <NavigationProperty Name="Attachments" Relationship="Model.FK_dbo_Attachments_dbo_ProjectTasks_TaskID" FromRole="ProjectTasks" ToRole="Attachments" />
+          <NavigationProperty Name="AspNetUsers11" Relationship="Model.ApplicationUserProjectTasks" FromRole="ProjectTasks" ToRole="AspNetUsers" />
         </EntityType>
         <EntityType Name="Rates">
           <Key>
@@ -538,6 +577,7 @@
           <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_dbo_Rates_dbo_AspNetUsers_User_Id" FromRole="Rates" ToRole="AspNetUsers" />
           <NavigationProperty Name="TimeEntries" Relationship="Self.FK_dbo_TimeEntries_dbo_Rates_RateID" FromRole="Rates" ToRole="TimeEntries" />
           <NavigationProperty Name="Projects" Relationship="Self.RateProjects" FromRole="Rates" ToRole="Projects" />
+          <NavigationProperty Name="Projects1" Relationship="Model.ProjectRates" FromRole="Rates" ToRole="Projects" />
         </EntityType>
         <EntityType Name="TimeEntries">
           <Key>
@@ -698,7 +738,6 @@
           <End Role="Rates" Type="Self.Rates" Multiplicity="*" />
         </Association>
         <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="C__MigrationHistory" EntityType="Self.C__MigrationHistory" />
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" />
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" />
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" />
@@ -760,23 +799,75 @@
             <End Role="Projects" EntitySet="Projects" />
             <End Role="Rates" EntitySet="Rates" />
           </AssociationSet>
+          <EntitySet Name="Attachments" EntityType="Model.Attachments" />
+          <AssociationSet Name="FK_dbo_ProjectTasks_dbo_AspNetUsers_OwnerID" Association="Model.FK_dbo_ProjectTasks_dbo_AspNetUsers_OwnerID">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="ProjectTasks" EntitySet="ProjectTasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Attachments_dbo_ProjectTasks_TaskID" Association="Model.FK_dbo_Attachments_dbo_ProjectTasks_TaskID">
+            <End Role="ProjectTasks" EntitySet="ProjectTasks" />
+            <End Role="Attachments" EntitySet="Attachments" />
+          </AssociationSet>
+          <AssociationSet Name="ApplicationUserProjectTasks" Association="Model.ApplicationUserProjectTasks">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="ProjectTasks" EntitySet="ProjectTasks" />
+          </AssociationSet>
+          <AssociationSet Name="ProjectRates" Association="Model.ProjectRates">
+            <End Role="Projects" EntitySet="Projects" />
+            <End Role="Rates" EntitySet="Rates" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Attachments">
+          <Key>
+            <PropertyRef Name="AttachmentID" />
+          </Key>
+          <Property Name="AttachmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskID" Type="Int32" Nullable="false" />
+          <Property Name="FileName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Size" Type="Int32" Nullable="false" />
+          <Property Name="Type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ProjectTasks" Relationship="Model.FK_dbo_Attachments_dbo_ProjectTasks_TaskID" FromRole="Attachments" ToRole="ProjectTasks" />
+        </EntityType>
+        <Association Name="FK_dbo_ProjectTasks_dbo_AspNetUsers_OwnerID">
+          <End Type="Model.AspNetUsers" Role="AspNetUsers" Multiplicity="0..1" />
+          <End Type="Model.ProjectTasks" Role="ProjectTasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProjectTasks">
+              <PropertyRef Name="OwnerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Attachments_dbo_ProjectTasks_TaskID">
+          <End Type="Model.ProjectTasks" Role="ProjectTasks" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.Attachments" Role="Attachments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProjectTasks">
+              <PropertyRef Name="TaskID" />
+            </Principal>
+            <Dependent Role="Attachments">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ApplicationUserProjectTasks">
+          <End Type="Model.AspNetUsers" Role="AspNetUsers" Multiplicity="*" />
+          <End Type="Model.ProjectTasks" Role="ProjectTasks" Multiplicity="*" />
+        </Association>
+        <Association Name="ProjectRates">
+          <End Type="Model.Projects" Role="Projects" Multiplicity="*" />
+          <End Type="Model.Rates" Role="Rates" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Entities">
-          <EntitySetMapping Name="C__MigrationHistory">
-            <EntityTypeMapping TypeName="Model.C__MigrationHistory">
-              <MappingFragment StoreEntitySet="__MigrationHistory">
-                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
-                <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
-                <ScalarProperty Name="Model" ColumnName="Model" />
-                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AspNetRoles">
             <EntityTypeMapping TypeName="Model.AspNetRoles">
               <MappingFragment StoreEntitySet="AspNetRoles">
@@ -845,6 +936,11 @@
           <EntitySetMapping Name="ProjectTasks">
             <EntityTypeMapping TypeName="Model.ProjectTasks">
               <MappingFragment StoreEntitySet="ProjectTasks">
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="Deadline" ColumnName="Deadline" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
                 <ScalarProperty Name="TaskID" ColumnName="TaskID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ParentProjectID" ColumnName="ParentProjectID" />
@@ -883,23 +979,34 @@
               <ScalarProperty Name="Id" ColumnName="UserId" />
             </EndProperty>
           </AssociationSetMapping>
-          <AssociationSetMapping Name="ProjectTaskApplicationUsers" TypeName="Model.ProjectTaskApplicationUsers" StoreEntitySet="ProjectTaskApplicationUsers">
-            <EndProperty Name="AspNetUsers">
-              <ScalarProperty Name="Id" ColumnName="ApplicationUser_Id" />
-            </EndProperty>
+          <EntitySetMapping Name="Attachments">
+            <EntityTypeMapping TypeName="Model.Attachments">
+              <MappingFragment StoreEntitySet="Attachments">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="AttachmentID" ColumnName="AttachmentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ApplicationUserProjectTasks" TypeName="Model.ApplicationUserProjectTasks" StoreEntitySet="ApplicationUserProjectTasks">
             <EndProperty Name="ProjectTasks">
               <ScalarProperty Name="TaskID" ColumnName="ProjectTask_TaskID" />
             </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="RateProjects" TypeName="Model.RateProjects" StoreEntitySet="RateProjects">
-            <EndProperty Name="Projects">
-              <ScalarProperty Name="ProjectID" ColumnName="Project_ProjectID" />
+            <EndProperty Name="AspNetUsers">
+              <ScalarProperty Name="Id" ColumnName="ApplicationUser_Id" />
             </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="ProjectRates" TypeName="Model.ProjectRates" StoreEntitySet="ProjectRates">
             <EndProperty Name="Rates">
               <ScalarProperty Name="RateID" ColumnName="Rate_RateID" />
             </EndProperty>
+            <EndProperty Name="Projects">
+              <ScalarProperty Name="ProjectID" ColumnName="Project_ProjectID" />
+            </EndProperty>
           </AssociationSetMapping>
-        </EntityContainerMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

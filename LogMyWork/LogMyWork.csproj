@@ -81,6 +81,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -218,12 +219,12 @@
     <Compile Include="Controllers\TimeEntriesController.cs" />
     <Compile Include="DTO\ProjectRoles\ProjectRoleCreateDTO.cs" />
     <Compile Include="DTO\Projects\ProjectCreateDTO.cs" />
+    <Compile Include="Consts\ProjectStatus.cs" />
     <Compile Include="LogMyWork.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LogMyWork.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Consts\ProjectStatus.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Attachment.cs" />
     <Compile Include="ContextExtensions\RatesExtension.cs" />
@@ -282,9 +283,6 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>LogMyWork.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="LogMyWork.edmx.diagram">
-      <DependentUpon>LogMyWork.edmx</DependentUpon>
-    </Content>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
@@ -401,6 +399,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
