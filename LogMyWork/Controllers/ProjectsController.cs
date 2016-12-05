@@ -40,7 +40,32 @@ namespace LogMyWork.Controllers
         {   // TODO
             // check what happens if project does not exist
             var data = this.db.GetUsersForProjectAsKeyValuePair(projectID).ToList();
-            data.Insert(0, new KeyValuePair<object, string>(null, null));
+            data.Insert(0, new KeyValuePair<object, string>(0, null));
+            return PartialView("~/Views/Partials/SelectOptionsTemplate.cshtml", data);
+        }
+
+        public ActionResult GetProjects(int projectID, int taskID, string userID)
+        {
+            IQueryable<Project> res = this.db.Projects;
+
+            if(projectID > 0)
+            {
+                res = res.Where(p => p.ProjectID == projectID);
+            }
+
+            if(userID == null)
+            {
+                res = res.Include(p => p.Roles)
+                    .Where(p => p.Roles.Any(r => r.UserID == userID));
+            }
+
+            if(taskID > 0)
+            {
+                res = res.Include(p => p.Tasks)
+                    .Where(p => p.Tasks.Any(t => t.TaskID == taskID));
+            }
+            var data = res.ToList().Select(p => new KeyValuePair<object, string>(p.ProjectID, p.Name)).ToList();
+            data.Insert(0, new KeyValuePair<object, string>(0, null));
             return PartialView("~/Views/Partials/SelectOptionsTemplate.cshtml", data);
         }
 

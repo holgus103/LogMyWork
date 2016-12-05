@@ -219,6 +219,7 @@
     <Compile Include="Controllers\RatesController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\TimeEntriesController.cs" />
+    <Compile Include="DTO\Filters\FilterCreateDTO.cs" />
     <Compile Include="DTO\ProjectRoles\ProjectRoleCreateDTO.cs" />
     <Compile Include="DTO\Projects\ProjectCreateDTO.cs" />
     <Compile Include="Consts\ProjectStatus.cs" />
@@ -227,6 +228,7 @@
     <Compile Include="ContextExtensions\RatesExtension.cs" />
     <Compile Include="ContextExtensions\UsersExtension.cs" />
     <Compile Include="Models\PredefinedFilter.cs" />
+    <Compile Include="ViewModels\Filters\FilterCreate.cs" />
     <Compile Include="ViewModels\ProjectRoles\ProjectRoleCreate.cs" />
     <Compile Include="ViewModels\Projects\ProjectCreate.cs" />
     <Compile Include="Global.asax.cs">
@@ -291,6 +293,7 @@
     <Content Include="Scripts\Common\RepeatableControl.js" />
     <Content Include="Scripts\Common\TimeZoneAdjust.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="Scripts\Filters\Create.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />

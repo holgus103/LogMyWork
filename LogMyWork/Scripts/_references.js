@@ -8,6 +8,7 @@
 /// <reference path="common/shared.js" />
 /// <reference path="common/timezoneadjust.js" />
 /// <reference path="common/tracker.js" />
+/// <reference path="filters/create.js" />
 /// <reference path="jquery.unobtrusive-ajax.min.js" />
 /// <reference path="jquery.validate.min.js" />
 /// <reference path="jquery.validate.unobtrusive.js" />

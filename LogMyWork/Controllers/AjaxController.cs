@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace LogMyWork.Controllers
 {
-    public class AjaxController : Controller
+    public abstract class AjaxController : Controller
     {
         protected ContentResult ajaxSuccess()
         {

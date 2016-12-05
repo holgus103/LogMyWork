@@ -7,6 +7,8 @@ using System.Net;
 using System.Web.Mvc;
 using LogMyWork.Models;
 using Microsoft.AspNet.Identity;
+using LogMyWork.ViewModels.Filters;
+using LogMyWork.ContextExtensions;
 
 namespace LogMyWork.Controllers
 {
@@ -39,6 +41,10 @@ namespace LogMyWork.Controllers
         // GET: Filters/Create
         public ActionResult Create()
         {
+            FilterCreate viewModel = new FilterCreate();
+            viewModel.SelectableProjects = this.db.GetProjectsForUser(User.Identity.GetUserId())
+                .Select(p => new KeyValuePair<object, string>(p.ProjectID, p.Name));
+
             return View();
         }
 
