@@ -10,6 +10,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using LogMyWork.Models;
 using LogMyWork.Consts;
+using LogMyWork.ContextExtensions;
+using System.Collections.Generic;
+using System.Data.Entity;
 
 namespace LogMyWork.Controllers
 {
@@ -406,6 +409,32 @@ namespace LogMyWork.Controllers
         public ActionResult ExternalLoginFailure()
         {
             return View();
+        }
+
+        public ActionResult GetUsers(int projectID, int taskID, string userID)
+        {
+            IQueryable<ApplicationUser> res = this.db.GetRelatedUsers(User.Identity.GetUserId());
+
+            if(projectID > 0)
+            {
+                res.Include(u => u.ProjectRoles)
+                    .Where(u => u.ProjectRoles.Any(r => r.ProjectID == projectID));
+            }
+
+            if(taskID > 0)
+            {
+                res = res.Include(u => u.Tasks)
+                    .Where(u => u.Tasks.Any(t => t.TaskID == taskID));
+            }
+
+            if(userID != null)
+            {
+                res = res.Where(u => u.Id == userID);
+            }
+
+            var data = res.ToList().Select(u => new KeyValuePair<object, string>(u.Id, u.Email)).ToList();
+            data.Insert(0, new KeyValuePair<object, string>(0, null));
+            return PartialView("~/Views/Partials/SelectOptionsTemplate.cshtml", data);
         }
 
         protected override void Dispose(bool disposing)

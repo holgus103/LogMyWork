@@ -53,7 +53,7 @@ namespace LogMyWork.Controllers
                 res = res.Where(p => p.ProjectID == projectID);
             }
 
-            if(userID == null)
+            if(userID != null)
             {
                 res = res.Include(p => p.Roles)
                     .Where(p => p.Roles.Any(r => r.UserID == userID));

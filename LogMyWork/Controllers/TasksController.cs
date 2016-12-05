@@ -12,6 +12,7 @@ using LogMyWork.Consts;
 using LogMyWork.ViewModels.Tasks;
 using System.IO;
 using System.Globalization;
+using LogMyWork.ContextExtensions;
 
 namespace LogMyWork.Controllers
 {
@@ -98,6 +99,28 @@ namespace LogMyWork.Controllers
                 );
         }
 
+        public ActionResult GetTasks(int projectID, int taskID, string userID)
+        {
+            IQueryable<ProjectTask> res = this.db.GetAllTasksForUser(User.Identity.GetUserId());
+            if(projectID > 0)
+            {
+                res = res.Where(t => t.ParentProjectID == projectID);
+            }
+
+            if(taskID > 0)
+            {
+                res = res.Where(t => t.TaskID == taskID);
+            }
+
+            if(userID != null)
+            {
+                res = res.Include(t => t.Users)
+                    .Where(t => t.Users.Any(u => u.Id == userID));
+            }
+            var data = res.ToList().Select(t => new KeyValuePair<object, string>(t.TaskID, t.Name)).ToList();
+            data.Insert(0, new KeyValuePair<object, string>(0, null));
+            return PartialView("~/Views/Partials/SelectOptionsTemplate.cshtml", data);
+        }
         // GET: Tasks/Create
         public ActionResult Create()
         {

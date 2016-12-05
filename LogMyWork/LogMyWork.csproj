@@ -208,6 +208,7 @@
     <Compile Include="Consts\ViewDataKeys.cs" />
     <Compile Include="ContextExtensions\ProjectsExtension.cs" />
     <Compile Include="ContextExtensions\RolesExtension.cs" />
+    <Compile Include="ContextExtensions\TasksExtension.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\AttachmentsController.cs" />
