@@ -89,17 +89,19 @@ namespace LogMyWork.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult GetTasksForProject(int projectID)
         {
             return View("~/Partials/SelectOptionsTemplate.cshtml", this.db.ProjectTasks
                 .Where(t => t.ParentProjectID == projectID)
                 .ToList()
-                .Select(t => new Tuple<int, string>(t.TaskID, t.Name))
+                .Select(t => new KeyValuePair<int, string>(t.TaskID, t.Name))
                 );
         }
 
-        public ActionResult GetTasks(int projectID, int taskID, string userID)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult GetTasks(int projectID, string userID)
         {
             IQueryable<ProjectTask> res = this.db.GetAllTasksForUser(User.Identity.GetUserId());
             if(projectID > 0)
@@ -107,10 +109,10 @@ namespace LogMyWork.Controllers
                 res = res.Where(t => t.ParentProjectID == projectID);
             }
 
-            if(taskID > 0)
-            {
-                res = res.Where(t => t.TaskID == taskID);
-            }
+            //if(taskID > 0)
+            //{
+            //    res = res.Where(t => t.TaskID == taskID);
+            //}
 
             if(userID != null)
             {

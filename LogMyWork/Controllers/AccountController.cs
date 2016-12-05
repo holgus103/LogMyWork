@@ -411,7 +411,9 @@ namespace LogMyWork.Controllers
             return View();
         }
 
-        public ActionResult GetUsers(int projectID, int taskID, string userID)
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult GetUsers(int projectID, int taskID)
         {
             IQueryable<ApplicationUser> res = this.db.GetRelatedUsers(User.Identity.GetUserId());
 
@@ -427,10 +429,10 @@ namespace LogMyWork.Controllers
                     .Where(u => u.Tasks.Any(t => t.TaskID == taskID));
             }
 
-            if(userID != null)
-            {
-                res = res.Where(u => u.Id == userID);
-            }
+            //if(userID != null)
+            //{
+            //    res = res.Where(u => u.Id == userID);
+            //}
 
             var data = res.ToList().Select(u => new KeyValuePair<object, string>(u.Id, u.Email)).ToList();
             data.Insert(0, new KeyValuePair<object, string>(0, null));

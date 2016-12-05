@@ -1,5 +1,5 @@
-﻿@model IEnumerable<Tuple<object, string>>
+﻿@model IEnumerable<KeyValuePair<object, string>>
 @foreach (var val in Model)
 {
-    <option value="@val.Item1">@val.Item2</option>
+    <option value="@val.Key">@val.Value</option>
 }

@@ -25,7 +25,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ProjectID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.ProjectID, new KeyValuePairSelectList(Model.SelectableProjects), new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.ProjectID, new KeyValuePairSelectList(Model.SelectableProjects),  new { @class = "form-control" } )
                 @Html.ValidationMessageFor(model => model.ProjectID, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -34,7 +34,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.TaskID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.TaskID, null, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.TaskID, new KeyValuePairSelectList(Model.SelectableTasks), new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.TaskID, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -43,7 +43,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.UserID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.UserID, null,  new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.UserID, new KeyValuePairSelectList(Model.SelectableUsers),  new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.UserID, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -89,4 +89,5 @@
     @Scripts.Render("~/Scripts/moment.min.js")
     @Scripts.Render("~/Scripts/bootstrap-datetimepicker.min.js")
     @Scripts.Render("~/Scripts/Filters/Create.js")
+    @Scripts.Render("~/Scripts/Common/Ajax.js")
 }

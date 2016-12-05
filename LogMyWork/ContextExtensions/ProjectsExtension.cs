@@ -19,7 +19,7 @@ namespace LogMyWork.ContextExtensions
 
 
 
-        public static IEnumerable<Project> GetProjectsForUser(this LogMyWorkContext context, string userID)
+        public static IQueryable<Project> GetProjectsForUser(this LogMyWorkContext context, string userID)
         {
             return context.ProjectRoles
                 .Where(r => r.UserID == userID)

@@ -44,14 +44,16 @@ namespace LogMyWork.Controllers
             return PartialView("~/Views/Partials/SelectOptionsTemplate.cshtml", data);
         }
 
-        public ActionResult GetProjects(int projectID, int taskID, string userID)
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult GetProjects(int taskID, string userID)
         {
-            IQueryable<Project> res = this.db.Projects;
+            IQueryable<Project> res = this.db.GetProjectsForUser(userID);
 
-            if(projectID > 0)
-            {
-                res = res.Where(p => p.ProjectID == projectID);
-            }
+            //if(projectID > 0)
+            //{
+            //    res = res.Where(p => p.ProjectID == projectID);
+            //}
 
             if(userID != null)
             {

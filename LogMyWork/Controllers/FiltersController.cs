@@ -41,11 +41,15 @@ namespace LogMyWork.Controllers
         // GET: Filters/Create
         public ActionResult Create()
         {
+            string userID = User.Identity.GetUserId();
             FilterCreate viewModel = new FilterCreate();
-            viewModel.SelectableProjects = this.db.GetProjectsForUser(User.Identity.GetUserId())
+            viewModel.SelectableProjects = this.db.GetProjectsForUser(userID).ToList()
                 .Select(p => new KeyValuePair<object, string>(p.ProjectID, p.Name));
-
-            return View();
+            viewModel.SelectableUsers = this.db.GetRelatedUsers(userID).ToList()
+                .Select(u => new KeyValuePair<object, string>(u.Id, u.Email));
+            viewModel.SelectableTasks = this.db.GetAllTasksForUser(userID).ToList()
+                .Select(t => new KeyValuePair<object, string>(t.TaskID, t.Name));
+            return View(viewModel);
         }
 
         // POST: Filters/Create

@@ -11,6 +11,8 @@ namespace LogMyWork.ViewModels.Filters
     public class FilterCreate : FilterCreateDTO
     {
         public IEnumerable<KeyValuePair<object, string>> SelectableProjects { get; set; }
+        public IEnumerable<KeyValuePair<object, string>> SelectableUsers { get; set; }
+        public IEnumerable<KeyValuePair<object, string>> SelectableTasks { get; set; }
 
     }
 }
