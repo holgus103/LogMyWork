@@ -205,6 +205,7 @@
     <Compile Include="Consts\Role.cs" />
     <Compile Include="Consts\SessionsKey.cs" />
     <Compile Include="Consts\TaskStatus.cs" />
+    <Compile Include="Consts\TimeUnitEnum.cs" />
     <Compile Include="Consts\ViewDataKeys.cs" />
     <Compile Include="ContextExtensions\ProjectsExtension.cs" />
     <Compile Include="ContextExtensions\RolesExtension.cs" />
@@ -228,7 +229,9 @@
     <Compile Include="Models\Attachment.cs" />
     <Compile Include="ContextExtensions\RatesExtension.cs" />
     <Compile Include="ContextExtensions\UsersExtension.cs" />
-    <Compile Include="Models\PredefinedFilter.cs" />
+    <Compile Include="Models\PredefinedStaticFilter.cs" />
+    <Compile Include="Models\PredefinedFilterBase.cs" />
+    <Compile Include="Models\RelativePredefinedFilter.cs" />
     <Compile Include="ViewModels\Filters\FilterCreate.cs" />
     <Compile Include="ViewModels\ProjectRoles\ProjectRoleCreate.cs" />
     <Compile Include="ViewModels\Projects\ProjectCreate.cs" />

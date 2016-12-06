@@ -30,7 +30,7 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PredefinedFilter filter = db.Filters.Find(id);
+            PredefinedStaticFilter filter = db.Filters.Find(id);
             if (filter == null)
             {
                 return HttpNotFound();
@@ -66,7 +66,7 @@ namespace LogMyWork.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "FilterID,OwnerID,TaskID,ProjectID,UserID,From,To,FilterType")] PredefinedFilter filter)
+        public ActionResult Create([Bind(Include = "FilterID,OwnerID,TaskID,ProjectID,UserID,From,To,FilterType")] PredefinedStaticFilter filter)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +85,7 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PredefinedFilter filter = db.Filters.Find(id);
+            PredefinedStaticFilter filter = db.Filters.Find(id);
             if (filter == null)
             {
                 return HttpNotFound();
@@ -98,7 +98,7 @@ namespace LogMyWork.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "FilterID,OwnerID,TaskID,ProjectID,UserID,From,To,FilterType")] PredefinedFilter filter)
+        public ActionResult Edit([Bind(Include = "FilterID,OwnerID,TaskID,ProjectID,UserID,From,To,FilterType")] PredefinedStaticFilter filter)
         {
             if (ModelState.IsValid)
             {
@@ -116,7 +116,7 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PredefinedFilter filter = db.Filters.Find(id);
+            PredefinedStaticFilter filter = db.Filters.Find(id);
             if (filter == null)
             {
                 return HttpNotFound();
@@ -129,7 +129,7 @@ namespace LogMyWork.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            PredefinedFilter filter = db.Filters.Find(id);
+            PredefinedStaticFilter filter = db.Filters.Find(id);
             db.Filters.Remove(filter);
             db.SaveChanges();
             return RedirectToAction("Index");
