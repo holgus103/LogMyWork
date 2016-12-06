@@ -11,9 +11,6 @@ namespace LogMyWork.Models
         [DisplayName("Project Name")]
         public string Name { get; set; }
         public ProjectStatus Status { get; set; }
-        public string ClientID { get; set; }
-        [ForeignKey("ClientID")]
-        public ApplicationUser Client { get; set; }
         public List<ProjectTask> Tasks{ get; set; }
         public List<ProjectRole> Roles { get; set; }
         public List<Rate> Rates { get; set; }

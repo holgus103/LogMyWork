@@ -20,20 +20,6 @@ namespace LogMyWork.Controllers
     {
         private LogMyWorkContext db = new LogMyWorkContext();
 
-        public ActionResult Index()
-        {
-            return null;
-        }
-        // GET: ProjectRoles/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            return View(db.ProjectRoles.Include( p => p.User).Where(t => t.ProjectID == id));
-        }
-
         // GET: ProjectRoles/Create
         public ActionResult Create(int? id)
         {
@@ -71,6 +57,11 @@ namespace LogMyWork.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(ProjectRoleCreateDTO dto)
         {
+            string userID = User.Identity.GetUserId();
+            if (!this.db.HasProjectRole(dto.ProjectID, userID, Role.Manager) && !this.db.HasProjectRole(dto.ProjectID, userID, Role.Owner))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
             if (ModelState.IsValid)
             {
                 ProjectRole role = new ProjectRole()
@@ -94,12 +85,18 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             ProjectRole projectRole = db.ProjectRoles.Find(id);
             if (projectRole == null)
             {
                 return HttpNotFound();
             }
-            return View(projectRole);
+            if (!this.db.HasProjectRole(projectRole.ProjectID, User.Identity.GetUserId(), Role.Owner))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+            else
+                return View(projectRole);
         }
 
         // POST: ProjectRoles/Delete/5
@@ -108,6 +105,10 @@ namespace LogMyWork.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             ProjectRole projectRole = db.ProjectRoles.Find(id);
+            if (!this.db.HasProjectRole(projectRole.ProjectID, User.Identity.GetUserId(), Role.Owner))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
             db.ProjectRoles.Remove(projectRole);
             db.SaveChanges();
             return this.RedirectToAction("Index", "Projects"); 

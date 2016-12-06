@@ -17,7 +17,7 @@ namespace LogMyWork.Controllers
         public ActionResult Index()
         {
             string userID = User.Identity.GetUserId();
-            var rates = db.Rates.Include(r => r.User).Where( r => r.User.Id == userID);
+            var rates = db.Rates.Include(r => r.User).Where(r => r.User.Id == userID);
             return View(rates.ToList());
         }
 
@@ -25,7 +25,6 @@ namespace LogMyWork.Controllers
         // GET: Rates/Create
         public ActionResult Create()
         {
-            //ViewBag.UserID = new SelectList(db.Users, "Id", "Email");
             return View();
         }
 
@@ -34,8 +33,10 @@ namespace LogMyWork.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "RateID,RateValue")] Rate rate)
+        public ActionResult Create(double rateValue)
         {
+            Rate rate = new Rate();
+            rate.RateValue = rateValue;
             rate.UserID = User.Identity.GetUserId();
             if (ModelState.IsValid)
             {
@@ -49,22 +50,6 @@ namespace LogMyWork.Controllers
         }
 
 
-        // POST: Rates/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "RateID,RateValue,UserID")] Rate rate)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(rate).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.UserID = new SelectList(db.Users, "Id", "Email", rate.UserID);
-            return View(rate);
-        }
 
         // GET: Rates/Delete/5
         public ActionResult Delete(int? id)
@@ -78,7 +63,12 @@ namespace LogMyWork.Controllers
             {
                 return HttpNotFound();
             }
-            return View(rate);
+            if (rate.UserID == User.Identity.GetUserId())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+            else
+                return View(rate);
         }
 
         // POST: Rates/Delete/5
@@ -87,6 +77,10 @@ namespace LogMyWork.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Rate rate = db.Rates.Find(id);
+            if(rate.UserID == User.Identity.GetUserId())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
             db.Rates.Remove(rate);
             db.SaveChanges();
             return RedirectToAction("Index");
