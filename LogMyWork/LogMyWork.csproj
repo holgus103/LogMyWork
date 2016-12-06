@@ -292,6 +292,7 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Common\Ajax.js" />
     <Content Include="Scripts\Common\RepeatableControl.js" />
+    <Content Include="Scripts\Common\TabbedView.js" />
     <Content Include="Scripts\Common\TimeZoneAdjust.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\Filters\Create.js" />
@@ -314,6 +315,7 @@
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\npm.js" />
+    <Content Include="Scripts\Projects\Details.js" />
     <Content Include="Scripts\Projects\Index.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -385,6 +387,8 @@
     <Content Include="Views\Filters\Details.cshtml" />
     <Content Include="Views\Filters\Edit.cshtml" />
     <Content Include="Views\Filters\Index.cshtml" />
+    <Content Include="Views\Partials\SimpleTaskList.cshtml" />
+    <Content Include="Views\Partials\SimplyUserList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

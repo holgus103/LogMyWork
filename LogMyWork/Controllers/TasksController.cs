@@ -89,7 +89,7 @@ namespace LogMyWork.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public ActionResult GetTasksForProject(int projectID)
         {
             return View("~/Partials/SelectOptionsTemplate.cshtml", this.db.ProjectTasks
@@ -100,7 +100,7 @@ namespace LogMyWork.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult GetTasks(int projectID, string userID)
         {
             IQueryable<ProjectTask> res = this.db.GetAllTasksForUser(User.Identity.GetUserId());
@@ -114,7 +114,7 @@ namespace LogMyWork.Controllers
             //    res = res.Where(t => t.TaskID == taskID);
             //}
 
-            if(userID != null)
+            if(!String.IsNullOrWhiteSpace(userID))
             {
                 res = res.Include(t => t.Users)
                     .Where(t => t.Users.Any(u => u.Id == userID));

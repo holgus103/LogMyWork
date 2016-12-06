@@ -12,6 +12,7 @@ using LogMyWork.ViewModels.Projects;
 using LogMyWork.DTO.Projects;
 using LogMyWork.ContextExtensions;
 using LogMyWork.ViewModels.Tasks;
+using System;
 
 namespace LogMyWork.Controllers
 {
@@ -55,7 +56,7 @@ namespace LogMyWork.Controllers
             //    res = res.Where(p => p.ProjectID == projectID);
             //}
 
-            if(userID != null)
+            if (!String.IsNullOrWhiteSpace(userID))
             {
                 res = res.Include(p => p.Roles)
                     .Where(p => p.Roles.Any(r => r.UserID == userID));
@@ -87,18 +88,20 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
-            projectDetails.Project = db.Projects.Include(p => p.Tasks).Include(p => p.Roles.Select(r => r.User)).Where(p => p.ProjectID == id).FirstOrDefault();
-            projectDetails.Tasks = this.db.Users.Where(u => u.Id == userID)
-                .Include(u => u.Tasks)
-                .Include(u => u.OwnedTasks)
-                .ToList()
-                .Select(u => new TaskIndex()
-                {
-                    AssignedTasks = u.Tasks,
-                })
+            projectDetails.Project = db.Projects
+                .Where(p => p.ProjectID == id)
+                .Include(p => p.Tasks)
+                .Include(p => p.Roles.Select(r => r.User))
                 .FirstOrDefault();
+            projectDetails.Tasks = new TaskIndex();
+            // load all assgned tasks in this project
+            projectDetails.Tasks.AssignedTasks = this.db.Users.Where(u => u.Id == userID)
+                .Include(u => u.Tasks)
+                .SelectMany(u => u.Tasks.Where(t => t.ParentProjectID == id.Value))
+                .ToList();
+
             // insert empty user to roles for dropdowns 
-            projectDetails.Project.Roles.Insert(0, new ProjectRole { ProjectID = projectDetails.Project.ProjectID });
+            //projectDetails.Project.Roles.Insert(0, new ProjectRole { ProjectID = projectDetails.Project.ProjectID });
 
             return View(projectDetails);
         }

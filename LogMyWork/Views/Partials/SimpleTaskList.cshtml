@@ -1,0 +1,24 @@
+﻿@using LogMyWork.Models
+@model IEnumerable<ProjectTask>
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Name)</th>
+        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Status)</th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Status)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", "Tasks", new { id = item.TaskID }, null) |
+
+            </td>
+        </tr>
+    }
+</table>

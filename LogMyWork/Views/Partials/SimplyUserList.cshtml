@@ -1,0 +1,7 @@
+﻿@using LogMyWork.Models
+@model IEnumerable<ApplicationUser>
+
+    @foreach (var val in Model)
+    {
+        <dd>@val.Email</dd>
+    }

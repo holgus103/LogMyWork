@@ -3,8 +3,8 @@ var userSelect;
 var taskSelect;
 $(document).ready(function () {
     projectSelect = $("#ProjectID");
-    userSelect = $("#TaskID");
-    taskSelect = $("#UserID");
+    userSelect = $("#UserID");
+    taskSelect = $("#TaskID");
 
     $("#From").datetimepicker();
     $("#To").datetimepicker();

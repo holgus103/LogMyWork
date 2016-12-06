@@ -30,8 +30,28 @@
         <dd>
             @Html.DisplayFor(model => model.Project.Name)
         </dd>
-        <h5>Tasks</h5>
-        @Html.Partial("~/Views/Partials/TaskList.cshtml", Model.Tasks)
+        <hr />
+        <ul id="TabMenu" class="nav nav-pills">
+            <li tabID="Users"><a>Project members</a></li>
+            <li tabID="ProjectTasks"><a>Tasks in this project</a></li>
+            <li tabID="AssignedTasks"><a>Tasks assigned to you</a></li>
+        </ul>
+        <div id="TabbedView">
+            <div tabiD="Users">
+                @foreach (var val in Model.Project.Roles)
+            {
+                    <dt>@val.User.Email</dt>
+                }
+            </div>
+
+            <div tabID="ProjectTasks">
+                @Html.Partial("~/Views/Partials/SimpleTaskList.cshtml", Model.Project.Tasks)
+            </div>
+
+            <div tabID="AssignedTasks">
+                @Html.Partial("~/Views/Partials/TaskList.cshtml", Model.Tasks)
+            </div>
+        </div>
         @*<div id="AddTaskPnl" class="panel panel-default hidden">
             @Html.Partial("~/Views/Partials/AddTask.cshtml", new TaskAdd() { ParentProjectID = Model.Project.ProjectID, Roles = Model.Project.Roles })
         </div>*@
@@ -43,8 +63,9 @@
     @Html.ActionLink("Back to List", "Index")
 </p>
 @section Scripts{
-    @Scripts.Render("~/Scripts/Projects/Projects.js")
+    @Scripts.Render("~/Scripts/Projects/Details.js")
     @Scripts.Render("~/Scripts/Projects/ProjectTasks.js")
     @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
+    @Scripts.Render("~/Scripts/Common/TabbedView.js")
 }
 
