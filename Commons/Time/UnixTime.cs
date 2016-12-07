@@ -13,7 +13,7 @@ namespace Commons.Time
             return (UInt64)(utcDate.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         }
 
-        public static DateTime ParseUnitTimestamp(UInt64 timestamp)
+        public static DateTime ParseUnixTimestamp(UInt64 timestamp)
         {
             return (new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).AddSeconds(timestamp);
         }

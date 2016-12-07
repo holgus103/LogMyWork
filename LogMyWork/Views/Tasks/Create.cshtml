@@ -12,7 +12,7 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm("Create", "Tasks", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Create", "Tasks", FormMethod.Post, new { id = "CreateForm", enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
@@ -20,7 +20,7 @@
         <h4>ProjectTask</h4>
         <hr />
 
-        @if(Model.TaskID != 0)
+        @if (Model.TaskID != 0)
         {
             @Html.HiddenFor(model => model.TaskID)
         }
@@ -45,11 +45,12 @@
                 @Html.TextAreaFor(model => model.Description, 10, 40, new { @class = "form-control" })
             </div>
         </div>
+        <input type="hidden" value="" id="DeadlineHidden" name="Deadline" />
         <div class="form-group">
             @Html.LabelFor(model => model.Deadline, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-3">
                 <div class='input-group date' id='Deadline'>
-                    <input type='text' name="Deadline" class="form-control" value="@Model.Deadline">
+                    <input type='text' class="form-control" adjustment="timezone" timestamp="@Model.Deadline">
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -60,13 +61,13 @@
         <div id="Users">
             @for (usersCounter = 0; usersCounter < Model.Users.Count(); usersCounter++)
             {
-            <div class="form-group">
-                @Html.LabelFor(model => model.Users[usersCounter].Email, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.Users[usersCounter].Id, new KeyValuePairSelectList(Model.SelectableUsers, Model.Users[usersCounter].Id), new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Users[usersCounter].Email, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Users[usersCounter].Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.Users[usersCounter].Id, new KeyValuePairSelectList(Model.SelectableUsers, Model.Users[usersCounter].Id), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Users[usersCounter].Email, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
             }
             <div class="form-group">
                 @Html.LabelFor(model => model.Users[0].Email, htmlAttributes: new { @class = "control-label col-md-2" })

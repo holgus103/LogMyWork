@@ -3,6 +3,7 @@
 /// <reference path="ajaxes.js" />
 /// <reference path="bootstrap.js" />
 /// <reference path="bootstrap-datetimepicker.min.js" />
+/// <reference path="common/adjusttimezones.js" />
 /// <reference path="common/ajax.js" />
 /// <reference path="common/repeatablecontrol.js" />
 /// <reference path="common/shared.js" />

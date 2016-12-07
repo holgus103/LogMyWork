@@ -293,6 +293,7 @@
     <None Include="Properties\PublishProfiles\logmywork - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\logmywork - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\Common\AdjustTimeZones.js" />
     <Content Include="Scripts\Common\Ajax.js" />
     <Content Include="Scripts\Common\RepeatableControl.js" />
     <Content Include="Scripts\Common\TabbedView.js" />

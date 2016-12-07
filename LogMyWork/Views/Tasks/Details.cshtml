@@ -43,11 +43,11 @@
             @Html.DisplayFor(model => model.Status)
         </dd>
         <dt>@Html.DisplayNameFor(model => model.Created)</dt>
-        <dd>@Html.DisplayFor(model => model.Created)</dd>
+        <dd timestamp="@Model.Created.ToUnixTimestamp()" adjustment="timezone">@Html.DisplayFor(model => model.Created)</dd>
         <dt>@Html.DisplayNameFor(model => model.LastModified)</dt>
-        <dd>@Html.DisplayFor(model => model.LastModified)</dd>
+        <dd timestamp="@Model.LastModified.ToUnixTimestamp()" adjustment="timezone">@Html.DisplayFor(model => model.LastModified)</dd>
         <dt>@Html.DisplayNameFor(model => model.Deadline)</dt>
-        <dd>@Html.DisplayFor(model => model.Deadline)</dd>
+        <dd timestamp="@Model.Deadline.ToUnixTimestamp()" adjustment="timezone">@Html.DisplayFor(model => model.Deadline)</dd>
         <div id="ProgressBar" class="col-sm-10">
             <div id="Progress"></div>
         </div>
@@ -68,7 +68,7 @@
                     <dd>
                         @(" ")
                         @Html.ActionLink("Download", "Download", "Attachments", new { attachmentID = attachment.AttachmentID }, null) |
-                        @Html.Label("Delete", new { attachmentID  = attachment.AttachmentID} )
+                        @Html.Label("Delete", new { attachmentID = attachment.AttachmentID })
                     </dd>
                 </div>
 
@@ -85,4 +85,5 @@
 @section Scripts{
     @Scripts.Render("~/Scripts/Tasks/Details.js")
     @Scripts.Render("~/Scripts/Common/Ajax.js")
+    @Scripts.Render("~/Scripts/Common/AdjustTimeZones.js")
 }

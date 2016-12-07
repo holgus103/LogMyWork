@@ -4,7 +4,7 @@ var endDate = new Date(0);
 var progress;
 var intervalHandle;
 $(document).ready(function () {
-
+    adjustTimeZones();
     startDate.setUTCSeconds(start);
     endDate.setUTCSeconds(deadline);
     var refreshRate = (endDate - startDate) / 100;
@@ -12,6 +12,7 @@ $(document).ready(function () {
     refreshBar();
     intervalHandle = setInterval(refreshBar, refreshRate);
     prepareAjaxDelete();
+
 });
 
 function refreshBar() {

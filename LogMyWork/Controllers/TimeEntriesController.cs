@@ -67,11 +67,11 @@ namespace LogMyWork.Controllers
             DateTime dateFrom;
             if (from != null)
             {
-                dateFrom = UnixTime.ParseUnitTimestamp((ulong)from);
+                dateFrom = UnixTime.ParseUnixTimestamp((ulong)from);
             }
             else
             {
-                dateFrom = UnixTime.ParseUnitTimestamp(0);
+                dateFrom = UnixTime.ParseUnixTimestamp(0);
             }
 
             string userId = User.Identity.GetUserId();
@@ -84,7 +84,7 @@ namespace LogMyWork.Controllers
                 .Where(t => t.Start > dateFrom);
             if (to != null)
             {
-                DateTime dateTo = UnixTime.ParseUnitTimestamp((ulong)to);
+                DateTime dateTo = UnixTime.ParseUnixTimestamp((ulong)to);
                 entries = entries.Where(t => t.End < dateTo);
             }
             if (projectID != null)

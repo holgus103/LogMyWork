@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity;
 using LogMyWork.Consts;
 using LogMyWork.ViewModels.Tasks;
 using System.IO;
+using Commons.Time;
 using System.Globalization;
 using LogMyWork.ContextExtensions;
 
@@ -188,7 +189,7 @@ namespace LogMyWork.Controllers
                     task.Users = new List<ApplicationUser>();
                 }
                 task.LastModified = DateTime.UtcNow;
-                task.Deadline = DateTime.ParseExact(form.Deadline, "MM/dd/yyyy h:mm tt", CultureInfo.InvariantCulture).ToUniversalTime();
+                task.Deadline = UnixTime.ParseUnixTimestamp(form.Deadline);
                 task.Description = form.Description;
                 task.Name = form.Name;
                 task.OwnerID = User.Identity.GetUserId();
@@ -244,7 +245,7 @@ namespace LogMyWork.Controllers
             }
             TaskCreate viewModel = new TaskCreate()
             {
-                Deadline = projectTask.Deadline.ToString("MM/dd/yyyy h:mm tt"),
+                Deadline = projectTask.Deadline.ToUnixTimestamp(),
                 Users = projectTask.Users,
                 TaskID = projectTask.TaskID,
                 Description = projectTask.Description,
