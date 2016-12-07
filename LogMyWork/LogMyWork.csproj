@@ -231,7 +231,7 @@
     <Compile Include="ContextExtensions\UsersExtension.cs" />
     <Compile Include="Models\PredefinedStaticFilter.cs" />
     <Compile Include="Models\PredefinedFilterBase.cs" />
-    <Compile Include="Models\RelativePredefinedFilter.cs" />
+    <Compile Include="Models\PredefinedRelativeFilter.cs" />
     <Compile Include="ViewModels\Filters\FilterCreate.cs" />
     <Compile Include="ViewModels\ProjectRoles\ProjectRoleCreate.cs" />
     <Compile Include="ViewModels\Projects\ProjectCreate.cs" />

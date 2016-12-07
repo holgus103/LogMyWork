@@ -34,6 +34,8 @@ namespace LogMyWork.Models
 
         public DbSet<Attachment> Attachments { get; set; }
 
-        public System.Data.Entity.DbSet<LogMyWork.Models.PredefinedStaticFilter> Filters { get; set; }
+        public DbSet<PredefinedStaticFilter> PredefinedFilters { get; set; }
+
+        public DbSet<PredefinedRelativeFilter> RelativeFilters { get; set; }
     }
 }

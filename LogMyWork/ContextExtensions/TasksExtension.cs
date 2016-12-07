@@ -22,5 +22,14 @@ namespace LogMyWork.ContextExtensions
                     .SelectMany(u => u.OwnedTasks.Union(u.Tasks))
                 );
         }
+
+        public static bool HasTaskAccess(this LogMyWorkContext context, int taskID, string userID)
+        {
+            return context.ProjectTasks.Where(t => t.TaskID == taskID)
+                .Include(t => t.ParentProject.Roles)
+                .Include(t => t.Users)
+                .Where(t => t.OwnerID == userID || t.Users.Any(u => u.Id == userID) || t.ParentProject.Roles.Any(r => r.Role == Role.Owner && r.UserID == userID))
+                .Count() > 0;
+        }
     }
 }

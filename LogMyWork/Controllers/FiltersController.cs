@@ -20,7 +20,7 @@ namespace LogMyWork.Controllers
         public ActionResult Index()
         {
             string userID = User.Identity.GetUserId();
-            return View(this.db.Filters.Where(f => f.OwnerID == userID).ToList());
+            return View(this.db.PredefinedFilters.Where(f => f.OwnerID == userID).ToList());
         }
 
         // GET: Filters/Details/5
@@ -30,7 +30,7 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PredefinedStaticFilter filter = db.Filters.Find(id);
+            PredefinedStaticFilter filter = db.PredefinedFilters.Find(id);
             if (filter == null)
             {
                 return HttpNotFound();
@@ -70,7 +70,7 @@ namespace LogMyWork.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Filters.Add(filter);
+                db.PredefinedFilters.Add(filter);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -85,7 +85,7 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PredefinedStaticFilter filter = db.Filters.Find(id);
+            PredefinedStaticFilter filter = db.PredefinedFilters.Find(id);
             if (filter == null)
             {
                 return HttpNotFound();
@@ -116,7 +116,7 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PredefinedStaticFilter filter = db.Filters.Find(id);
+            PredefinedStaticFilter filter = db.PredefinedFilters.Find(id);
             if (filter == null)
             {
                 return HttpNotFound();
@@ -129,8 +129,8 @@ namespace LogMyWork.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            PredefinedStaticFilter filter = db.Filters.Find(id);
-            db.Filters.Remove(filter);
+            PredefinedStaticFilter filter = db.PredefinedFilters.Find(id);
+            db.PredefinedFilters.Remove(filter);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

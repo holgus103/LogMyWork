@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LogMyWork.Models
 {
-    class RelativePredefinedFilter : PredefinedFilterBase
+    public class PredefinedRelativeFilter : PredefinedFilterBase
     {
         public FilterType FilterType { get; set; }
         public int Amount { get; set; }

@@ -63,6 +63,11 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            if (!this.db.HasTaskAccess(id.Value, User.Identity.GetUserId()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
             ProjectTask projectTask = db.ProjectTasks
                 .Where(t => t.TaskID == id)
                 .Include(t => t.ParentProject)
@@ -74,7 +79,6 @@ namespace LogMyWork.Controllers
             {
                 return HttpNotFound();
             }
-            //projectTask.ParentProject = db.Projects.Find(projectTask.ParentProjectID);
             return View(projectTask);
         }
 
@@ -82,6 +86,10 @@ namespace LogMyWork.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult UpdateStatus(int id, TaskStatus status)
         {
+            if(!this.db.HasTaskAccess(id, User.Identity.GetUserId()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
             var task = this.db.ProjectTasks.Find(id);
             task.Status = status;
             db.SaveChanges();
@@ -92,6 +100,10 @@ namespace LogMyWork.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult GetTasksForProject(int projectID)
         {
+            if(!this.db.HasProjectAccess(projectID, User.Identity.GetUserId()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
             return View("~/Partials/SelectOptionsTemplate.cshtml", this.db.ProjectTasks
                 .Where(t => t.ParentProjectID == projectID)
                 .ToList()
@@ -109,11 +121,6 @@ namespace LogMyWork.Controllers
                 res = res.Where(t => t.ParentProjectID == projectID);
             }
 
-            //if(taskID > 0)
-            //{
-            //    res = res.Where(t => t.TaskID == taskID);
-            //}
-
             if(!String.IsNullOrWhiteSpace(userID))
             {
                 res = res.Include(t => t.Users)
@@ -126,7 +133,6 @@ namespace LogMyWork.Controllers
         // GET: Tasks/Create
         public ActionResult Create()
         {
-
             TaskCreate viewModel = new TaskCreate();
             // Load projects where the user has management rights
             this.prepareCreateViewModel(viewModel);
@@ -151,6 +157,10 @@ namespace LogMyWork.Controllers
                         .Where(x => x.TaskID == form.TaskID)
                         .Include(x => x.Users)
                         .FirstOrDefault();
+                    if(task.OwnerID != User.Identity.GetUserId())
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                    }
 
                     // remove users that are no longer assigned to the task
                     task.Users.RemoveAll(x => !form.Users.Contains(x, new ApplicationUser.IdComparer()));
@@ -159,6 +169,12 @@ namespace LogMyWork.Controllers
                     
                 }
                 else {
+                    // if not project manager nor owner => task addition refused
+                    if((!this.db.HasProjectRole(form.ParentProjectID, User.Identity.GetUserId(), Role.Owner)) &&
+                        (!this.db.HasProjectRole(form.ParentProjectID, User.Identity.GetUserId(), Role.Manager)))
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                    }
                     task = new ProjectTask();
                     task.Created = DateTime.UtcNow;
                 }
@@ -213,10 +229,15 @@ namespace LogMyWork.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             ProjectTask projectTask = db.ProjectTasks
-                .Where(t => t.TaskID == id)
+                .Where(t => t.TaskID == id.Value)
                 .Include(t => t.Users)
                 .Include(t => t.Attachments)
                 .FirstOrDefault();
+
+            if(projectTask.OwnerID != User.Identity.GetUserId())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
             if (projectTask == null)
             {
                 return HttpNotFound();
@@ -242,10 +263,15 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             ProjectTask projectTask = db.ProjectTasks.Find(id);
             if (projectTask == null)
             {
                 return HttpNotFound();
+            }
+            if(!this.db.HasProjectRole(projectTask.ParentProjectID, User.Identity.GetUserId(), Role.Owner))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
             return View(projectTask);
         }
@@ -256,6 +282,10 @@ namespace LogMyWork.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             ProjectTask projectTask = db.ProjectTasks.Find(id);
+            if (!this.db.HasProjectRole(projectTask.ParentProjectID, User.Identity.GetUserId(), Role.Owner))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
             db.ProjectTasks.Remove(projectTask);
             db.SaveChanges();
             return RedirectToAction("Details", "Projects", new { id = projectTask.ParentProjectID });
