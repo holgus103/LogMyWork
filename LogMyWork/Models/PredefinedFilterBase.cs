@@ -14,6 +14,6 @@ namespace LogMyWork.Models
         public string OwnerID { get; set; }
         public int TaskID { get; set; }
         public int ProjectID { get; set; }
-        public int UserID { get; set; }
+        public string UserID { get; set; }
     }
 }

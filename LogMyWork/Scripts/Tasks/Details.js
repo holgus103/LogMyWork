@@ -22,11 +22,10 @@ function refreshBar() {
         progress.css("width", value + "%");
     }
     else {
-        if (value > 100) {
             progress.css("background-color", "#8E001C");
             clearInterval(intervalHandle);
             progress.css("width", "100%");
-        }
+
     }
 }
 

@@ -213,7 +213,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\AttachmentsController.cs" />
-    <Compile Include="Controllers\FiltersController.cs" />
+    <Compile Include="Controllers\StaticFiltersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProjectRolesController.cs" />
@@ -221,7 +221,7 @@
     <Compile Include="Controllers\RatesController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\TimeEntriesController.cs" />
-    <Compile Include="DTO\Filters\FilterCreateDTO.cs" />
+    <Compile Include="DTO\Filters\StaticFilterCreateDTO.cs" />
     <Compile Include="DTO\ProjectRoles\ProjectRoleCreateDTO.cs" />
     <Compile Include="DTO\Projects\ProjectCreateDTO.cs" />
     <Compile Include="Consts\ProjectStatus.cs" />
@@ -232,7 +232,7 @@
     <Compile Include="Models\PredefinedStaticFilter.cs" />
     <Compile Include="Models\PredefinedFilterBase.cs" />
     <Compile Include="Models\PredefinedRelativeFilter.cs" />
-    <Compile Include="ViewModels\Filters\FilterCreate.cs" />
+    <Compile Include="ViewModels\Filters\StaticFilterCreate.cs" />
     <Compile Include="ViewModels\ProjectRoles\ProjectRoleCreate.cs" />
     <Compile Include="ViewModels\Projects\ProjectCreate.cs" />
     <Compile Include="Global.asax.cs">
@@ -386,11 +386,11 @@
     <Content Include="Views\Partials\SelectOptionsTemplate.cshtml" />
     <Content Include="Views\Partials\ProjectsList.cshtml" />
     <Content Include="Views\Projects\Archive.cshtml" />
-    <Content Include="Views\Filters\Create.cshtml" />
-    <Content Include="Views\Filters\Delete.cshtml" />
-    <Content Include="Views\Filters\Details.cshtml" />
-    <Content Include="Views\Filters\Edit.cshtml" />
-    <Content Include="Views\Filters\Index.cshtml" />
+    <Content Include="Views\StaticFilters\Create.cshtml" />
+    <Content Include="Views\StaticFilters\Delete.cshtml" />
+    <Content Include="Views\StaticFilters\Details.cshtml" />
+    <Content Include="Views\StaticFilters\Edit.cshtml" />
+    <Content Include="Views\StaticFilters\Index.cshtml" />
     <Content Include="Views\Partials\SimpleTaskList.cshtml" />
     <Content Include="Views\Partials\SimplyUserList.cshtml" />
   </ItemGroup>

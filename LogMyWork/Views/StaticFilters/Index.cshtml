@@ -1,4 +1,5 @@
-﻿@model IEnumerable<LogMyWork.Models.Filter>
+﻿@using LogMyWork.Models;
+@model IEnumerable<PredefinedStaticFilter>
 
 @{
     ViewBag.Title = "Index";
@@ -12,9 +13,6 @@
 </p>
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.OwnerID)
-        </th>
         <th>
             @Html.DisplayNameFor(model => model.TaskID)
         </th>
@@ -30,17 +28,11 @@
         <th>
             @Html.DisplayNameFor(model => model.To)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FilterType)
-        </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.OwnerID)
-        </td>
         <td>
             @Html.DisplayFor(modelItem => item.TaskID)
         </td>
@@ -55,9 +47,6 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.To)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FilterType)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.FilterID }) |

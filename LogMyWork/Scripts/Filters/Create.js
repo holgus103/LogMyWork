@@ -8,6 +8,13 @@ $(document).ready(function () {
 
     $("#From").datetimepicker();
     $("#To").datetimepicker();
+
+    $("#CreateForm").submit(function () {
+        var to = $("#To").val();
+        var from = $("#From").val();
+        $("#ToHidden").val(moment(to).format("X"));
+        $("#FromHidden").val(moment(from).format("X"));
+    })
     projectSelect.change(function () {
         refreshTasks();
         refreshUsers();
@@ -30,7 +37,9 @@ function refreshProjects() {
         },
         "/Projects/GetProjects",
         function (data) {
+            var val = projectSelect.val();
             projectSelect.html(data);
+            projectSelect.val(val);
         })
 }
 
@@ -42,7 +51,9 @@ function refreshTasks() {
     },
     "/Tasks/GetTasks",
     function (data) {
+        var val = taskSelect.val();
         taskSelect.html(data);
+        taskSelect.val(val);
     })
 }
 
@@ -54,6 +65,8 @@ function refreshUsers() {
     },
     "/Account/GetUsers",
     function (data) {
+        var val = userSelect.val();
         userSelect.html(data);
+        userSelect.val(val);
     })
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LogMyWork.ViewModels.Filters
 {
-    public class FilterCreate : FilterCreateDTO
+    public class StaticFilterCreate : StaticFilterCreateDTO
     {
         public IEnumerable<KeyValuePair<object, string>> SelectableProjects { get; set; }
         public IEnumerable<KeyValuePair<object, string>> SelectableUsers { get; set; }
