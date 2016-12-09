@@ -27,11 +27,21 @@ namespace LogMyWork.Controllers
         {
             string userID = User.Identity.GetUserId();
             TimeEntryIndex viewModel = new TimeEntryIndex();
+            viewModel.StaticFilters = this.db.StaticFilters
+                .Where(f => f.OwnerID == userID)
+                .ToList();
+
+            viewModel.RelativeFilters = this.db.RelativeFilters
+                    .Where(f => f.OwnerID == userID)
+                .ToList();
+
             viewModel.TimeEntries.TimeEntries = this.db.TimeEntries
                 .Include(t => t.ParentTask.ParentProject.Rates)
                 .Include(e => e.User)
                 .Where(e => e.UserID == userID).ToList();
+
             viewModel.TimeEntries.Sum = TimeSpan.FromSeconds(viewModel.TimeEntries.TimeEntries.Sum(e => e.Duration.Value.TotalSeconds));
+
             viewModel.TimeEntries.TotalEarned = viewModel.TimeEntries.TimeEntries.Sum(e => e.Charge);
 
             viewModel.Projects = viewModel.TimeEntries.TimeEntries.Select(e => e.ParentTask.ParentProject).Distinct().ToList();

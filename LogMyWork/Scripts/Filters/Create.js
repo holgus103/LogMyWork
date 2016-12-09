@@ -12,7 +12,9 @@ $(document).ready(function () {
     $("#CreateForm").submit(function () {
         var to = $("#To").val();
         var from = $("#From").val();
-        $("#ToHidden").val(moment(to).format("X"));
+        if(to != "")
+            $("#ToHidden").val(moment(to).format("X"));
+        if (from != "")
         $("#FromHidden").val(moment(from).format("X"));
     })
     projectSelect.change(function () {
