@@ -50,7 +50,7 @@ $(document).ready(function () {
     projectSelect.change(onDateChanged);
     taskSelect.change(onDateChanged);
     userSelect.change(onDateChanged);
-    adjustTimeZones();
+    //adjustTimeZones();
 });
 
 

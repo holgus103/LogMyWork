@@ -1,4 +1,5 @@
 ﻿@using LogMyWork.Models;
+@using Commons.Time;
 @model IEnumerable<PredefinedStaticFilter>
 
 @{
@@ -14,13 +15,13 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.TaskID)
+            @Html.DisplayNameFor(model => model.Task)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ProjectID)
+            @Html.DisplayNameFor(model => model.Project)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.UserID)
+            @Html.DisplayNameFor(model => model.User)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.From)
@@ -34,18 +35,18 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.TaskID)
+            @Html.DisplayFor(modelItem => item.Task.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ProjectID)
+            @Html.DisplayFor(modelItem => item.Project.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.UserID)
+            @Html.DisplayFor(modelItem => item.User.Email)
         </td>
-        <td>
+        <td adjustment="timezone" timestamp="@item.From.Value.ToUnixTimestamp() ">
             @Html.DisplayFor(modelItem => item.From)
         </td>
-        <td>
+        <td adjustment="timezone" timestamp="@item.To.Value.ToUnixTimestamp()">
             @Html.DisplayFor(modelItem => item.To)
         </td>
         <td>
@@ -57,3 +58,6 @@
 }
 
 </table>
+@section Scripts{
+    @Scripts.Render("~/Scripts/Common/AdjustTimeZones.js")
+    }

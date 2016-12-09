@@ -8,7 +8,7 @@ $(document).ready(function () {
 
     $("#From").datetimepicker();
     $("#To").datetimepicker();
-
+    UpdateDates();
     $("#CreateForm").submit(function () {
         var to = $("#To").val();
         var from = $("#From").val();
@@ -69,4 +69,15 @@ function refreshUsers() {
         userSelect.html(data);
         userSelect.val(val);
     })
+}
+
+function UpdateDates() {
+    var to = moment(1000 * parseInt($("#ToHidden").val())).format("L LT");
+    var from = moment(1000 * parseInt($("#FromHidden").val())).format("L LT");
+    if (to > 0) {
+        $("#To").val(to);
+    }
+    if (from > 0) {
+        $("#From").val(from);
+    }
 }

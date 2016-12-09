@@ -1,4 +1,4 @@
-﻿@model LogMyWork.Models.Filter
+﻿@model LogMyWork.Models.PredefinedStaticFilter
 
 @{
     ViewBag.Title = "Delete";
@@ -12,36 +12,29 @@
     <h4>Filter</h4>
     <hr />
     <dl class="dl-horizontal">
+
         <dt>
-            @Html.DisplayNameFor(model => model.OwnerID)
+            @Html.DisplayNameFor(model => model.Task)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.OwnerID)
+            @Html.DisplayFor(model => model.Task.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TaskID)
+            @Html.DisplayNameFor(model => model.Project)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.TaskID)
+            @Html.DisplayFor(model => model.Project.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ProjectID)
+            @Html.DisplayNameFor(model => model.User)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ProjectID)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.UserID)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UserID)
+            @Html.DisplayFor(model => model.User.Email)
         </dd>
 
         <dt>
@@ -60,13 +53,6 @@
             @Html.DisplayFor(model => model.To)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.FilterType)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FilterType)
-        </dd>
 
     </dl>
 

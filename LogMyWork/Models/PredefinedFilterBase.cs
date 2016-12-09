@@ -12,8 +12,11 @@ namespace LogMyWork.Models
         public int FilterID { get; set; }
         public ApplicationUser Owner { get; set; }
         public string OwnerID { get; set; }
-        public int TaskID { get; set; }
-        public int ProjectID { get; set; }
+        public ProjectTask Task { get; set; }
+        public int? TaskID { get; set; }
+        public Project Project { get; set; }
+        public int? ProjectID { get; set; }
+        public ApplicationUser User { get; set; }
         public string UserID { get; set; }
     }
 }

@@ -44,7 +44,13 @@ namespace LogMyWork.Controllers
         public ActionResult Index()
         {
             string userID = User.Identity.GetUserId();
-            return View(this.db.StaticFilters.Where(f => f.OwnerID == userID).ToList());
+            return View(this.db.StaticFilters
+                .Where(f => f.OwnerID == userID)
+                .Include(f => f.Project)
+                .Include(f => f.Task)
+                .Include(f => f.User)
+                .ToList()
+                );
         }
 
         // GET: Filters/Details/5
@@ -68,7 +74,7 @@ namespace LogMyWork.Controllers
 
         // GET: Filters/Create
         public ActionResult Create()
-        { 
+        {
             return View(this.getCreateViewModel());
         }
 
@@ -85,7 +91,7 @@ namespace LogMyWork.Controllers
                 if (filter.FilterID != 0)
                 {
                     newFilter = this.db.StaticFilters.Find(filter.FilterID);
-                    if(newFilter.OwnerID != User.Identity.GetUserId())
+                    if (newFilter.OwnerID != User.Identity.GetUserId())
                     {
                         return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                     }
@@ -105,6 +111,7 @@ namespace LogMyWork.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
 
             return View(filter);
         }
@@ -132,7 +139,7 @@ namespace LogMyWork.Controllers
             viewModel.From = filter.From?.ToUnixTimestamp() ?? 0;
             viewModel.UserID = filter.UserID;
             viewModel.FilterID = filter.FilterID;
-            return View("Create", filter);
+            return View("Create", viewModel);
         }
 
 
@@ -143,7 +150,12 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PredefinedStaticFilter filter = db.StaticFilters.Find(id);
+            PredefinedStaticFilter filter = db.StaticFilters
+                .Where(f => f.FilterID == id.Value)
+                .Include(f => f.Project)
+                .Include(f => f.Task)
+                .Include(f => f.User)
+                .FirstOrDefault();
             if (filter == null)
             {
                 return HttpNotFound();

@@ -4,7 +4,7 @@ var endDate = new Date(0);
 var progress;
 var intervalHandle;
 $(document).ready(function () {
-    adjustTimeZones();
+    //adjustTimeZones();
     startDate.setUTCSeconds(start);
     endDate.setUTCSeconds(deadline);
     var refreshRate = (endDate - startDate) / 100;
