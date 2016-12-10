@@ -14,6 +14,7 @@ using System.IO;
 using Commons.Time;
 using System.Globalization;
 using LogMyWork.ContextExtensions;
+using LogMyWork.Tools;
 
 namespace LogMyWork.Controllers
 {
@@ -164,15 +165,14 @@ namespace LogMyWork.Controllers
                     }
 
                     // remove users that are no longer assigned to the task
-                    task.Users.RemoveAll(x => !form.Users.Contains(x, new ApplicationUser.IdComparer()));
+                    task.Users.RemoveAll(x => !form.Users.Contains(x, new PropertyComparer<ApplicationUser, string>(u => u.Id)));
                     // remove duplicates
-                    form.Users.RemoveAll(x => task.Users.Contains(x, new ApplicationUser.IdComparer()));
+                    form.Users.RemoveAll(x => task.Users.Contains(x, new PropertyComparer<ApplicationUser, string>(u => u.Id)));
                     
                 }
                 else {
                     // if not project manager nor owner => task addition refused
-                    if((!this.db.HasProjectRole(form.ParentProjectID, User.Identity.GetUserId(), Role.Owner)) &&
-                        (!this.db.HasProjectRole(form.ParentProjectID, User.Identity.GetUserId(), Role.Manager)))
+                    if((!this.db.HasProjectRole(form.ParentProjectID, User.Identity.GetUserId(), Role.Manager)))
                     {
                         return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                     }

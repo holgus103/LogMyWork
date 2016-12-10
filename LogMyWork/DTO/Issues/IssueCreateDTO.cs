@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace LogMyWork.DTO.Issues
+{
+    public class IssueCreateDTO
+    {
+        public int IssueID { get; set; }
+        public int ProjectID { get; set; }
+        public string Title { get; set; } 
+        public string Description { get; set; }
+        public List<HttpPostedFileBase> Files { get; set; }
+
+    }
+}

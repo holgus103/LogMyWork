@@ -13,6 +13,7 @@ using LogMyWork.DTO.Projects;
 using LogMyWork.ContextExtensions;
 using LogMyWork.ViewModels.Tasks;
 using System;
+using LogMyWork.Tools;
 
 namespace LogMyWork.Controllers
 {
@@ -170,7 +171,7 @@ namespace LogMyWork.Controllers
                     project.Rates = new List<Rate>();
                 }
                 // if the rate is not already contained, add it and remove the old one for the current user
-                if (!project.Rates.Contains(form.Rate, new Rate.IdComparer()))
+                if (!project.Rates.Contains(form.Rate, new PropertyComparer<Rate, int>(r => r.RateID)))
                 {
                     this.db.Rates.Attach(form.Rate);
                     project.Rates.Add(form.Rate);

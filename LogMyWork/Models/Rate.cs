@@ -6,20 +6,6 @@ namespace LogMyWork.Models
 {
     public class Rate
     {
-
-        public class IdComparer : IEqualityComparer<Rate>
-        {
-            public bool Equals(Rate x, Rate y)
-            {
-                return x.RateID == y.RateID;
-            }
-
-            public int GetHashCode(Rate obj)
-            {
-                return obj.GetHashCode();
-            }
-        }
-
         [Key]
         public int RateID { get; set; }
         public double RateValue { get; set; }

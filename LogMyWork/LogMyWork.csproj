@@ -224,6 +224,7 @@
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\TimeEntriesController.cs" />
     <Compile Include="DTO\Filters\StaticFilterCreateDTO.cs" />
+    <Compile Include="DTO\Issues\IssueCreateDTO.cs" />
     <Compile Include="DTO\ProjectRoles\ProjectRoleCreateDTO.cs" />
     <Compile Include="DTO\Projects\ProjectCreateDTO.cs" />
     <Compile Include="Consts\ProjectStatus.cs" />
@@ -235,7 +236,9 @@
     <Compile Include="Models\PredefinedStaticFilter.cs" />
     <Compile Include="Models\PredefinedFilterBase.cs" />
     <Compile Include="Models\PredefinedRelativeFilter.cs" />
+    <Compile Include="Tools\IdComparer.cs" />
     <Compile Include="ViewModels\Filters\StaticFilterCreate.cs" />
+    <Compile Include="ViewModels\Issues\IssueCreate.cs" />
     <Compile Include="ViewModels\ProjectRoles\ProjectRoleCreate.cs" />
     <Compile Include="ViewModels\Projects\ProjectCreate.cs" />
     <Compile Include="Global.asax.cs">

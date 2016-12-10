@@ -29,7 +29,7 @@ namespace LogMyWork.Controllers
             }
             string userID = User.Identity.GetUserId();
             // if user is neither an admin nor a manager => refuse access
-            if(!this.db.HasProjectRole(id.Value, userID, Role.Manager) && !this.db.HasProjectRole(id.Value,userID, Role.Owner))
+            if(!this.db.HasProjectRole(id.Value, userID, Role.Manager))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
@@ -58,7 +58,7 @@ namespace LogMyWork.Controllers
         public ActionResult Create(ProjectRoleCreateDTO dto)
         {
             string userID = User.Identity.GetUserId();
-            if (!this.db.HasProjectRole(dto.ProjectID, userID, Role.Manager) && !this.db.HasProjectRole(dto.ProjectID, userID, Role.Owner))
+            if (!this.db.HasProjectRole(dto.ProjectID, userID, Role.Manager))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }

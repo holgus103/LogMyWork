@@ -11,19 +11,6 @@ namespace LogMyWork.Models
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
-        public class IdComparer : IEqualityComparer<ApplicationUser>
-        {
-            public bool Equals(ApplicationUser x, ApplicationUser y)
-            {
-                return x.Id == y.Id;
-            }
-
-            public int GetHashCode(ApplicationUser obj)
-            {
-                return obj.GetHashCode();
-            }
-        }
-
         public virtual List<TimeEntry> UserEntries { get; set; }
 
         public virtual List<ProjectTask> Tasks { get; set; }
