@@ -202,6 +202,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Consts\FileType.cs" />
     <Compile Include="Consts\FilterType.cs" />
+    <Compile Include="Consts\IssueStatus.cs" />
     <Compile Include="Consts\Role.cs" />
     <Compile Include="Consts\SessionsKey.cs" />
     <Compile Include="Consts\TaskStatus.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\AttachmentsController.cs" />
+    <Compile Include="Controllers\IssuesController.cs" />
     <Compile Include="Controllers\StaticFiltersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -229,6 +231,7 @@
     <Compile Include="Models\Attachment.cs" />
     <Compile Include="ContextExtensions\RatesExtension.cs" />
     <Compile Include="ContextExtensions\UsersExtension.cs" />
+    <Compile Include="Models\Issue.cs" />
     <Compile Include="Models\PredefinedStaticFilter.cs" />
     <Compile Include="Models\PredefinedFilterBase.cs" />
     <Compile Include="Models\PredefinedRelativeFilter.cs" />
@@ -393,6 +396,11 @@
     <Content Include="Views\StaticFilters\Index.cshtml" />
     <Content Include="Views\Partials\SimpleTaskList.cshtml" />
     <Content Include="Views\Partials\SimplyUserList.cshtml" />
+    <Content Include="Views\Issues\Create.cshtml" />
+    <Content Include="Views\Issues\Delete.cshtml" />
+    <Content Include="Views\Issues\Details.cshtml" />
+    <Content Include="Views\Issues\Edit.cshtml" />
+    <Content Include="Views\Issues\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

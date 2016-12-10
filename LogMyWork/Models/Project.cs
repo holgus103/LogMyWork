@@ -14,5 +14,6 @@ namespace LogMyWork.Models
         public List<ProjectTask> Tasks{ get; set; }
         public List<ProjectRole> Roles { get; set; }
         public List<Rate> Rates { get; set; }
+        public List<Issue> Issues { get; set; }
     }
 }
