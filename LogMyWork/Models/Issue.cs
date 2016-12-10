@@ -16,7 +16,6 @@ namespace LogMyWork.Models
         public string Description { get; set; }
         public ApplicationUser Reporter { get; set; }
         public string ReporterID { get; set; }
-        public List<Attachment> Attachments { get; set; }
         public DateTime RaportDate { get; set; }
         public DateTime LastModified { get; set; }
         public IssueStatus Status { get; set; }

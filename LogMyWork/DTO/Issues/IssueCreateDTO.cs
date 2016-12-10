@@ -11,7 +11,6 @@ namespace LogMyWork.DTO.Issues
         public int ProjectID { get; set; }
         public string Title { get; set; } 
         public string Description { get; set; }
-        public List<HttpPostedFileBase> Files { get; set; }
 
     }
 }

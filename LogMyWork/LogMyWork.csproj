@@ -236,7 +236,7 @@
     <Compile Include="Models\PredefinedStaticFilter.cs" />
     <Compile Include="Models\PredefinedFilterBase.cs" />
     <Compile Include="Models\PredefinedRelativeFilter.cs" />
-    <Compile Include="Tools\IdComparer.cs" />
+    <Compile Include="Tools\PropertyComparer.cs" />
     <Compile Include="ViewModels\Filters\StaticFilterCreate.cs" />
     <Compile Include="ViewModels\Issues\IssueCreate.cs" />
     <Compile Include="ViewModels\ProjectRoles\ProjectRoleCreate.cs" />

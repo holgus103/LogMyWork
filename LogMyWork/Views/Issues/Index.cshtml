@@ -1,8 +1,11 @@
-﻿@model IEnumerable<LogMyWork.Models.Issue>
+﻿@using Microsoft.AspNet.Identity;
+@using LogMyWork.Consts;
+@model IEnumerable<LogMyWork.Models.Issue>
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    string userID = User.Identity.GetUserId();
 }
 
 <h2>Index</h2>
@@ -19,10 +22,10 @@
             @Html.DisplayNameFor(model => model.IssueNumber)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Title)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ReporterID)
+            @Html.DisplayNameFor(model => model.Reporter)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.RaportDate)
@@ -36,35 +39,42 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Project.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IssueNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReporterID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RaportDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastModified)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IssueID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IssueID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IssueID })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Project.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IssueNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reporter.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RaportDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastModified)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+
+                @Html.ActionLink("Details", "Details", new { id = item.IssueID })
+                @if (item.ReporterID == userID || item.Project.Roles.Any(r => r.UserID == userID && r.Role < Role.Manager))
+                {
+                    @(" | ")
+                    @Html.ActionLink("Edit", "Edit", new { id = item.IssueID })
+                    @(" | ")
+                    @Html.ActionLink("Delete", "Delete", new { id = item.IssueID })
+                }
+            </td>
+        </tr>
+    }
 
 </table>

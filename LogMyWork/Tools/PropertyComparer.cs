@@ -6,9 +6,8 @@ using System.Web;
 namespace LogMyWork.Tools
 {
     public class PropertyComparer<T1,T2> : IEqualityComparer<T1> 
-    {
+    {   
         Func<T1, T2> selector;
-
         public PropertyComparer(Func<T1, T2> selector)
         {
             this.selector = selector;

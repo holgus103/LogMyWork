@@ -18,7 +18,16 @@ namespace LogMyWork.Controllers
     public class IssuesController : Controller
     {
         private LogMyWorkContext db = new LogMyWorkContext();
+        private IssueCreate convertToViewModel(IssueCreateDTO dto, IssueCreate viewModel = null)
+        {
+            IssueCreate converted = viewModel ?? new IssueCreate();
+            converted.Description = dto.Description;
+            converted.ProjectID = dto.ProjectID;
+            converted.Title = dto.Title;
+            converted.IssueID = dto.IssueID == 0 ? converted.IssueID : dto.IssueID;
 
+            return converted;
+        }
         private IssueCreate getCreateModel()
         {
             IssueCreate viewModel = new IssueCreate();
@@ -33,7 +42,9 @@ namespace LogMyWork.Controllers
             string userID = User.Identity.GetUserId();
             var issues = this.db.ProjectRoles.Where(r => r.UserID == userID)
                 .Include(r => r.Project.Issues)
-                .SelectMany(r => r.Project.Issues);
+                .SelectMany(r => r.Project.Issues)
+                .Include(i => i.Reporter)
+                .Include(i => i.Project);
             return View(issues.ToList());
         }
 
@@ -103,20 +114,20 @@ namespace LogMyWork.Controllers
                 issue.LastModified = DateTime.UtcNow;
                 issue.Title = dto.Title;
 
-                if(dto.IssueID == 0)
-                db.Issues.Add(issue);
+                if (dto.IssueID == 0)
+                    db.Issues.Add(issue);
                 db.SaveChanges();
-                foreach ()
-                    return RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
-
-            ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "Name", issue.ProjectID);
-            return View(issue);
+            IssueCreate viewModel = this.getCreateModel();
+            viewModel = this.convertToViewModel(dto, viewModel);
+            return View(viewModel);
         }
 
         // GET: Issues/Edit/5
         public ActionResult Edit(int? id)
         {
+            string userID = User.Identity.GetUserId();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -126,25 +137,16 @@ namespace LogMyWork.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "Name", issue.ProjectID);
-            return View(issue);
-        }
-
-        // POST: Issues/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IssueID,IssueNumber,ProjectID,Description,ReporterID,RaportDate,LastModified,Status")] Issue issue)
-        {
-            if (ModelState.IsValid)
+            if (issue.ReporterID != userID && !this.db.HasProjectRole(issue.ProjectID, userID, Role.Manager))
             {
-                db.Entry(issue).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
-            ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "Name", issue.ProjectID);
-            return View(issue);
+            IssueCreate viewModel = getCreateModel();
+            viewModel.Title = issue.Title;
+            viewModel.ProjectID = issue.ProjectID;
+            viewModel.IssueID = issue.IssueID;
+            viewModel.Description = issue.Description;
+            return View("Create", viewModel);
         }
 
         // GET: Issues/Delete/5
@@ -159,6 +161,10 @@ namespace LogMyWork.Controllers
             {
                 return HttpNotFound();
             }
+            if (!this.db.HasProjectRole(issue.ProjectID, User.Identity.GetUserId(), Role.Manager))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
             return View(issue);
         }
 
@@ -168,6 +174,10 @@ namespace LogMyWork.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Issue issue = db.Issues.Find(id);
+            if (!this.db.HasProjectRole(issue.ProjectID, User.Identity.GetUserId(), Role.Manager))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
             db.Issues.Remove(issue);
             db.SaveChanges();
             return RedirectToAction("Index");
