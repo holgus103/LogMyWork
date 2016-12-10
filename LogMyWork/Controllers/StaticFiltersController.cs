@@ -107,6 +107,7 @@ namespace LogMyWork.Controllers
                 newFilter.ProjectID = filter.ProjectID;
                 newFilter.TaskID = filter.TaskID;
                 newFilter.UserID = filter.UserID;
+                newFilter.Name = filter.Name;
                 db.StaticFilters.Add(newFilter);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -139,6 +140,7 @@ namespace LogMyWork.Controllers
             viewModel.From = filter.From?.ToUnixTimestamp() ?? 0;
             viewModel.UserID = filter.UserID;
             viewModel.FilterID = filter.FilterID;
+            viewModel.Name = filter.Name;
             return View("Create", viewModel);
         }
 

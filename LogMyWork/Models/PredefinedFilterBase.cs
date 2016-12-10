@@ -10,6 +10,7 @@ namespace LogMyWork.Models
     {
         [Key]
         public int FilterID { get; set; }
+        public string Name { get; set; }
         public ApplicationUser Owner { get; set; }
         public string OwnerID { get; set; }
         public ProjectTask Task { get; set; }

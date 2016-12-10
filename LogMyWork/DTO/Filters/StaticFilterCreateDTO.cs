@@ -9,6 +9,7 @@ namespace LogMyWork.DTO.Filters
     public class StaticFilterCreateDTO
     {
         public int FilterID { get; set; }
+        public string Name { get; set; }
         public int? ProjectID { get; set; }
         public int? TaskID { get; set; }
         public string UserID  { get; set; }
