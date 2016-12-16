@@ -31,9 +31,9 @@ namespace LogMyWork.Controllers
                 .Where(f => f.OwnerID == userID)
                 .ToList();
 
-            viewModel.RelativeFilters = this.db.RelativeFilters
-                    .Where(f => f.OwnerID == userID)
-                .ToList();
+            //viewModel.RelativeFilters = this.db.RelativeFilters
+            //        .Where(f => f.OwnerID == userID)
+            //    .ToList();
 
             viewModel.TimeEntries.TimeEntries = this.db.TimeEntries
                 .Include(t => t.ParentTask.ParentProject.Rates)

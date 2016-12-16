@@ -239,6 +239,7 @@
     <Compile Include="Tools\PropertyComparer.cs" />
     <Compile Include="ViewModels\Filters\StaticFilterCreate.cs" />
     <Compile Include="ViewModels\Issues\IssueCreate.cs" />
+    <Compile Include="ViewModels\Issues\IssuesIndex.cs" />
     <Compile Include="ViewModels\ProjectRoles\ProjectRoleCreate.cs" />
     <Compile Include="ViewModels\Projects\ProjectCreate.cs" />
     <Compile Include="Global.asax.cs">

@@ -36,7 +36,7 @@ namespace LogMyWork.Models
 
         public DbSet<PredefinedStaticFilter> StaticFilters { get; set; }
 
-        public DbSet<PredefinedRelativeFilter> RelativeFilters { get; set; }
+        //public DbSet<PredefinedRelativeFilter> RelativeFilters { get; set; }
 
         public System.Data.Entity.DbSet<LogMyWork.Models.Issue> Issues { get; set; }
     }

@@ -74,6 +74,34 @@
           <Property Name="Size" Type="int" Nullable="false" />
           <Property Name="Type" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="Issues">
+          <Key>
+            <PropertyRef Name="IssueID" />
+          </Key>
+          <Property Name="IssueID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IssueNumber" Type="int" Nullable="false" />
+          <Property Name="ProjectID" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="RaportDate" Type="datetime" Nullable="false" />
+          <Property Name="LastModified" Type="datetime" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="TaskID" Type="int" />
+          <Property Name="ReporterID" Type="nvarchar" MaxLength="128" />
+          <Property Name="Title" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="PredefinedStaticFilters">
+          <Key>
+            <PropertyRef Name="FilterID" />
+          </Key>
+          <Property Name="FilterID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OwnerID" Type="nvarchar" MaxLength="128" />
+          <Property Name="TaskID" Type="int" />
+          <Property Name="ProjectID" Type="int" />
+          <Property Name="UserID" Type="nvarchar" MaxLength="128" />
+          <Property Name="From" Type="datetime" />
+          <Property Name="To" Type="datetime" />
+          <Property Name="Name" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="ProjectRates">
           <Key>
             <PropertyRef Name="Rate_RateID" />
@@ -98,7 +126,6 @@
           <Property Name="ProjectID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" />
           <Property Name="Status" Type="int" Nullable="false" />
-          <Property Name="ClientID" Type="nvarchar" MaxLength="128" />
         </EntityType>
         <EntityType Name="ProjectTasks">
           <Key>
@@ -205,6 +232,92 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_dbo_Issues_dbo_AspNetUsers_Reporter_Id">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <End Role="Issues" Type="Self.Issues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Issues">
+              <PropertyRef Name="ReporterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Issues_dbo_Projects_ProjectID">
+          <End Role="Projects" Type="Self.Projects" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Issues" Type="Self.Issues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Projects">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="Issues">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Issues_dbo_ProjectTasks_TaskID">
+          <End Role="ProjectTasks" Type="Self.ProjectTasks" Multiplicity="0..1" />
+          <End Role="Issues" Type="Self.Issues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProjectTasks">
+              <PropertyRef Name="TaskID" />
+            </Principal>
+            <Dependent Role="Issues">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_PredefinedFilters_dbo_AspNetUsers_OwnerID">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <End Role="PredefinedStaticFilters" Type="Self.PredefinedStaticFilters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PredefinedStaticFilters">
+              <PropertyRef Name="OwnerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_PredefinedStaticFilters_dbo_AspNetUsers_UserID">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <End Role="PredefinedStaticFilters" Type="Self.PredefinedStaticFilters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PredefinedStaticFilters">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_PredefinedStaticFilters_dbo_Projects_ProjectID">
+          <End Role="Projects" Type="Self.Projects" Multiplicity="0..1" />
+          <End Role="PredefinedStaticFilters" Type="Self.PredefinedStaticFilters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Projects">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="PredefinedStaticFilters">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_PredefinedStaticFilters_dbo_ProjectTasks_TaskID">
+          <End Role="ProjectTasks" Type="Self.ProjectTasks" Multiplicity="0..1" />
+          <End Role="PredefinedStaticFilters" Type="Self.PredefinedStaticFilters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProjectTasks">
+              <PropertyRef Name="TaskID" />
+            </Principal>
+            <Dependent Role="PredefinedStaticFilters">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_ProjectRoles_dbo_AspNetUsers_UserID">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
           <End Role="ProjectRoles" Type="Self.ProjectRoles" Multiplicity="*" />
@@ -228,18 +341,6 @@
             </Principal>
             <Dependent Role="ProjectRoles">
               <PropertyRef Name="ProjectID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_dbo_Projects_dbo_AspNetUsers_ClientID">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
-          <End Role="Projects" Type="Self.Projects" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Projects">
-              <PropertyRef Name="ClientID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -383,6 +484,8 @@
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Attachments" EntityType="Self.Attachments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Issues" EntityType="Self.Issues" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PredefinedStaticFilters" EntityType="Self.PredefinedStaticFilters" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProjectRates" EntityType="Self.ProjectRates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProjectRoles" EntityType="Self.ProjectRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Projects" EntityType="Self.Projects" Schema="dbo" store:Type="Tables" />
@@ -409,6 +512,34 @@
             <End Role="ProjectTasks" EntitySet="ProjectTasks" />
             <End Role="Attachments" EntitySet="Attachments" />
           </AssociationSet>
+          <AssociationSet Name="FK_dbo_Issues_dbo_AspNetUsers_Reporter_Id" Association="Self.FK_dbo_Issues_dbo_AspNetUsers_Reporter_Id">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Issues" EntitySet="Issues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Issues_dbo_Projects_ProjectID" Association="Self.FK_dbo_Issues_dbo_Projects_ProjectID">
+            <End Role="Projects" EntitySet="Projects" />
+            <End Role="Issues" EntitySet="Issues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Issues_dbo_ProjectTasks_TaskID" Association="Self.FK_dbo_Issues_dbo_ProjectTasks_TaskID">
+            <End Role="ProjectTasks" EntitySet="ProjectTasks" />
+            <End Role="Issues" EntitySet="Issues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_PredefinedFilters_dbo_AspNetUsers_OwnerID" Association="Self.FK_dbo_PredefinedFilters_dbo_AspNetUsers_OwnerID">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="PredefinedStaticFilters" EntitySet="PredefinedStaticFilters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_PredefinedStaticFilters_dbo_AspNetUsers_UserID" Association="Self.FK_dbo_PredefinedStaticFilters_dbo_AspNetUsers_UserID">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="PredefinedStaticFilters" EntitySet="PredefinedStaticFilters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_PredefinedStaticFilters_dbo_Projects_ProjectID" Association="Self.FK_dbo_PredefinedStaticFilters_dbo_Projects_ProjectID">
+            <End Role="Projects" EntitySet="Projects" />
+            <End Role="PredefinedStaticFilters" EntitySet="PredefinedStaticFilters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_PredefinedStaticFilters_dbo_ProjectTasks_TaskID" Association="Self.FK_dbo_PredefinedStaticFilters_dbo_ProjectTasks_TaskID">
+            <End Role="ProjectTasks" EntitySet="ProjectTasks" />
+            <End Role="PredefinedStaticFilters" EntitySet="PredefinedStaticFilters" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_ProjectRoles_dbo_AspNetUsers_UserID" Association="Self.FK_dbo_ProjectRoles_dbo_AspNetUsers_UserID">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="ProjectRoles" EntitySet="ProjectRoles" />
@@ -416,10 +547,6 @@
           <AssociationSet Name="FK_dbo_ProjectRoles_dbo_Projects_ProjectID" Association="Self.FK_dbo_ProjectRoles_dbo_Projects_ProjectID">
             <End Role="Projects" EntitySet="Projects" />
             <End Role="ProjectRoles" EntitySet="ProjectRoles" />
-          </AssociationSet>
-          <AssociationSet Name="FK_dbo_Projects_dbo_AspNetUsers_ClientID" Association="Self.FK_dbo_Projects_dbo_AspNetUsers_ClientID">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="Projects" EntitySet="Projects" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_ProjectTaskApplicationUsers_dbo_AspNetUsers_ApplicationUser_Id" Association="Self.FK_dbo_ProjectTaskApplicationUsers_dbo_AspNetUsers_ApplicationUser_Id">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -521,6 +648,9 @@
           <NavigationProperty Name="ProjectTasks" Relationship="Self.ProjectTaskApplicationUsers" FromRole="AspNetUsers" ToRole="ProjectTasks" />
           <NavigationProperty Name="ProjectTasks1" Relationship="Model.FK_dbo_ProjectTasks_dbo_AspNetUsers_OwnerID" FromRole="AspNetUsers" ToRole="ProjectTasks" />
           <NavigationProperty Name="ProjectTasks11" Relationship="Model.ApplicationUserProjectTasks" FromRole="AspNetUsers" ToRole="ProjectTasks" />
+          <NavigationProperty Name="Issues" Relationship="Model.FK_dbo_Issues_dbo_AspNetUsers_Reporter_Id" FromRole="AspNetUsers" ToRole="Issues" />
+          <NavigationProperty Name="PredefinedStaticFilters" Relationship="Model.FK_dbo_PredefinedFilters_dbo_AspNetUsers_OwnerID" FromRole="AspNetUsers" ToRole="PredefinedStaticFilters" />
+          <NavigationProperty Name="PredefinedStaticFilters1" Relationship="Model.FK_dbo_PredefinedStaticFilters_dbo_AspNetUsers_UserID" FromRole="AspNetUsers" ToRole="PredefinedStaticFilters" />
         </EntityType>
         <EntityType Name="ProjectRoles">
           <Key>
@@ -546,6 +676,8 @@
           <NavigationProperty Name="ProjectTasks" Relationship="Self.FK_dbo_ProjectTasks_dbo_Projects_ParentProjectID" FromRole="Projects" ToRole="ProjectTasks" />
           <NavigationProperty Name="Rates" Relationship="Self.RateProjects" FromRole="Projects" ToRole="Rates" />
           <NavigationProperty Name="Rates1" Relationship="Model.ProjectRates" FromRole="Projects" ToRole="Rates" />
+          <NavigationProperty Name="Issues" Relationship="Model.FK_dbo_Issues_dbo_Projects_ProjectID" FromRole="Projects" ToRole="Issues" />
+          <NavigationProperty Name="PredefinedStaticFilters" Relationship="Model.FK_dbo_PredefinedStaticFilters_dbo_Projects_ProjectID" FromRole="Projects" ToRole="PredefinedStaticFilters" />
         </EntityType>
         <EntityType Name="ProjectTasks">
           <Key>
@@ -566,6 +698,8 @@
           <NavigationProperty Name="AspNetUsers1" Relationship="Model.FK_dbo_ProjectTasks_dbo_AspNetUsers_OwnerID" FromRole="ProjectTasks" ToRole="AspNetUsers" />
           <NavigationProperty Name="Attachments" Relationship="Model.FK_dbo_Attachments_dbo_ProjectTasks_TaskID" FromRole="ProjectTasks" ToRole="Attachments" />
           <NavigationProperty Name="AspNetUsers11" Relationship="Model.ApplicationUserProjectTasks" FromRole="ProjectTasks" ToRole="AspNetUsers" />
+          <NavigationProperty Name="Issues" Relationship="Model.FK_dbo_Issues_dbo_ProjectTasks_TaskID" FromRole="ProjectTasks" ToRole="Issues" />
+          <NavigationProperty Name="PredefinedStaticFilters" Relationship="Model.FK_dbo_PredefinedStaticFilters_dbo_ProjectTasks_TaskID" FromRole="ProjectTasks" ToRole="PredefinedStaticFilters" />
         </EntityType>
         <EntityType Name="Rates">
           <Key>
@@ -816,6 +950,36 @@
             <End Role="Projects" EntitySet="Projects" />
             <End Role="Rates" EntitySet="Rates" />
           </AssociationSet>
+          <EntitySet Name="Issues" EntityType="Model.Issues" />
+          <EntitySet Name="PredefinedStaticFilters" EntityType="Model.PredefinedStaticFilters" />
+          <AssociationSet Name="FK_dbo_Issues_dbo_AspNetUsers_Reporter_Id" Association="Model.FK_dbo_Issues_dbo_AspNetUsers_Reporter_Id">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Issues" EntitySet="Issues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_PredefinedFilters_dbo_AspNetUsers_OwnerID" Association="Model.FK_dbo_PredefinedFilters_dbo_AspNetUsers_OwnerID">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="PredefinedStaticFilters" EntitySet="PredefinedStaticFilters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_PredefinedStaticFilters_dbo_AspNetUsers_UserID" Association="Model.FK_dbo_PredefinedStaticFilters_dbo_AspNetUsers_UserID">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="PredefinedStaticFilters" EntitySet="PredefinedStaticFilters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Issues_dbo_Projects_ProjectID" Association="Model.FK_dbo_Issues_dbo_Projects_ProjectID">
+            <End Role="Projects" EntitySet="Projects" />
+            <End Role="Issues" EntitySet="Issues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Issues_dbo_ProjectTasks_TaskID" Association="Model.FK_dbo_Issues_dbo_ProjectTasks_TaskID">
+            <End Role="ProjectTasks" EntitySet="ProjectTasks" />
+            <End Role="Issues" EntitySet="Issues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_PredefinedStaticFilters_dbo_Projects_ProjectID" Association="Model.FK_dbo_PredefinedStaticFilters_dbo_Projects_ProjectID">
+            <End Role="Projects" EntitySet="Projects" />
+            <End Role="PredefinedStaticFilters" EntitySet="PredefinedStaticFilters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_PredefinedStaticFilters_dbo_ProjectTasks_TaskID" Association="Model.FK_dbo_PredefinedStaticFilters_dbo_ProjectTasks_TaskID">
+            <End Role="ProjectTasks" EntitySet="ProjectTasks" />
+            <End Role="PredefinedStaticFilters" EntitySet="PredefinedStaticFilters" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Attachments">
           <Key>
@@ -861,6 +1025,127 @@
         <Association Name="ProjectRates">
           <End Type="Model.Projects" Role="Projects" Multiplicity="*" />
           <End Type="Model.Rates" Role="Rates" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Issues">
+          <Key>
+            <PropertyRef Name="IssueID" />
+          </Key>
+          <Property Name="IssueID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IssueNumber" Type="Int32" Nullable="false" />
+          <Property Name="ProjectID" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RaportDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LastModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="TaskID" Type="Int32" />
+          <Property Name="ReporterID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Model.FK_dbo_Issues_dbo_AspNetUsers_Reporter_Id" FromRole="Issues" ToRole="AspNetUsers" />
+          <NavigationProperty Name="Projects" Relationship="Model.FK_dbo_Issues_dbo_Projects_ProjectID" FromRole="Issues" ToRole="Projects" />
+          <NavigationProperty Name="ProjectTasks" Relationship="Model.FK_dbo_Issues_dbo_ProjectTasks_TaskID" FromRole="Issues" ToRole="ProjectTasks" />
+        </EntityType>
+        <EntityType Name="PredefinedStaticFilters">
+          <Key>
+            <PropertyRef Name="FilterID" />
+          </Key>
+          <Property Name="FilterID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OwnerID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="TaskID" Type="Int32" />
+          <Property Name="ProjectID" Type="Int32" />
+          <Property Name="UserID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="From" Type="DateTime" Precision="3" />
+          <Property Name="To" Type="DateTime" Precision="3" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Model.FK_dbo_PredefinedFilters_dbo_AspNetUsers_OwnerID" FromRole="PredefinedStaticFilters" ToRole="AspNetUsers" />
+          <NavigationProperty Name="AspNetUsers1" Relationship="Model.FK_dbo_PredefinedStaticFilters_dbo_AspNetUsers_UserID" FromRole="PredefinedStaticFilters" ToRole="AspNetUsers" />
+          <NavigationProperty Name="Projects" Relationship="Model.FK_dbo_PredefinedStaticFilters_dbo_Projects_ProjectID" FromRole="PredefinedStaticFilters" ToRole="Projects" />
+          <NavigationProperty Name="ProjectTasks" Relationship="Model.FK_dbo_PredefinedStaticFilters_dbo_ProjectTasks_TaskID" FromRole="PredefinedStaticFilters" ToRole="ProjectTasks" />
+        </EntityType>
+        <Association Name="FK_dbo_Issues_dbo_AspNetUsers_Reporter_Id">
+          <End Type="Model.AspNetUsers" Role="AspNetUsers" Multiplicity="0..1" />
+          <End Type="Model.Issues" Role="Issues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Issues">
+              <PropertyRef Name="ReporterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_PredefinedFilters_dbo_AspNetUsers_OwnerID">
+          <End Type="Model.AspNetUsers" Role="AspNetUsers" Multiplicity="0..1" />
+          <End Type="Model.PredefinedStaticFilters" Role="PredefinedStaticFilters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PredefinedStaticFilters">
+              <PropertyRef Name="OwnerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_PredefinedStaticFilters_dbo_AspNetUsers_UserID">
+          <End Type="Model.AspNetUsers" Role="AspNetUsers" Multiplicity="0..1" />
+          <End Type="Model.PredefinedStaticFilters" Role="PredefinedStaticFilters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PredefinedStaticFilters">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Issues_dbo_Projects_ProjectID">
+          <End Type="Model.Projects" Role="Projects" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.Issues" Role="Issues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Projects">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="Issues">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Issues_dbo_ProjectTasks_TaskID">
+          <End Type="Model.ProjectTasks" Role="ProjectTasks" Multiplicity="0..1" />
+          <End Type="Model.Issues" Role="Issues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProjectTasks">
+              <PropertyRef Name="TaskID" />
+            </Principal>
+            <Dependent Role="Issues">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_PredefinedStaticFilters_dbo_Projects_ProjectID">
+          <End Type="Model.Projects" Role="Projects" Multiplicity="0..1" />
+          <End Type="Model.PredefinedStaticFilters" Role="PredefinedStaticFilters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Projects">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="PredefinedStaticFilters">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_PredefinedStaticFilters_dbo_ProjectTasks_TaskID">
+          <End Type="Model.ProjectTasks" Role="ProjectTasks" Multiplicity="0..1" />
+          <End Type="Model.PredefinedStaticFilters" Role="PredefinedStaticFilters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProjectTasks">
+              <PropertyRef Name="TaskID" />
+            </Principal>
+            <Dependent Role="PredefinedStaticFilters">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -929,7 +1214,6 @@
                 <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1006,6 +1290,36 @@
               <ScalarProperty Name="ProjectID" ColumnName="Project_ProjectID" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Issues">
+            <EntityTypeMapping TypeName="Model.Issues">
+              <MappingFragment StoreEntitySet="Issues">
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ReporterID" ColumnName="ReporterID" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="RaportDate" ColumnName="RaportDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="IssueNumber" ColumnName="IssueNumber" />
+                <ScalarProperty Name="IssueID" ColumnName="IssueID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PredefinedStaticFilters">
+            <EntityTypeMapping TypeName="Model.PredefinedStaticFilters">
+              <MappingFragment StoreEntitySet="PredefinedStaticFilters">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="To" ColumnName="To" />
+                <ScalarProperty Name="From" ColumnName="From" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+                <ScalarProperty Name="FilterID" ColumnName="FilterID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -32,6 +32,15 @@
         <AssociationConnector Association="Model.FK_dbo_Attachments_dbo_ProjectTasks_TaskID" />
         <AssociationConnector Association="Model.ApplicationUserProjectTasks" />
         <AssociationConnector Association="Model.ProjectRates" />
+        <EntityTypeShape EntityType="Model.Issues" Width="1.5" PointX="12.75" PointY="9.875" />
+        <EntityTypeShape EntityType="Model.PredefinedStaticFilters" Width="1.5" PointX="9.75" PointY="4.875" />
+        <AssociationConnector Association="Model.FK_dbo_Issues_dbo_AspNetUsers_Reporter_Id" />
+        <AssociationConnector Association="Model.FK_dbo_PredefinedFilters_dbo_AspNetUsers_OwnerID" />
+        <AssociationConnector Association="Model.FK_dbo_PredefinedStaticFilters_dbo_AspNetUsers_UserID" />
+        <AssociationConnector Association="Model.FK_dbo_Issues_dbo_Projects_ProjectID" />
+        <AssociationConnector Association="Model.FK_dbo_Issues_dbo_ProjectTasks_TaskID" />
+        <AssociationConnector Association="Model.FK_dbo_PredefinedStaticFilters_dbo_Projects_ProjectID" />
+        <AssociationConnector Association="Model.FK_dbo_PredefinedStaticFilters_dbo_ProjectTasks_TaskID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
