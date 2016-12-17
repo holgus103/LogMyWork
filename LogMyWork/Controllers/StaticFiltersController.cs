@@ -14,6 +14,7 @@ using Commons.Time;
 
 namespace LogMyWork.Controllers
 {
+    [Authorize]
     public class StaticFiltersController : Controller
     {
         private LogMyWorkContext db = new LogMyWorkContext();

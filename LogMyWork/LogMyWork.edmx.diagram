@@ -41,6 +41,7 @@
         <AssociationConnector Association="Model.FK_dbo_Issues_dbo_ProjectTasks_TaskID" />
         <AssociationConnector Association="Model.FK_dbo_PredefinedStaticFilters_dbo_Projects_ProjectID" />
         <AssociationConnector Association="Model.FK_dbo_PredefinedStaticFilters_dbo_ProjectTasks_TaskID" />
+        <AssociationConnector Association="Model.RateProjects1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

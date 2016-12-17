@@ -20,6 +20,5 @@ namespace LogMyWork.Models
         public DateTime LastModified { get; set; }
         public IssueStatus Status { get; set; }
         public ProjectTask Task { get; set; }
-        public int? TaskID { get; set; }
     }
 }

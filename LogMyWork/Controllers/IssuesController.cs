@@ -15,6 +15,7 @@ using LogMyWork.Consts;
 
 namespace LogMyWork.Controllers
 {
+    [Authorize]
     public class IssuesController : Controller
     {
         private LogMyWorkContext db = new LogMyWorkContext();

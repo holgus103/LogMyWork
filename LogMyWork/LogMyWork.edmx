@@ -102,14 +102,6 @@
           <Property Name="To" Type="datetime" />
           <Property Name="Name" Type="nvarchar(max)" />
         </EntityType>
-        <EntityType Name="ProjectRates">
-          <Key>
-            <PropertyRef Name="Rate_RateID" />
-            <PropertyRef Name="Project_ProjectID" />
-          </Key>
-          <Property Name="Rate_RateID" Type="int" Nullable="false" />
-          <Property Name="Project_ProjectID" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="ProjectRoles">
           <Key>
             <PropertyRef Name="ProjectRoleID" />
@@ -141,6 +133,14 @@
           <Property Name="Created" Type="datetime" Nullable="false" />
           <Property Name="LastModified" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="RateProjects">
+          <Key>
+            <PropertyRef Name="Rate_RateID" />
+            <PropertyRef Name="Project_ProjectID" />
+          </Key>
+          <Property Name="Rate_RateID" Type="int" Nullable="false" />
+          <Property Name="Project_ProjectID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Rates">
           <Key>
             <PropertyRef Name="RateID" />
@@ -158,8 +158,6 @@
           <Property Name="Start" Type="datetime" Nullable="false" />
           <Property Name="End" Type="datetime" />
           <Property Name="Active" Type="bit" Nullable="false" />
-          <Property Name="Billed" Type="bit" Nullable="false" />
-          <Property Name="RateID" Type="int" />
           <Property Name="ParentTaskID" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
@@ -402,12 +400,12 @@
           <End Role="Projects" Type="Self.Projects" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="ProjectRates" Type="Self.ProjectRates" Multiplicity="*" />
+          <End Role="RateProjects" Type="Self.RateProjects" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Projects">
               <PropertyRef Name="ProjectID" />
             </Principal>
-            <Dependent Role="ProjectRates">
+            <Dependent Role="RateProjects">
               <PropertyRef Name="Project_ProjectID" />
             </Dependent>
           </ReferentialConstraint>
@@ -416,12 +414,12 @@
           <End Role="Rates" Type="Self.Rates" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="ProjectRates" Type="Self.ProjectRates" Multiplicity="*" />
+          <End Role="RateProjects" Type="Self.RateProjects" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Rates">
               <PropertyRef Name="RateID" />
             </Principal>
-            <Dependent Role="ProjectRates">
+            <Dependent Role="RateProjects">
               <PropertyRef Name="Rate_RateID" />
             </Dependent>
           </ReferentialConstraint>
@@ -464,18 +462,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_dbo_TimeEntries_dbo_Rates_RateID">
-          <End Role="Rates" Type="Self.Rates" Multiplicity="0..1" />
-          <End Role="TimeEntries" Type="Self.TimeEntries" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Rates">
-              <PropertyRef Name="RateID" />
-            </Principal>
-            <Dependent Role="TimeEntries">
-              <PropertyRef Name="RateID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="ModelStoreContainer">
           <EntitySet Name="ApplicationUserProjectTasks" EntityType="Self.ApplicationUserProjectTasks" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
@@ -486,10 +472,10 @@
           <EntitySet Name="Attachments" EntityType="Self.Attachments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Issues" EntityType="Self.Issues" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PredefinedStaticFilters" EntityType="Self.PredefinedStaticFilters" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ProjectRates" EntityType="Self.ProjectRates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProjectRoles" EntityType="Self.ProjectRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Projects" EntityType="Self.Projects" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProjectTasks" EntityType="Self.ProjectTasks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RateProjects" EntityType="Self.RateProjects" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rates" EntityType="Self.Rates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TimeEntries" EntityType="Self.TimeEntries" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
@@ -566,11 +552,11 @@
           </AssociationSet>
           <AssociationSet Name="FK_dbo_RateProjects_dbo_Projects_Project_ProjectID" Association="Self.FK_dbo_RateProjects_dbo_Projects_Project_ProjectID">
             <End Role="Projects" EntitySet="Projects" />
-            <End Role="ProjectRates" EntitySet="ProjectRates" />
+            <End Role="RateProjects" EntitySet="RateProjects" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_RateProjects_dbo_Rates_Rate_RateID" Association="Self.FK_dbo_RateProjects_dbo_Rates_Rate_RateID">
             <End Role="Rates" EntitySet="Rates" />
-            <End Role="ProjectRates" EntitySet="ProjectRates" />
+            <End Role="RateProjects" EntitySet="RateProjects" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_Rates_dbo_AspNetUsers_UserID" Association="Self.FK_dbo_Rates_dbo_AspNetUsers_UserID">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -582,10 +568,6 @@
           </AssociationSet>
           <AssociationSet Name="FK_dbo_TimeEntries_dbo_ProjectTasks_ParentTaskID" Association="Self.FK_dbo_TimeEntries_dbo_ProjectTasks_ParentTaskID">
             <End Role="ProjectTasks" EntitySet="ProjectTasks" />
-            <End Role="TimeEntries" EntitySet="TimeEntries" />
-          </AssociationSet>
-          <AssociationSet Name="FK_dbo_TimeEntries_dbo_Rates_RateID" Association="Self.FK_dbo_TimeEntries_dbo_Rates_RateID">
-            <End Role="Rates" EntitySet="Rates" />
             <End Role="TimeEntries" EntitySet="TimeEntries" />
           </AssociationSet>
         </EntityContainer>
@@ -678,6 +660,7 @@
           <NavigationProperty Name="Rates1" Relationship="Model.ProjectRates" FromRole="Projects" ToRole="Rates" />
           <NavigationProperty Name="Issues" Relationship="Model.FK_dbo_Issues_dbo_Projects_ProjectID" FromRole="Projects" ToRole="Issues" />
           <NavigationProperty Name="PredefinedStaticFilters" Relationship="Model.FK_dbo_PredefinedStaticFilters_dbo_Projects_ProjectID" FromRole="Projects" ToRole="PredefinedStaticFilters" />
+          <NavigationProperty Name="Rates2" Relationship="Model.RateProjects1" FromRole="Projects" ToRole="Rates" />
         </EntityType>
         <EntityType Name="ProjectTasks">
           <Key>
@@ -712,6 +695,7 @@
           <NavigationProperty Name="TimeEntries" Relationship="Self.FK_dbo_TimeEntries_dbo_Rates_RateID" FromRole="Rates" ToRole="TimeEntries" />
           <NavigationProperty Name="Projects" Relationship="Self.RateProjects" FromRole="Rates" ToRole="Projects" />
           <NavigationProperty Name="Projects1" Relationship="Model.ProjectRates" FromRole="Rates" ToRole="Projects" />
+          <NavigationProperty Name="Projects2" Relationship="Model.RateProjects1" FromRole="Rates" ToRole="Projects" />
         </EntityType>
         <EntityType Name="TimeEntries">
           <Key>
@@ -980,6 +964,10 @@
             <End Role="ProjectTasks" EntitySet="ProjectTasks" />
             <End Role="PredefinedStaticFilters" EntitySet="PredefinedStaticFilters" />
           </AssociationSet>
+          <AssociationSet Name="RateProjects1" Association="Model.RateProjects1">
+            <End Role="Projects" EntitySet="Projects" />
+            <End Role="Rates" EntitySet="Rates" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Attachments">
           <Key>
@@ -1147,6 +1135,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="RateProjects1">
+          <End Type="Model.Projects" Role="Projects" Multiplicity="*" />
+          <End Type="Model.Rates" Role="Rates" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1250,9 +1242,7 @@
                 <ScalarProperty Name="End" ColumnName="End" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="ParentTaskID" ColumnName="ParentTaskID" />
-                <ScalarProperty Name="Billed" ColumnName="Billed" />
-                <ScalarProperty Name="RateID" ColumnName="RateID" />
-              </MappingFragment>
+                </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <AssociationSetMapping Name="AspNetUserRoles" TypeName="Model.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
@@ -1280,14 +1270,6 @@
             </EndProperty>
             <EndProperty Name="AspNetUsers">
               <ScalarProperty Name="Id" ColumnName="ApplicationUser_Id" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="ProjectRates" TypeName="Model.ProjectRates" StoreEntitySet="ProjectRates">
-            <EndProperty Name="Rates">
-              <ScalarProperty Name="RateID" ColumnName="Rate_RateID" />
-            </EndProperty>
-            <EndProperty Name="Projects">
-              <ScalarProperty Name="ProjectID" ColumnName="Project_ProjectID" />
             </EndProperty>
           </AssociationSetMapping>
           <EntitySetMapping Name="Issues">
@@ -1320,6 +1302,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <AssociationSetMapping Name="RateProjects1" TypeName="Model.RateProjects1" StoreEntitySet="RateProjects">
+            <EndProperty Name="Rates">
+              <ScalarProperty Name="RateID" ColumnName="Rate_RateID" />
+            </EndProperty>
+            <EndProperty Name="Projects">
+              <ScalarProperty Name="ProjectID" ColumnName="Project_ProjectID" />
+            </EndProperty>
+          </AssociationSetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
