@@ -144,6 +144,7 @@ namespace LogMyWork.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(ProjectCreateDTO form)
         {
+
             if (ModelState.IsValid)
             {
                 string userID = User.Identity.GetUserId();
@@ -151,8 +152,8 @@ namespace LogMyWork.Controllers
                 // existing project
                 if (form.ProjectID > 0)
                 {
-                    // refuse edit if user is not the owner
-                    if (!this.db.HasProjectRole(form.ProjectID, userID, Role.Owner))
+                    // refuse edit if user has no project access
+                    if (!this.db.HasProjectAccess(form.ProjectID, userID))
                     {
                         return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                     }
@@ -165,7 +166,11 @@ namespace LogMyWork.Controllers
                 else {
                     project = new Project();
                 }
-                project.Name = form.Name;
+                // allow field edition only for owner and new projects
+                if (form.ProjectID == 0 || this.db.HasProjectRole(form.ProjectID, userID, Role.Owner))
+                {
+                    project.Name = form.Name;
+                }
                 if(project.Rates == null)
                 {
                     project.Rates = new List<Rate>();
@@ -201,7 +206,7 @@ namespace LogMyWork.Controllers
             }
             string userID = User.Identity.GetUserId();
             // if not project user => edition is refused
-            if(!this.db.HasProjectRole(id.Value, userID, Role.Owner))
+            if(!this.db.HasProjectAccess(id.Value, userID))
             {
                 return  new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }

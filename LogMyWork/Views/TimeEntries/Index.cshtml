@@ -13,7 +13,7 @@
 <div class="nav-pills">
     <ul id="TabbedMenu" class="nav nav-tabs">
         <li tabID="StaticFilters"><a>Static Filters</a></li>
-        <li tabID="RelativeFilters"><a>Relative Filters</a></li>
+        @*<li tabID="RelativeFilters"><a>Relative Filters</a></li>*@
     </ul>
 </div>
 <div id="TabbedView">
@@ -26,12 +26,12 @@
             </dd>
         }
     </div>
-    <div tabID="RelativeFilters">
+    @*<div tabID="RelativeFilters">
         @foreach (var val in Model.RelativeFilters)
         {
             @val.Name
         }
-    </div>
+    </div>*@
 </div>
 <div class="container-fluid">
     <table class="table" id="TimeEntriesTable">
