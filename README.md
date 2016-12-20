@@ -3,6 +3,7 @@ Free open-source working time tracking system
 
 Written in ASP.NET MVC
 
+[Download](https://github.com/holgus103/LogMyWork/raw/master/Release/LogMyWork.7z)
 ## Functionality (so far)
 - Projects:
   - Creation
