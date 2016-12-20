@@ -12,7 +12,7 @@ using Microsoft.AspNet.Identity;
 namespace LogMyWork.Controllers
 {
     [Authorize]
-    public class AttachmentsController : AjaxController
+    public class AttachmentsController : AjaxController, IAttachmentsController
     {
 
         private LogMyWorkContext db = new LogMyWorkContext();

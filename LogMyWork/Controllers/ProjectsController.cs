@@ -18,7 +18,7 @@ using LogMyWork.Tools;
 namespace LogMyWork.Controllers
 {
     [Authorize]
-    public class ProjectsController : AjaxController
+    public class ProjectsController : AjaxController, IProjectsController
     {
         private LogMyWorkContext db = new LogMyWorkContext();
 
@@ -63,7 +63,7 @@ namespace LogMyWork.Controllers
                     .Where(p => p.Roles.Any(r => r.UserID == userID));
             }
 
-            if(taskID > 0)
+            if (taskID > 0)
             {
                 res = res.Include(p => p.Tasks)
                     .Where(p => p.Tasks.Any(t => t.TaskID == taskID));
@@ -111,7 +111,7 @@ namespace LogMyWork.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult UpdateStatus(int? id, ProjectStatus status)
         {
-            if(id == null)
+            if (id == null)
             {
                 return this.ajaxFailure();
             }
@@ -160,7 +160,7 @@ namespace LogMyWork.Controllers
                     project = this.db.Projects
                         .Where(p => p.ProjectID == form.ProjectID)
                         .Include(p => p.Rates).First();
-                    
+
                 }
                 // new project
                 else {
@@ -171,7 +171,7 @@ namespace LogMyWork.Controllers
                 {
                     project.Name = form.Name;
                 }
-                if(project.Rates == null)
+                if (project.Rates == null)
                 {
                     project.Rates = new List<Rate>();
                 }
@@ -183,7 +183,7 @@ namespace LogMyWork.Controllers
                     project.Rates.RemoveAll(r => r.UserID == userID);
                 }
                 // add a owner entry if the project is new
-                if(form.ProjectID == 0)
+                if (form.ProjectID == 0)
                 {
                     db.Projects.Add(project);
                     // save to get id
@@ -194,7 +194,7 @@ namespace LogMyWork.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View( form);
+            return View(form);
         }
 
         // GET: Projects/Edit/5
@@ -206,9 +206,9 @@ namespace LogMyWork.Controllers
             }
             string userID = User.Identity.GetUserId();
             // if not project user => edition is refused
-            if(!this.db.HasProjectAccess(id.Value, userID))
+            if (!this.db.HasProjectAccess(id.Value, userID))
             {
-                return  new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
             Project project = db.Projects.Find(id);
             if (project == null)
@@ -222,7 +222,7 @@ namespace LogMyWork.Controllers
             viewModel.Rate = this.db.GetRateForProjectForUser(id.Value, userID);
             viewModel.ProjectID = id.Value;
 
-            return View("Create",viewModel);
+            return View("Create", viewModel);
         }
 
         public ActionResult Users(int? id)
@@ -237,7 +237,7 @@ namespace LogMyWork.Controllers
                 .Include(p => p.Roles.Select(t => t.User))
                 .Where(p => p.ProjectID == id)
                 .ToList()
-                .Select(p =>new ProjectUsers()
+                .Select(p => new ProjectUsers()
                 {
                     ProjectName = p.Name,
                     Users = p.Roles,
@@ -247,7 +247,7 @@ namespace LogMyWork.Controllers
                 })
                 .First();
             // if not a project member => refuse access
-            if(viewModel.CurrentUserRole == null)
+            if (viewModel.CurrentUserRole == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }

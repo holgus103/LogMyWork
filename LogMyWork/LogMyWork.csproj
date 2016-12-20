@@ -214,7 +214,16 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\AttachmentsController.cs" />
+    <Compile Include="Controllers\IAttachmentsController.cs" />
+    <Compile Include="Controllers\IHomeController.cs" />
+    <Compile Include="Controllers\IIssuesController.cs" />
+    <Compile Include="Controllers\IProjectRolesController.cs" />
+    <Compile Include="Controllers\IProjectsController.cs" />
+    <Compile Include="Controllers\IRatesController.cs" />
     <Compile Include="Controllers\IssuesController.cs" />
+    <Compile Include="Controllers\IStaticFiltersController.cs" />
+    <Compile Include="Controllers\ITasksController.cs" />
+    <Compile Include="Controllers\ITimeEntriesController.cs" />
     <Compile Include="Controllers\StaticFiltersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -295,6 +304,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="ClassDiagram1.cd" />
     <None Include="Properties\PublishProfiles\geathost.pubxml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <None Include="Properties\PublishProfiles\logmywork - FTP.pubxml" />

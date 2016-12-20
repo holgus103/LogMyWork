@@ -9,7 +9,7 @@ using Microsoft.AspNet.Identity;
 namespace LogMyWork.Controllers
 {
     [Authorize]
-    public class RatesController : Controller
+    public class RatesController : Controller, IRatesController
     {
         private LogMyWorkContext db = new LogMyWorkContext();
 

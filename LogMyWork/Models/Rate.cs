@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace LogMyWork.Models
@@ -8,6 +9,7 @@ namespace LogMyWork.Models
     {
         [Key]
         public int RateID { get; set; }
+        [DisplayName("Rate value")]
         public double RateValue { get; set; }
         public string UserID { get; set; }
         public ApplicationUser User { get; set; }

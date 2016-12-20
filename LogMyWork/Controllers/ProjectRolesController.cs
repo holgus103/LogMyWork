@@ -16,7 +16,7 @@ using LogMyWork.DTO.ProjectRoles;
 namespace LogMyWork.Controllers
 {
     [Authorize]
-    public class ProjectRolesController : Controller
+    public class ProjectRolesController : Controller, IProjectRolesController
     {
         private LogMyWorkContext db = new LogMyWorkContext();
 

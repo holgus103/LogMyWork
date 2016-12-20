@@ -14,7 +14,7 @@
             @Html.DisplayFor(modelItem => item.ParentTask.Name)
         </td>
         <td adjustment="timezone" timestamp="@item.Start.ToUnixTimestamp()"></td>
-        <td adjustment="timezone" timestamp="@item.End.Value.ToUnixTimestamp()"></td>
+        <td adjustment="timezone" timestamp="@item.End?.Value.ToUnixTimestamp()"></td>
         <td>
             @Html.DisplayFor(modelItem => item.Duration)
         </td>

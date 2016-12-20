@@ -19,7 +19,7 @@ using LogMyWork.Tools;
 namespace LogMyWork.Controllers
 {
     [Authorize]
-    public class TasksController : AjaxController
+    public class TasksController : AjaxController, ITasksController
     {
         private LogMyWorkContext db = new LogMyWorkContext();
 

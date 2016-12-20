@@ -18,7 +18,7 @@ using LogMyWork.ViewModels.TimeEntries;
 namespace LogMyWork.Controllers
 {
     [Authorize]
-    public class TimeEntriesController : AjaxController
+    public class TimeEntriesController : AjaxController, ITimeEntriesController
     {
         private LogMyWorkContext db = new LogMyWorkContext();
 
@@ -40,7 +40,7 @@ namespace LogMyWork.Controllers
                 .Include(e => e.User)
                 .Where(e => e.UserID == userID).ToList();
 
-            viewModel.TimeEntries.Sum = TimeSpan.FromSeconds(viewModel.TimeEntries.TimeEntries.Sum(e => e.Duration.Value.TotalSeconds));
+            viewModel.TimeEntries.Sum = TimeSpan.FromSeconds(viewModel.TimeEntries.TimeEntries.Sum(e => e.Duration?.TotalSeconds ?? 0));
 
             viewModel.TimeEntries.TotalEarned = viewModel.TimeEntries.TimeEntries.Sum(e => e.Charge);
 
@@ -110,7 +110,7 @@ namespace LogMyWork.Controllers
                 entries = entries.Where(e => e.UserID == user);
             }
             viewModel.TimeEntries = entries;
-            viewModel.Sum = TimeSpan.FromSeconds(viewModel.TimeEntries.Sum(e => e.Duration.Value.TotalSeconds));
+            viewModel.Sum = TimeSpan.FromSeconds(viewModel.TimeEntries.Sum(e => e.Duration?.TotalSeconds ?? 0));
             viewModel.TotalEarned = viewModel.TimeEntries.Sum(e => e.Charge);
             return PartialView("~/Views/Partials/TimeEntriesResultsTable.cshtml", viewModel);
         }
@@ -120,10 +120,10 @@ namespace LogMyWork.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ParentTaskId")] TimeEntry timeEntry)
+        public ActionResult Create(long parentTaskID)
         {
             ProjectTask task;
-            var entries = db.TimeEntries.Where(t => t.Active == true && t.ParentTaskID == timeEntry.ParentTaskID);
+            var entries = db.TimeEntries.Where(t => t.Active == true && t.ParentTaskID == parentTaskID);
             // if exits a currently active entry for this task, end it
             if (entries.Count() > 0)
             {
@@ -132,7 +132,7 @@ namespace LogMyWork.Controllers
                     val.Active = false;
                     val.End = DateTime.UtcNow;
                 }
-                task = this.db.ProjectTasks.Find(timeEntry.ParentTaskID);
+                task = this.db.ProjectTasks.Find(parentTaskID);
                 task.Status = TaskStatus.InProgress;
                 Session[SessionKeys.CurrentTimeEntry] = null;
                 db.SaveChanges();

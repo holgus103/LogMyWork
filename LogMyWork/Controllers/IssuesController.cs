@@ -16,7 +16,7 @@ using LogMyWork.Consts;
 namespace LogMyWork.Controllers
 {
     [Authorize]
-    public class IssuesController : Controller
+    public class IssuesController : Controller, IIssuesController
     {
         private LogMyWorkContext db = new LogMyWorkContext();
         private IssueCreate convertToViewModel(IssueCreateDTO dto, IssueCreate viewModel = null)
