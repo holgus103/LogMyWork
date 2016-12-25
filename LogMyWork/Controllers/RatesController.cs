@@ -5,6 +5,7 @@ using System.Net;
 using System.Web.Mvc;
 using LogMyWork.Models;
 using Microsoft.AspNet.Identity;
+using LogMyWork.DTO.Rates;
 
 namespace LogMyWork.Controllers
 {
@@ -33,20 +34,21 @@ namespace LogMyWork.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(double rateValue)
+        public ActionResult Create(RateCreateDTO dto)
         {
             Rate rate = new Rate();
-            rate.RateValue = rateValue;
-            rate.UserID = User.Identity.GetUserId();
+            rate.RateValue = dto.RateValue;
             if (ModelState.IsValid)
             {
+                rate.UserID = User.Identity.GetUserId();
+
                 db.Rates.Add(rate);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            ViewBag.UserID = new SelectList(db.Users, "Id", "Email", rate.UserID);
-            return View(rate);
+            else {
+                return View(rate);
+            }
         }
 
 

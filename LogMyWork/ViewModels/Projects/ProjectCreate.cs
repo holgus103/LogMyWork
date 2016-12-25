@@ -8,7 +8,6 @@ namespace LogMyWork.ViewModels.Projects
     public class ProjectCreate : ProjectCreateDTO
     {
         public IEnumerable<KeyValuePair<object, string>> UserRates { get; set; }
-        public IEnumerable<KeyValuePair<object, string>> Users { get; set; }
 
     }
 }

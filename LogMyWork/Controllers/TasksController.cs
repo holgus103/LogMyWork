@@ -23,6 +23,18 @@ namespace LogMyWork.Controllers
     {
         private LogMyWorkContext db = new LogMyWorkContext();
 
+        private TaskCreate getCreateViewModel(TaskCreateDTO dto)
+        {
+            TaskCreate viewModel = new TaskCreate();
+            viewModel.TaskID = dto.TaskID;
+            viewModel.Name = dto.Name;
+            viewModel.ParentProjectID = dto.ParentProjectID;
+            viewModel.Description = dto.Description;
+            viewModel.Deadline = dto.Deadline;
+            viewModel.Users = dto.Users;
+            viewModel.Files = dto.Files;
+            return viewModel;
+        }
         private void prepareCreateViewModel(TaskCreate viewModel, string userID = null)
         {
             if (userID == null)
@@ -148,10 +160,11 @@ namespace LogMyWork.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(TaskCreateDTO form)
         {
+            if (form?.Users.Count > 0)
+                form.Users.RemoveAt(form.Users.Count - 1);
             if (ModelState.IsValid)
             {
-                if (form?.Users.Count > 0)
-                    form.Users.RemoveAt(form.Users.Count - 1);
+
                 ProjectTask task;
                 if (form.TaskID != 0)
                 {
@@ -218,8 +231,13 @@ namespace LogMyWork.Controllers
                 db.SaveChanges();
                 return this.Redirect("/Projects/Details/" + form.ParentProjectID);
             }
+            else
+            {
+                TaskCreate viewModel = this.getCreateViewModel(form);
+                this.prepareCreateViewModel(viewModel);
+                return View(viewModel);
+            }
 
-            return View();
         }
 
         // GET: Tasks/Edit/5

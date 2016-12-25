@@ -120,9 +120,12 @@ namespace LogMyWork.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            IssueCreate viewModel = this.getCreateModel();
-            viewModel = this.convertToViewModel(dto, viewModel);
-            return View(viewModel);
+            else
+            {
+                IssueCreate viewModel = this.getCreateModel();
+                viewModel = this.convertToViewModel(dto, viewModel);
+                return View(viewModel);
+            }
         }
 
         // GET: Issues/Edit/5

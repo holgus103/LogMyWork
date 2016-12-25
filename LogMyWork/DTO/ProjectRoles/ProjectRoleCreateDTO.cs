@@ -11,9 +11,11 @@ namespace LogMyWork.DTO.ProjectRoles
 {
     public class ProjectRoleCreateDTO
     {
+        [Range(1, int.MaxValue)]
         public int ProjectID { get; set; }
-        //[DisallowEnumValueAttribute(typeof(Role), new SortedSet<object>() { Role.Owner })]
+        [Required]
         public Role Role { get; set; }
+        [Required]
         public string UserID { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace LogMyWork.Models
         [Key]
         public int RateID { get; set; }
         [DisplayName("Rate value")]
+        [Range(0, Double.MaxValue)]
         public double RateValue { get; set; }
         public string UserID { get; set; }
         public ApplicationUser User { get; set; }

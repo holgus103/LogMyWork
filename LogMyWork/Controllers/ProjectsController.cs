@@ -22,6 +22,22 @@ namespace LogMyWork.Controllers
     {
         private LogMyWorkContext db = new LogMyWorkContext();
 
+        private ProjectCreate getCreateViewModel()
+        {
+            string userID = this.User.Identity.GetUserId();
+            ProjectCreate viewModel = new ProjectCreate();
+            viewModel.UserRates = this.db.GetUserRatesAsKeyValuePair(userID);
+            return viewModel;
+        }
+
+        private ProjectCreate getCreateViewModel(ProjectCreateDTO dto)
+        {
+            ProjectCreate viewModel = this.getCreateViewModel();
+            viewModel.Name = dto.Name;
+            viewModel.ProjectID = dto.ProjectID;
+            viewModel.Rate = dto.Rate;
+            return viewModel;
+        }
 
         // GET: Projects
         public ActionResult Index()
@@ -130,11 +146,8 @@ namespace LogMyWork.Controllers
         // GET: Projects/Create
         public ActionResult Create()
         {
-            string userID = this.User.Identity.GetUserId();
-            ProjectCreate viewModel = new ProjectCreate();
-            viewModel.UserRates = this.db.GetUserRatesAsKeyValuePair(userID);
-            viewModel.Users = this.db.GetUsersAsKeyValuePair();
-            return View(viewModel);
+
+            return View(this.getCreateViewModel());
         }
 
         // POST: Projects/Create
@@ -193,8 +206,13 @@ namespace LogMyWork.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            else
+            {
+                // validation failed
 
-            return View(form);
+                ProjectCreate viewModel = this.getCreateViewModel(form);
+                return View(viewModel);
+            }
         }
 
         // GET: Projects/Edit/5

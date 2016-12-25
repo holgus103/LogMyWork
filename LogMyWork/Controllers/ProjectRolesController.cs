@@ -58,8 +58,12 @@ namespace LogMyWork.Controllers
         public ActionResult Create(ProjectRoleCreateDTO dto)
         {
             string userID = User.Identity.GetUserId();
-            if (!this.db.HasProjectRole(dto.ProjectID, userID, Role.Manager))
-            {
+
+            if(dto.Role == Role.Owner || // owner role cannot be assigned
+                (dto.Role == Role.Manager  && !this.db.HasProjectRole(dto.ProjectID, userID, Role.Owner) ) || // only the owner of the project can designate a manager
+                !this.db.HasProjectRole(dto.ProjectID, userID, Role.Manager) // only manager can add workers and clients
+               )
+            { 
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
             if (ModelState.IsValid)
@@ -74,7 +78,9 @@ namespace LogMyWork.Controllers
                 db.SaveChanges();
                 return this.RedirectToAction("Index", "Projects");
             }
-            return View();
+            else {
+                return View();
+            }
         }
 
 
