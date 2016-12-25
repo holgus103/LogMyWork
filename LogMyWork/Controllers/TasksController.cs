@@ -98,20 +98,20 @@ namespace LogMyWork.Controllers
             return this.ajaxSuccess();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult GetTasksForProject(int projectID)
-        {
-            if(!this.db.HasProjectAccess(projectID, User.Identity.GetUserId()))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
-            }
-            return View("~/Partials/SelectOptionsTemplate.cshtml", this.db.ProjectTasks
-                .Where(t => t.ParentProjectID == projectID)
-                .ToList()
-                .Select(t => new KeyValuePair<int, string>(t.TaskID, t.Name))
-                );
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult GetTasksForProject(int projectID)
+        //{
+        //    if(!this.db.HasProjectAccess(projectID, User.Identity.GetUserId()))
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+        //    }
+        //    return View("~/Partials/SelectOptionsTemplate.cshtml", this.db.ProjectTasks
+        //        .Where(t => t.ParentProjectID == projectID)
+        //        .ToList()
+        //        .Select(t => new KeyValuePair<int, string>(t.TaskID, t.Name))
+        //        );
+        //}
 
         [HttpPost]
         //[ValidateAntiForgeryToken]

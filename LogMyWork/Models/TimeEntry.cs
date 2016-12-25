@@ -20,7 +20,18 @@ namespace LogMyWork.Models
         public int ParentTaskID { get; set; }
         [ForeignKey("ParentTaskID")]
         public ProjectTask ParentTask { get; set; }
-        [DisplayFormat(DataFormatString = @"{0:hh\:mm\:ss}", ApplyFormatInEditMode = true)]
+        public String DuractionString
+        {
+            get
+            {
+                TimeSpan? span = this.Duration;
+                if (!span.HasValue)
+                {
+                    return "0:00:00";
+                }
+                return String.Format("{0:D2}:{1:D2}:{2:D2}", (int)span.Value.TotalHours, span.Value.Minutes, span.Value.Seconds);
+            }
+        }
         public TimeSpan? Duration
         {
             get

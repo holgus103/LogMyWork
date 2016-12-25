@@ -120,7 +120,7 @@ namespace LogMyWork.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(long parentTaskID)
+        public ActionResult Create(int parentTaskID)
         {
             ProjectTask task;
             var entries = db.TimeEntries.Where(t => t.Active == true && t.ParentTaskID == parentTaskID);
@@ -139,13 +139,15 @@ namespace LogMyWork.Controllers
                 return this.ajaxSuccess();
             }
             //else create new record and save it
-
+            TimeEntry timeEntry = new TimeEntry();
+            timeEntry.ParentTaskID = parentTaskID;
             Session[SessionKeys.CurrentTimeEntry] = timeEntry;
             timeEntry.Active = true;
             timeEntry.Start = DateTime.UtcNow;
             timeEntry.UserID = User.Identity.GetUserId();
             task = this.db.ProjectTasks.Find(timeEntry.ParentTaskID);
             task.Status = TaskStatus.CurrentlyInProgress;
+
             if (ModelState.IsValid)
             {
                 db.TimeEntries.Add(timeEntry);
