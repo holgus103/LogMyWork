@@ -1,0 +1,79 @@
+﻿@using LogMyWork.ViewModels.Issues;
+@using LogMyWork.Consts;
+@model IssueList
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Issues.FirstOrDefault().IssueNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Issues.FirstOrDefault().Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Issues.FirstOrDefault().Reporter)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Issues.FirstOrDefault().RaportDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Issues.FirstOrDefault().LastModified)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Issues.FirstOrDefault().Status)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Issues)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IssueNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reporter.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RaportDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastModified)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+
+                @Html.ActionLink("Details", "Details", "Issues", new { id = item.IssueID }, null)
+                @if (Model.Role <= Role.Manager)
+                {
+                    @(" | ")
+                    @Html.ActionLink("Edit", "Edit", "Issues", new { id = item.IssueID }, null)
+                    @(" | ")
+                    @Html.ActionLink("Delete", "Delete", "Issues", new { id = item.IssueID }, null)
+                    if (item.Status == IssueStatus.Reported)
+                    {
+                        @(" | ")
+                        @Html.Label("Reject", new { issueID = item.IssueID, status = IssueStatus.Refused })
+                        @(" | ")
+                        @Html.Label("Mark as In progress", new { issueID = item.IssueID, status = IssueStatus.InProgress })
+                    }
+                    else
+                    {
+                        if (item.Status == IssueStatus.InProgress)
+                        {
+                            @(" | ")
+                            @Html.Label("Mark as Resolved", new { issueID = item.IssueID, status = IssueStatus.Resolved })
+                        }
+                    }
+                }
+            </td>
+        </tr>
+    }
+
+
+
+</table>

@@ -109,6 +109,7 @@ namespace LogMyWork.Controllers
                 .Where(p => p.ProjectID == id)
                 .Include(p => p.Tasks)
                 .Include(p => p.Roles.Select(r => r.User))
+                .Include(p => p.Issues)
                 .FirstOrDefault();
             projectDetails.Tasks = new TaskIndex();
             // load all assgned tasks in this project

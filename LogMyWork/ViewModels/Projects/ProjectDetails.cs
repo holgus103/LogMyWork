@@ -1,5 +1,6 @@
 ﻿using LogMyWork.Models;
 using LogMyWork.ViewModels.Tasks;
+using System.Collections.Generic;
 
 namespace LogMyWork.ViewModels.Projects
 {

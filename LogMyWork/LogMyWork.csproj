@@ -249,6 +249,7 @@
     <Compile Include="Tools\PropertyComparer.cs" />
     <Compile Include="ViewModels\Filters\StaticFilterCreate.cs" />
     <Compile Include="ViewModels\Issues\IssueCreate.cs" />
+    <Compile Include="ViewModels\Issues\IssueList.cs" />
     <Compile Include="ViewModels\Issues\IssuesIndex.cs" />
     <Compile Include="ViewModels\ProjectRoles\ProjectRoleCreate.cs" />
     <Compile Include="ViewModels\Projects\ProjectCreate.cs" />
@@ -313,10 +314,12 @@
     <Content Include="Scripts\Common\AdjustTimeZones.js" />
     <Content Include="Scripts\Common\Ajax.js" />
     <Content Include="Scripts\Common\RepeatableControl.js" />
+    <Content Include="Scripts\Common\StatusUpdater.js" />
     <Content Include="Scripts\Common\TabbedView.js" />
     <Content Include="Scripts\Common\TimeZoneAdjust.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\Filters\Create.js" />
+    <Content Include="Scripts\Issues\IssuesList.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />
@@ -415,6 +418,7 @@
     <Content Include="Views\Issues\Details.cshtml" />
     <Content Include="Views\Issues\Edit.cshtml" />
     <Content Include="Views\Issues\Index.cshtml" />
+    <Content Include="Views\Partials\IssuesList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,7 +1,7 @@
 ﻿@using LogMyWork.Consts
 @using LogMyWork.Models
 @using LogMyWork.ViewModels.Projects
-@using LogMyWork.ViewModels.Tasks
+@using LogMyWork.ViewModels.Issues
 @model ProjectDetails
 
 @Styles.Render("~/Content/Projects.css")
@@ -35,6 +35,7 @@
             <li tabID="Users"><a>Project members</a></li>
             <li tabID="ProjectTasks"><a>Tasks in this project</a></li>
             <li tabID="AssignedTasks"><a>Tasks assigned to you</a></li>
+            <li tabID="Issues"><a>Issues for this project</a></li>
         </ul>
         <div id="TabbedView">
             <div tabiD="Users">
@@ -51,10 +52,14 @@
             <div tabID="AssignedTasks">
                 @Html.Partial("~/Views/Partials/TaskList.cshtml", Model.Tasks)
             </div>
+
+            <div id="Issues" tabID="Issues">
+                @Html.Partial("~/Views/Partials/IssuesList.cshtml", new IssueList() { Role = Model.CurrentProjectRole.Role, Issues = Model.Project.Issues })
+            </div>
         </div>
         @*<div id="AddTaskPnl" class="panel panel-default hidden">
-            @Html.Partial("~/Views/Partials/AddTask.cshtml", new TaskAdd() { ParentProjectID = Model.Project.ProjectID, Roles = Model.Project.Roles })
-        </div>*@
+                @Html.Partial("~/Views/Partials/AddTask.cshtml", new TaskAdd() { ParentProjectID = Model.Project.ProjectID, Roles = Model.Project.Roles })
+            </div>*@
         @*<div class="btn btn-default" id="ShowTaskPanelBtn">Add Task</div>*@
     </dl>
 </div>
@@ -67,5 +72,7 @@
     @Scripts.Render("~/Scripts/Projects/ProjectTasks.js")
     @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
     @Scripts.Render("~/Scripts/Common/TabbedView.js")
+    @Scripts.Render("~/Scripts/Common/StatusUpdater.js")
+    @Scripts.Render("~/Scripts/Issues/IssuesList.js")
 }
 

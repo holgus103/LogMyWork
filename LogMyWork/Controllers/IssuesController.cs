@@ -16,7 +16,7 @@ using LogMyWork.Consts;
 namespace LogMyWork.Controllers
 {
     [Authorize]
-    public class IssuesController : Controller, IIssuesController
+    public class IssuesController : AjaxController, IIssuesController
     {
         private LogMyWorkContext db = new LogMyWorkContext();
         private IssueCreate convertToViewModel(IssueCreateDTO dto, IssueCreate viewModel = null)
@@ -187,6 +187,31 @@ namespace LogMyWork.Controllers
             return RedirectToAction("Index");
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateStatus(int? id, IssueStatus status)
+        {
+            if (!id.HasValue)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Issue issue = this.db.Issues.Find(id.Value);
+
+            if(!this.db.HasProjectRole(issue.ProjectID, User.Identity.GetUserId(), Role.Manager))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+            else
+            {
+                issue.Status = status;
+                this.db.SaveChanges();
+                return this.ajaxSuccess();
+            }
+
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -195,5 +220,6 @@ namespace LogMyWork.Controllers
             }
             base.Dispose(disposing);
         }
+
     }
 }
