@@ -174,6 +174,10 @@ namespace LogMyWork.Controllers
                     project = this.db.Projects
                         .Where(p => p.ProjectID == form.ProjectID)
                         .Include(p => p.Rates).First();
+                    if(project.Status == ProjectStatus.Completed)
+                    {
+                            return this.RedirectToAction("Details", new { id = project.ProjectID });
+                    }
 
                 }
                 // new project
@@ -230,6 +234,10 @@ namespace LogMyWork.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
             Project project = db.Projects.Find(id);
+            if(project.Status == ProjectStatus.Completed)
+            {
+                return this.RedirectToAction("Details", new { id = id.Value });
+            }
             if (project == null)
             {
                 return HttpNotFound();

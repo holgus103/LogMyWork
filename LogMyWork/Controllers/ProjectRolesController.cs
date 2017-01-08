@@ -33,7 +33,10 @@ namespace LogMyWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
-
+            if(this.db.Projects.Find(id).Status == ProjectStatus.Completed)
+            {
+               return this.Redirect(String.Format("/Projects/Users/{0}", id.Value));
+            }
             ProjectRoleCreate viewModel = new ProjectRoleCreate();
             viewModel.SelectableUsers = this.db.Users
                 .Include(u => u.ProjectRoles)
@@ -68,6 +71,10 @@ namespace LogMyWork.Controllers
             }
             if (ModelState.IsValid)
             {
+                if (this.db.Projects.Find(dto.ProjectID).Status == ProjectStatus.Completed)
+                {
+                    return this.Redirect(String.Format("/Projects/Users/{0}", dto.ProjectID));
+                }
                 ProjectRole role = new ProjectRole()
                 {
                     ProjectID = dto.ProjectID,

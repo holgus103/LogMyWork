@@ -18,7 +18,10 @@
             <td>
                 @Html.ActionLink("Details", "Details", new { id = item.ProjectID })
                 @(" | ")
-                @Html.ActionLink("Edit", "Edit", new { id = item.ProjectID })
+                @if (item.Project.Status != ProjectStatus.Completed)
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ProjectID })
+                }
                 @if (item.Role == Role.Owner && item.Project.Status != ProjectStatus.Completed)
                 {
 

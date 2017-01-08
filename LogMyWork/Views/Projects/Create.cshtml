@@ -48,6 +48,7 @@
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.Rate.RateID, new KeyValuePairSelectList(Model.UserRates, Model.Rate == null ? 0 : Model.Rate.RateID ), new { @class = "form-control" })
             </div>
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
         </div>
 
         <div class="form-group">
