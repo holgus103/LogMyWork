@@ -1,6 +1,6 @@
 ﻿
 $(document).ready(function () {
-    $("#TaskTable [status]").click(sendStatusUpdate);
+    $("[status][taskid]").click(sendStatusUpdate);
 });
 
 function sendStatusUpdate() {
