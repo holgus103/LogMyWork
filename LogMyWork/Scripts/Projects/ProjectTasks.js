@@ -1,6 +1,6 @@
 ﻿
 $(document).ready(function () {
-    $("#ProjectTasks [status]").click(sendStatusUpdate);
+    $("#TaskTable [status]").click(sendStatusUpdate);
 });
 
 function sendStatusUpdate() {

@@ -160,8 +160,7 @@ namespace LogMyWork.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(TaskCreateDTO form)
         {
-            if (form?.Users.Count > 0)
-                form.Users.RemoveAt(form.Users.Count - 1);
+            form?.Users.RemoveAll(u => u.Id == null);
             if (ModelState.IsValid)
             {
 
