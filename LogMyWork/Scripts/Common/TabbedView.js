@@ -11,8 +11,11 @@
 
         tabbedViewDiv.find("[tabID]").hide();
 
-        if(!wasVisible)
+        if (!wasVisible) {
             element.show();
+            window.location.hash = tabID;
+        }
+
     }
     tabbedViewDiv.find("[tabID]").hide();
     menu.children("li").click(handleTabChange);
