@@ -24,9 +24,14 @@ namespace LogMyWork.Controllers
 
         private ProjectCreate getCreateViewModel()
         {
-            string userID = this.User.Identity.GetUserId();
-            ProjectCreate viewModel = new ProjectCreate();
-            viewModel.UserRates = this.db.GetUserRatesAsKeyValuePair(userID);
+            var userID = this.User.Identity.GetUserId();
+            var viewModel = new ProjectCreate();
+            var rates = this.db.GetUserRatesAsKeyValuePair(userID).ToList();
+            if (rates.Count == 0)
+            {
+                rates.Add(new KeyValuePair<object, string>(0, "No rates found!"));
+            }
+            viewModel.UserRates = rates;
             return viewModel;
         }
 
@@ -245,8 +250,13 @@ namespace LogMyWork.Controllers
             ProjectCreate viewModel = new ProjectCreate();
             //viewModel.Role = this.db.ProjectRoles.Where(r => r.ProjectID == id && r.UserID == userID).FirstOrDefault();
             viewModel.Name = project.Name;
-            viewModel.UserRates = this.db.GetUserRatesAsKeyValuePair(userID);
+            var rates = this.db.GetUserRatesAsKeyValuePair(userID).ToList();
             viewModel.Rate = this.db.GetRateForProjectForUser(id.Value, userID);
+            if (rates.Count == 0)
+            {
+                rates.Add(new KeyValuePair<object, string>(0, "No rates defined!"));
+            }
+            viewModel.UserRates = rates;
             viewModel.ProjectID = id.Value;
 
             return View("Create", viewModel);
